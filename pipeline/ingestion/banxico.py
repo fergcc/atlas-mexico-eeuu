@@ -58,9 +58,11 @@ def fetch_series(
     else:
         url = f"{BASE_URL}/{series_id}/datos"
 
-    payload = request_json(
-        "GET", url, source=SOURCE_NAME, headers={"Bmx-Token": token}, params={"decimales": "false"}
-    )
+    # No se envían query params adicionales: el parámetro "decimales" (con
+    # cualquier valor) hace que el SIE de Banxico devuelva un HTTP 400 genérico
+    # ("Ha tecleado un carácter no válido..."), confirmado probando la misma
+    # URL con y sin ese parámetro contra el token real.
+    payload = request_json("GET", url, source=SOURCE_NAME, headers={"Bmx-Token": token})
     try:
         series = payload["bmx"]["series"][0]["datos"]
     except (KeyError, IndexError, TypeError) as exc:

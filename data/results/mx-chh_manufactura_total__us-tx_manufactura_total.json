@@ -8,100 +8,37 @@
   },
   "series_a": {
     "id": "mx-chh_manufactura_total_itaee",
-    "source": "INEGI - ITAEE (mock)",
+    "source": "INEGI - ITAEE (Series Originales, clave 741651, manufactura 31-33)",
     "region": "08",
     "proxy_type": "output_index",
     "seasonal_adjustment": "nsa"
   },
   "series_b": {
     "id": "us-tx_manufactura_total_chh_bls",
-    "source": "BLS - State and Area Employment (mock)",
+    "source": "BLS - CES SMU48000003133600001 (Texas, equipo de transporte)",
     "region": "48",
     "proxy_type": "labor_input",
     "seasonal_adjustment": "nsa"
   },
   "sample": {
     "frequency_used": "quarterly",
-    "start": "2010-03-31",
-    "end": "2026-06-30",
-    "n_obs": 66
+    "start": "2024-03-31",
+    "end": "2025-12-31",
+    "n_obs": 8
   },
-  "generated_at": "2026-07-16T16:41:05.863170+00:00",
-  "data_vintage": "2026-10-03",
+  "generated_at": "2026-07-16T17:48:54.039202+00:00",
+  "data_vintage": "2026-05-01",
   "data_vintage_detail": {
-    "a": "2026-10-03",
-    "b": "2026-07-21"
+    "a": "2003-03-01",
+    "b": "2026-05-01"
   },
-  "insufficient_data": false,
-  "stationarity": {
-    "a": {
-      "adf_statistic": -6.629813098900701,
-      "adf_p_value": 5.7527897091195706e-09,
-      "kpss_statistic": 0.05787228043752505,
-      "kpss_p_value": 0.1,
-      "is_stationary": true,
-      "order_of_integration": 1,
-      "log_transformed": true
-    },
-    "b": {
-      "adf_statistic": -6.237266067010402,
-      "adf_p_value": 4.791722253800065e-08,
-      "kpss_statistic": 0.04746626120894022,
-      "kpss_p_value": 0.1,
-      "is_stationary": true,
-      "order_of_integration": 1,
-      "log_transformed": true
-    }
-  },
-  "granger": {
-    "optimal_lag": 1,
-    "selection_criterion": "bic",
-    "a_causes_b": {
-      "f_stat": 12.218114494075115,
-      "p_value": 0.0006605603265077993,
-      "p_value_fdr_adj": 0.0027743533713327573,
-      "significant": true
-    },
-    "b_causes_a": {
-      "f_stat": 0.27611544148525696,
-      "p_value": 0.6002124117644244,
-      "p_value_fdr_adj": 0.6463825972847648,
-      "significant": false
-    }
-  },
-  "cointegration_engle_granger": {
-    "statistic": -4.8138502366971245,
-    "p_value": 0.00035673088238959074,
-    "cointegrated": true
-  },
-  "cointegration_johansen": {
-    "trace_statistic": [
-      25.157201758231942,
-      0.30417448074258624
-    ],
-    "critical_values": [
-      [
-        13.4294,
-        15.4943,
-        19.9349
-      ],
-      [
-        2.7055,
-        3.8415,
-        6.6349
-      ]
-    ],
-    "cointegration_rank": 1
-  },
-  "vecm": {
-    "cointegration_vector": [
-      1.0,
-      -1.4112940872601867
-    ],
-    "adjustment_speed": [
-      -0.042671232225663554,
-      0.5016050317084427
-    ]
-  },
-  "warnings": []
+  "insufficient_data": true,
+  "warnings": [
+    "n_obs=8 < mínimo requerido=30 para frecuencia 'quarterly'; no se corrió el motor econométrico sobre este par (resultado se omite para evitar un estadístico espurio)."
+  ],
+  "stationarity": null,
+  "granger": null,
+  "cointegration_engle_granger": null,
+  "cointegration_johansen": null,
+  "vecm": null
 }

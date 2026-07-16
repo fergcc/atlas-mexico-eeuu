@@ -2,17 +2,32 @@
 
 Endpoint real:
     https://www.inegi.org.mx/app/api/indicadores/desarrolladores/jsonxml/
-        INDICATOR/{indicador}/{idioma}/{area}/{recientes}/BIE/2.0/{token}?type=json
+        INDICATOR/{indicador}/{idioma}/{area}/{recientes}/{fuente}/2.0/{token}?type=json
 
 Documentación: https://www.inegi.org.mx/servicios/api_indicadores.html
 
-Series de ejemplo usadas como referencia de integración:
-    - 628194: IMAI nacional desestacionalizado (Índice Mensual de la Actividad
-      Industrial), indicador nacional mensual del BIE.
-    - ITAEE (Indicador Trimestral de la Actividad Económica Estatal) se
-      consulta con el mismo endpoint cambiando `indicator_id` y `area` al
-      código de entidad INEGI de 2 dígitos (ver
-      `pipeline/reference/region_registry.yaml`).
+IMPORTANTE sobre `{fuente}` y `{area}` (verificado en vivo contra el token real,
+no asumido de la documentación): para el catálogo "Indicadores económicos de
+coyuntura" (donde viven IMAI e ITAEE), el segmento de fuente de datos debe ser
+literalmente `BIE-BISE` (con guión) — ni `BIE` ni `BISE` solos funcionan y
+devuelven `ErrorCode:100` ("No se encontraron resultados") aunque el token sea
+válido. Esto se confirmó inspeccionando el scope de AngularJS del "Constructor
+de consultas" oficial (https://www.inegi.org.mx/app/querybuilder2/) mientras
+generaba la URL para un indicador seleccionado ahí. El área nacional es `00`
+(no `0700`, que también da `ErrorCode:100`).
+
+Series verificadas en vivo (claves del BIE, catálogo "actualizado" — estas
+claves NO se pueden derivar de la documentación pública ni buscar por texto
+vía la API; solo se descubren con el "Constructor de consultas" del sitio):
+    - 736407: "Total de la actividad industrial" (IMAI), Índice de volumen
+      físico, Series Originales (NSA), nacional. Existe también una variante
+      desestacionalizada bajo el mismo árbol que no se ha identificado aún
+      (TODO: ubicarla si se necesita SA en vez de NSA).
+    - 741177: ITAEE total estatal, Índice de volumen físico, Series
+      Originales — usar con `area_code` = código INEGI de 2 dígitos del
+      estado (ver `region_registry.yaml`).
+    - 741651: ITAEE del sector "31-33 Industrias manufactureras" por estado,
+      mismo uso que 741177 pero acotado a manufactura.
 
 El token se lee de la variable de entorno `INEGI_TOKEN` (vía python-dotenv).
 """
@@ -31,10 +46,13 @@ load_dotenv()
 SOURCE_NAME = "INEGI"
 BASE_URL = "https://www.inegi.org.mx/app/api/indicadores/desarrolladores/jsonxml"
 
-# IMAI nacional desestacionalizado — ver catálogo BIE de INEGI.
-DEFAULT_INDICATOR_ID = "628194"
-# "República Mexicana" (nacional) en el catálogo de áreas geográficas de INEGI.
-NATIONAL_AREA_CODE = "0700"
+# "Total de la actividad industrial" (IMAI), Índice, Series Originales, nacional.
+DEFAULT_INDICATOR_ID = "736407"
+# Código de área para "Estados Unidos Mexicanos" (nacional) en el BIE.
+NATIONAL_AREA_CODE = "00"
+# Fuente de datos requerida por el catálogo de indicadores de coyuntura
+# (IMAI/ITAEE) — ver nota arriba, no es "BIE" ni "BISE" solos.
+COYUNTURA_SOURCE_DB = "BIE-BISE"
 
 
 def _get_token() -> str:
@@ -54,7 +72,7 @@ def fetch_indicator(
     area_code: str = NATIONAL_AREA_CODE,
     language: str = "es",
     recent_only: bool = False,
-    source_db: str = "BIE",
+    source_db: str = COYUNTURA_SOURCE_DB,
 ) -> list[dict[str, Any]]:
     """Consulta un indicador del BIE de INEGI (nacional o estatal) y devuelve la
     lista cruda de observaciones (`OBSERVATIONS`) tal cual la entrega la API.
@@ -83,10 +101,17 @@ def fetch_indicator(
     return series
 
 
-def fetch_itaee(state_area_code: str, *, indicator_id: str = "479887") -> list[dict[str, Any]]:
+ITAEE_TOTAL_INDICATOR_ID = "741177"
+ITAEE_MANUFACTURING_INDICATOR_ID = "741651"
+
+
+def fetch_itaee(
+    state_area_code: str, *, indicator_id: str = ITAEE_TOTAL_INDICATOR_ID
+) -> list[dict[str, Any]]:
     """Atajo semántico para el ITAEE (Indicador Trimestral de la Actividad
     Económica Estatal), proxy estatal trimestral de producción en México.
-    `indicator_id` por defecto corresponde al ITAEE total estatal; para
-    desagregar por SCIAN se debe sustituir por el id específico del catálogo BIE.
+    `indicator_id` por defecto corresponde al ITAEE total estatal (verificado
+    en vivo); pasar `ITAEE_MANUFACTURING_INDICATOR_ID` para el subtotal de
+    manufactura (31-33), o el id específico de otro SCIAN del catálogo BIE.
     """
     return fetch_indicator(indicator_id, area_code=state_area_code)

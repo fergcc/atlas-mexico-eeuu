@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-07-16T16:41:06.038485+00:00",
-  "mode": "mock",
+  "generated_at": "2026-07-16T17:48:54.233398+00:00",
+  "mode": "mixed",
   "refresh_cadence": "trimestral",
   "sectors": [
     {
@@ -199,29 +199,29 @@
     },
     {
       "id": "mx-nac_manufactura_total_emim",
-      "nombre": "Producción manufacturera - Manufactura total (referencia nacional) (México, nacional)",
+      "nombre": "Producción manufacturera - Actividad industrial total (México, nacional, INEGI real)",
       "pais": "MX",
       "region_code": "NAC",
       "sector_id": "manufactura_total",
-      "fuente": "INEGI - EMIM (mock)",
+      "fuente": "INEGI - BIE (Indicadores económicos de coyuntura, clave 736407)",
       "periodicidad": "mensual",
-      "unidad": "Índice base 2018=100 (sintético)",
+      "unidad": "Índice base 2018=100",
       "proxy_type": "output_index",
-      "ultima_actualizacion": "2026-06-30",
-      "proxima_actualizacion_estimada": "2026-07-30"
+      "ultima_actualizacion": "2026-05-01",
+      "proxima_actualizacion_estimada": "2026-05-31"
     },
     {
       "id": "us-nac_manufactura_total_ip",
-      "nombre": "Industrial Production Index - Total manufacturing (national reference) (US, national)",
+      "nombre": "Industrial Production Index - Total (US, national, FRED real)",
       "pais": "US",
       "region_code": "NAC",
       "sector_id": "manufactura_total",
-      "fuente": "FRED - Industrial Production (mock)",
+      "fuente": "FRED - INDPRO (Industrial Production: Total Index)",
       "periodicidad": "mensual",
-      "unidad": "Índice base 2017=100 (sintético)",
+      "unidad": "Índice base 2017=100",
       "proxy_type": "output_index",
-      "ultima_actualizacion": "2026-06-30",
-      "proxima_actualizacion_estimada": "2026-07-30"
+      "ultima_actualizacion": "2026-05-01",
+      "proxima_actualizacion_estimada": "2026-05-31"
     },
     {
       "id": "mx-bc_aeroespacial_itaee",
@@ -407,29 +407,29 @@
     },
     {
       "id": "mx-chh_manufactura_total_itaee",
-      "nombre": "ITAEE - Actividad industrial (Chihuahua)",
+      "nombre": "ITAEE - Manufactura 31-33 (Chihuahua, INEGI real)",
       "pais": "MX",
       "region_code": "08",
       "sector_id": "manufactura_total",
-      "fuente": "INEGI - ITAEE (mock)",
+      "fuente": "INEGI - ITAEE (Series Originales, clave 741651, manufactura 31-33)",
       "periodicidad": "trimestral",
-      "unidad": "Índice base 2018=100 (sintético)",
+      "unidad": "Índice base 2018=100",
       "proxy_type": "output_index",
-      "ultima_actualizacion": "2026-06-30",
-      "proxima_actualizacion_estimada": "2026-09-30"
+      "ultima_actualizacion": "2025-12-01",
+      "proxima_actualizacion_estimada": "2026-03-03"
     },
     {
       "id": "us-tx_manufactura_total_chh_bls",
-      "nombre": "Empleo manufacturero - Total manufacturing (national reference) (Texas)",
+      "nombre": "Empleo manufacturero - Equipo de transporte (Texas, BLS real)",
       "pais": "US",
       "region_code": "48",
       "sector_id": "manufactura_total",
-      "fuente": "BLS - State and Area Employment (mock)",
+      "fuente": "BLS - CES SMU48000003133600001 (Texas, equipo de transporte)",
       "periodicidad": "mensual",
-      "unidad": "Miles de empleos (sintético)",
+      "unidad": "Miles de empleos",
       "proxy_type": "labor_input",
-      "ultima_actualizacion": "2026-06-30",
-      "proxima_actualizacion_estimada": "2026-07-30"
+      "ultima_actualizacion": "2026-05-01",
+      "proxima_actualizacion_estimada": "2026-05-31"
     },
     {
       "id": "mx-coa_manufactura_total_itaee",
