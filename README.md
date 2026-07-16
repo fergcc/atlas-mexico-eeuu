@@ -7,6 +7,8 @@ Dashboard interactivo y de uso público que extiende el [*Atlas Prospectivo Terr
 
 A nivel nacional, estatal (32 entidades de México) y regional (corredores industriales), actualizado con datos públicos de INEGI, Banxico, FRED, BEA y BLS.
 
+**Demo en vivo:** https://atlas-mexico-eeuu.vercel.app (datos de demostración en modo `mock` hasta que se conecten credenciales reales — ver abajo).
+
 > El Atlas 2021 original usa Ventaja Comparativa Revelada, matriz insumo-producto y shift-share — **no** usa Granger ni cointegración. Esta capa econométrica es una extensión propia construida sobre el mismo armazón sectorial y territorial del Atlas (ver [`docs/metodologia.md`](docs/metodologia.md) y la página `/metodologia` del sitio).
 
 ## Estado actual
@@ -66,7 +68,13 @@ Sin una credencial, el módulo de ingestión correspondiente falla explícitamen
 
 El sitio es 100% estático (`output: 'export'` en `next.config.ts`) — no requiere backend ni base de datos.
 
-**Vercel (recomendado):** conecta este repo desde [vercel.com/new](https://vercel.com/new), configura el *Root Directory* como `app/`, y Vercel detecta Next.js automáticamente. Para que la actualización trimestral automática (`.github/workflows/update-and-deploy.yml`) dispare el redeploy, crea un *Deploy Hook* en tu proyecto de Vercel (Settings → Git → Deploy Hooks) y guárdalo como variable de repo `VERCEL_DEPLOY_HOOK_URL` en GitHub (Settings → Secrets and variables → Actions → Variables).
+**Vercel (recomendado, ya configurado en este repo):** conecta este repo desde [vercel.com/new](https://vercel.com/new). Como el frontend vive en `app/` dentro del monorepo, en *Project Settings → Build & Development Settings* define (en vez de cambiar *Root Directory*, para que `npm run build` siga viendo la carpeta `data/` de la raíz):
+
+- **Install Command**: `cd app && npm install`
+- **Build Command**: `cd app && npm run build`
+- **Output Directory**: `app/out`
+
+Para que la actualización trimestral automática (`.github/workflows/update-and-deploy.yml`) dispare el redeploy, crea un *Deploy Hook* en tu proyecto de Vercel (Settings → Git → Deploy Hooks) y guárdalo como variable de repo `VERCEL_DEPLOY_HOOK_URL` en GitHub (Settings → Secrets and variables → Actions → Variables).
 
 **GitHub Pages (alternativa sin servicios externos):** requiere ajustar `basePath`/`assetPrefix` en `next.config.ts` según el nombre del repo — ver `docs/arquitectura.md`.
 
