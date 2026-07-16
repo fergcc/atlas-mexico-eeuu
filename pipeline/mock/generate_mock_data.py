@@ -79,6 +79,119 @@ US_STATE_LAG_DAYS = 21
 CHIHUAHUA_REGION_CODE = "08"
 TEXAS_REGION_CODE = "48"
 
+# --- Pares estatales adicionales: frontera + corredores no fronterizos -----
+# Extiende el patrón de `_state_pair_frames` (antes hardcodeado a
+# Chihuahua-Texas/aeroespacial) a los estados fronterizos de
+# `region_registry.yaml` (border: true) y a 3 pares no fronterizos tomados de
+# los `corridors` del mismo registro. Cada entrada fija un `rng_index` único
+# y PERMANENTE (bloque 100+, separado del rango 0..len(sectors)-1 que usan
+# los pares nacionales y del índice fijo del par estatal original) — nunca
+# reordenar ni reutilizar un índice ya asignado aquí, o cambian los números
+# ya publicados de ese par (ver `_child_rng`).
+#
+# Correspondencia MX<->US elegida por proximidad geográfica/económica real:
+#   Baja California <-> California (frontera Tijuana-San Diego)
+#   Sonora          <-> Arizona   (frontera Nogales-Nogales)
+#   Chihuahua       <-> Texas     (frontera Cd. Juárez-El Paso; ya existente
+#                                   para aeroespacial, ver `_state_pair_frames`
+#                                   más abajo)
+#   Coahuila        <-> Texas     (frontera Piedras Negras/Acuña-Texas)
+#   Nuevo León      <-> Texas     (corredor industrial Monterrey-Texas)
+#   Tamaulipas      <-> Texas     (frontera Reynosa/Nuevo Laredo-Texas)
+# No fronterizos (corredores de `sectors.yaml`/`region_registry.yaml`):
+#   farmaceutico-laguna-culiacan: Jalisco/Sinaloa <-> polos farmacéuticos
+#     reales de EEUU (New Jersey, North Carolina)
+#   agroindustrial-sureste: Veracruz <-> Florida (agroindustria/logística)
+ADDITIONAL_STATE_PAIRS: list[dict[str, Any]] = [
+    # --- Frontera: aeroespacial (corredor aeroespacial del noreste) ---
+    {
+        "rng_index": 100,
+        "sector_id": "aeroespacial",
+        "mx": {"code": "02", "abbr": "BC", "label": "Baja California"},
+        "us": {"code": "06", "abbr": "CA", "label": "California"},
+    },
+    {
+        "rng_index": 101,
+        "sector_id": "aeroespacial",
+        "mx": {"code": "26", "abbr": "SON", "label": "Sonora"},
+        "us": {"code": "04", "abbr": "AZ", "label": "Arizona"},
+    },
+    {
+        "rng_index": 102,
+        "sector_id": "aeroespacial",
+        "mx": {"code": "05", "abbr": "COA", "label": "Coahuila"},
+        "us": {"code": "48", "abbr": "TX", "label": "Texas"},
+    },
+    {
+        "rng_index": 103,
+        "sector_id": "aeroespacial",
+        "mx": {"code": "19", "abbr": "NL", "label": "Nuevo León"},
+        "us": {"code": "48", "abbr": "TX", "label": "Texas"},
+    },
+    {
+        "rng_index": 104,
+        "sector_id": "aeroespacial",
+        "mx": {"code": "28", "abbr": "TAM", "label": "Tamaulipas"},
+        "us": {"code": "48", "abbr": "TX", "label": "Texas"},
+    },
+    # --- Frontera: manufactura_total (corredor siderúrgico-metal-mecánico) ---
+    {
+        "rng_index": 110,
+        "sector_id": "manufactura_total",
+        "mx": {"code": "02", "abbr": "BC", "label": "Baja California"},
+        "us": {"code": "06", "abbr": "CA", "label": "California"},
+    },
+    {
+        "rng_index": 111,
+        "sector_id": "manufactura_total",
+        "mx": {"code": "26", "abbr": "SON", "label": "Sonora"},
+        "us": {"code": "04", "abbr": "AZ", "label": "Arizona"},
+    },
+    {
+        "rng_index": 112,
+        "sector_id": "manufactura_total",
+        "mx": {"code": "08", "abbr": "CHH", "label": "Chihuahua"},
+        "us": {"code": "48", "abbr": "TX", "label": "Texas"},
+    },
+    {
+        "rng_index": 113,
+        "sector_id": "manufactura_total",
+        "mx": {"code": "05", "abbr": "COA", "label": "Coahuila"},
+        "us": {"code": "48", "abbr": "TX", "label": "Texas"},
+    },
+    {
+        "rng_index": 114,
+        "sector_id": "manufactura_total",
+        "mx": {"code": "19", "abbr": "NL", "label": "Nuevo León"},
+        "us": {"code": "48", "abbr": "TX", "label": "Texas"},
+    },
+    {
+        "rng_index": 115,
+        "sector_id": "manufactura_total",
+        "mx": {"code": "28", "abbr": "TAM", "label": "Tamaulipas"},
+        "us": {"code": "48", "abbr": "TX", "label": "Texas"},
+    },
+    # --- No fronterizos: corredores farmacéutico y agroindustrial ---
+    {
+        "rng_index": 120,
+        "sector_id": "farmaceutica",
+        "mx": {"code": "14", "abbr": "JAL", "label": "Jalisco"},
+        "us": {"code": "34", "abbr": "NJ", "label": "New Jersey"},
+    },
+    {
+        "rng_index": 121,
+        "sector_id": "farmaceutica",
+        "mx": {"code": "25", "abbr": "SIN", "label": "Sinaloa"},
+        "us": {"code": "37", "abbr": "NC", "label": "North Carolina"},
+    },
+    {
+        "rng_index": 122,
+        "sector_id": "agroindustrial",
+        "mx": {"code": "30", "abbr": "VER", "label": "Veracruz"},
+        "us": {"code": "12", "abbr": "FL", "label": "Florida"},
+    },
+]
+
 
 def _load_sectors() -> list[dict[str, Any]]:
     with open(SECTORS_YAML, encoding="utf-8") as fh:
@@ -248,13 +361,36 @@ def _state_pair_frames(
     sector: dict[str, Any],
     quarterly_dates: pd.DatetimeIndex,
     monthly_dates: pd.DatetimeIndex,
+    *,
+    mx_region_code: str = CHIHUAHUA_REGION_CODE,
+    mx_abbr: str = "CHH",
+    mx_state_label: str = "Chihuahua",
+    us_region_code: str = TEXAS_REGION_CODE,
+    us_abbr: str = "TX",
+    us_state_label: str = "Texas",
+    us_series_disambiguator: str | None = None,
 ) -> tuple[dict[str, pd.DataFrame], dict[str, str], dict[str, Any]]:
-    """Serie MX ITAEE (Chihuahua, trimestral, `output_index`) vs serie US BLS
-    (Texas, mensual, `labor_input`) para el sector aeroespacial. El BLS
-    mensual se construye a partir del mismo valor trimestral latente que el
-    ITAEE + ruido idiosincrático mensual, para que `processing.align` tenga
-    que remuestrear mensual->trimestral por promedio antes de correr el
-    motor, igual que pasaría con datos reales."""
+    """Serie MX ITAEE (nivel estatal, trimestral, `output_index`) vs serie US
+    BLS (nivel estatal, mensual, `labor_input`) para un sector y un par de
+    estados MX/US dados. El BLS mensual se construye a partir del mismo valor
+    trimestral latente que el ITAEE + ruido idiosincrático mensual, para que
+    `processing.align` tenga que remuestrear mensual->trimestral por promedio
+    antes de correr el motor, igual que pasaría con datos reales.
+
+    Por defecto reproduce exactamente el par original Chihuahua/aeroespacial
+    vs Texas (mismos `region_code`/abrreviaturas), para no alterar los
+    identificadores ya publicados de ese par al generalizar la función.
+
+    `us_series_disambiguator` evita colisiones de `series_id` cuando el mismo
+    estado de EEUU (p. ej. Texas) se compara contra VARIOS estados mexicanos
+    distintos para el mismo sector (Coahuila, Nuevo León, Tamaulipas y
+    Chihuahua todos contra Texas): sin esto, `us-tx_{sector}_bls` se
+    generaría idéntico para los 4 pares y `series_lookup` (un dict keyed por
+    series_id) se sobreescribiría en silencio, dejando 3 de los 4 pares
+    corriendo el motor econométrico contra los valores sintéticos de OTRO
+    par (el DGP común-tendencia/Granger de cada par dejaría de corresponder
+    a esa serie). Ver `ADDITIONAL_STATE_PAIRS` más abajo, donde siempre se
+    pasa el abbr del estado mexicano como disambiguador."""
     rng = _child_rng(rng_index)
     n_q = len(quarterly_dates)
     if len(monthly_dates) != n_q * 3:
@@ -279,9 +415,15 @@ def _state_pair_frames(
     sector_id = sector["id"]
     scian_code = sector["scian_codes"][0]
     naics_code = sector["naics_codes"][0]
+    label_en = sector.get("label_en", sector["label"])
 
-    mx_series_id = "mx-chh_aeroespacial_itaee"
-    us_series_id = "us-tx_aeroespacial_bls"
+    mx_abbr_lower = mx_abbr.lower()
+    us_abbr_lower = us_abbr.lower()
+    mx_series_id = f"mx-{mx_abbr_lower}_{sector_id}_itaee"
+    if us_series_disambiguator:
+        us_series_id = f"us-{us_abbr_lower}_{sector_id}_{us_series_disambiguator.lower()}_bls"
+    else:
+        us_series_id = f"us-{us_abbr_lower}_{sector_id}_bls"
 
     mx_vintage = (quarterly_dates[-1] + pd.Timedelta(days=MX_STATE_LAG_DAYS)).date().isoformat()
     us_vintage = (monthly_dates[-1] + pd.Timedelta(days=US_STATE_LAG_DAYS)).date().isoformat()
@@ -290,7 +432,7 @@ def _state_pair_frames(
         series_id=mx_series_id,
         source=MX_STATE_SOURCE,
         country="MX",
-        region_code=CHIHUAHUA_REGION_CODE,
+        region_code=mx_region_code,
         sector_id=sector_id,
         frequency="quarterly",
         seasonal_adjustment="nsa",
@@ -305,7 +447,7 @@ def _state_pair_frames(
         series_id=us_series_id,
         source=US_STATE_SOURCE,
         country="US",
-        region_code=TEXAS_REGION_CODE,
+        region_code=us_region_code,
         sector_id=sector_id,
         frequency="monthly",
         seasonal_adjustment="nsa",
@@ -321,11 +463,11 @@ def _state_pair_frames(
     us_tidy = normalize_series(list(zip(monthly_dates, us_monthly_values)), us_meta)
 
     labels = {
-        mx_series_id: "ITAEE - Actividad industrial (Chihuahua)",
-        us_series_id: "Empleo manufacturero - Aerospace (Texas)",
+        mx_series_id: f"ITAEE - Actividad industrial ({mx_state_label})",
+        us_series_id: f"Empleo manufacturero - {label_en} ({us_state_label})",
     }
     pair_def = {
-        "pair_id": "mx-chh_aeroespacial__us-tx_aeroespacial",
+        "pair_id": f"mx-{mx_abbr_lower}_{sector_id}__us-{us_abbr_lower}_{sector_id}",
         "level": "estatal",
         "sector_id": sector_id,
         "series_a": mx_series_id,
@@ -363,6 +505,32 @@ def main() -> dict[str, Any]:
             pair_defs.append(state_pair_def)
 
     sectors_by_id = {s["id"]: s for s in sectors}
+
+    logger.info("Generando %d pares estatales adicionales (frontera + corredores)...", len(ADDITIONAL_STATE_PAIRS))
+    for spec in ADDITIONAL_STATE_PAIRS:
+        sector = sectors_by_id[spec["sector_id"]]
+        mx = spec["mx"]
+        us = spec["us"]
+        state_frames, state_labels, state_pair_def = _state_pair_frames(
+            spec["rng_index"],
+            sector,
+            quarterly_dates,
+            monthly_dates,
+            mx_region_code=mx["code"],
+            mx_abbr=mx["abbr"],
+            mx_state_label=mx["label"],
+            us_region_code=us["code"],
+            us_abbr=us["abbr"],
+            us_state_label=us["label"],
+            # Siempre se disambigua con el abbr MX: varios pares nuevos
+            # comparten el mismo estado de EEUU (Texas) para el mismo sector
+            # (ver docstring de `_state_pair_frames`).
+            us_series_disambiguator=mx["abbr"],
+        )
+        series_lookup.update(state_frames)
+        series_labels.update(state_labels)
+        pair_defs.append(state_pair_def)
+
     logger.info("Corriendo motor econométrico sobre %d pares...", len(pair_defs))
     results = run_all(pair_defs, series_lookup, sectors_by_id)
 

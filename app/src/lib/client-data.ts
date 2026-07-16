@@ -1,6 +1,7 @@
 "use client";
 
 import type { Manifest, SeriesFile, ResultFile } from "./types";
+import type { Topology } from "topojson-specification";
 
 /**
  * Client-side counterparts to `data-loader.ts`, for Client Components that
@@ -29,4 +30,9 @@ export function fetchSeries(seriesId: string): Promise<SeriesFile | null> {
 
 export function fetchResult(pairId: string): Promise<ResultFile | null> {
   return fetchJson<ResultFile>(`/data/results/${pairId}.json`);
+}
+
+/** TopoJSON with the 32 Mexican states (`data/geo/mx-states.topojson`, synced by `scripts/sync-data.mjs`). */
+export function fetchMxStatesTopology(): Promise<Topology | null> {
+  return fetchJson<Topology>("/data/geo/mx-states.topojson");
 }

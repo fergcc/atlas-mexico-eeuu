@@ -46,8 +46,9 @@ export default function AcercaPage() {
           </h2>
           <p className="text-sm leading-relaxed text-foreground-muted">
             Los issues y pull requests son bienvenidos: desde ampliar la cobertura sectorial (todo el árbol
-            SCIAN/NAICS, no solo los 5 sectores estratégicos del Atlas 2021), hasta mejorar la geometría del
-            mapa estatal (ver la nota sobre el TopoJSON placeholder en <code className="font-mono-data">/estatal</code>),
+            SCIAN/NAICS, no solo los 5 sectores estratégicos del Atlas 2021), hasta mejorar la precisión de
+            fronteras del mapa estatal (ver <code className="font-mono-data">data/geo/SOURCES.md</code> para
+            la fuente actual y el reemplazo pendiente por el Marco Geoestadístico de INEGI),
             corregir metodología o traducir la interfaz. Revisa{" "}
             <code className="font-mono-data">CONTRIBUTING.md</code> en la raíz del repositorio.
           </p>

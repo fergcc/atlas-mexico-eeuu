@@ -1,22 +1,22 @@
 {
-  "pair_id": "mx-chh_aeroespacial__us-tx_aeroespacial",
+  "pair_id": "mx-son_manufactura_total__us-az_manufactura_total",
   "sector": {
-    "id": "aeroespacial",
-    "scian": "336410",
-    "naics": "3364",
-    "label": "Aeroespacial"
+    "id": "manufactura_total",
+    "scian": "31-33",
+    "naics": "31-33",
+    "label": "Manufactura total (referencia nacional)"
   },
   "series_a": {
-    "id": "mx-chh_aeroespacial_itaee",
+    "id": "mx-son_manufactura_total_itaee",
     "source": "INEGI - ITAEE (mock)",
-    "region": "08",
+    "region": "26",
     "proxy_type": "output_index",
     "seasonal_adjustment": "nsa"
   },
   "series_b": {
-    "id": "us-tx_aeroespacial_bls",
+    "id": "us-az_manufactura_total_son_bls",
     "source": "BLS - State and Area Employment (mock)",
-    "region": "48",
+    "region": "04",
     "proxy_type": "labor_input",
     "seasonal_adjustment": "nsa"
   },
@@ -26,7 +26,7 @@
     "end": "2026-06-30",
     "n_obs": 66
   },
-  "generated_at": "2026-07-16T16:41:05.736122+00:00",
+  "generated_at": "2026-07-16T16:41:05.853323+00:00",
   "data_vintage": "2026-10-03",
   "data_vintage_detail": {
     "a": "2026-10-03",
@@ -35,18 +35,18 @@
   "insufficient_data": false,
   "stationarity": {
     "a": {
-      "adf_statistic": -9.8820093784045,
-      "adf_p_value": 3.748389841333152e-17,
-      "kpss_statistic": 0.11072624638696962,
+      "adf_statistic": -7.115463766328205,
+      "adf_p_value": 3.8412205577264534e-10,
+      "kpss_statistic": 0.09789260675122195,
       "kpss_p_value": 0.1,
       "is_stationary": true,
       "order_of_integration": 1,
       "log_transformed": true
     },
     "b": {
-      "adf_statistic": -12.32781356083493,
-      "adf_p_value": 6.528852983385807e-23,
-      "kpss_statistic": 0.10823478780079562,
+      "adf_statistic": -6.444367191808523,
+      "adf_p_value": 1.5792534424053537e-08,
+      "kpss_statistic": 0.10423928249157724,
       "kpss_p_value": 0.1,
       "is_stationary": true,
       "order_of_integration": 1,
@@ -57,27 +57,27 @@
     "optimal_lag": 1,
     "selection_criterion": "bic",
     "a_causes_b": {
-      "f_stat": 11.398317161341,
-      "p_value": 0.0009865613949884872,
-      "p_value_fdr_adj": 0.003766870780865133,
+      "f_stat": 13.942378964561863,
+      "p_value": 0.00028780752036070196,
+      "p_value_fdr_adj": 0.0013431017616832759,
       "significant": true
     },
     "b_causes_a": {
-      "f_stat": 2.9874020472491103,
-      "p_value": 0.08644467864954707,
-      "p_value_fdr_adj": 0.15785550014265115,
+      "f_stat": 3.6471921725235266,
+      "p_value": 0.05851167181681692,
+      "p_value_fdr_adj": 0.1293415903319111,
       "significant": false
     }
   },
   "cointegration_engle_granger": {
-    "statistic": -5.44935471737187,
-    "p_value": 2.2633357191853218e-05,
+    "statistic": -6.258611056608134,
+    "p_value": 4.40280558854567e-07,
     "cointegrated": true
   },
   "cointegration_johansen": {
     "trace_statistic": [
-      19.66414879988243,
-      0.08967601639369972
+      30.27697552832872,
+      0.23467287245792243
     ],
     "critical_values": [
       [
@@ -96,11 +96,11 @@
   "vecm": {
     "cointegration_vector": [
       1.0,
-      -1.4289402798929376
+      -1.4382948263536344
     ],
     "adjustment_speed": [
-      -0.04810947494095112,
-      0.4674063775420345
+      0.06930467301423722,
+      0.5094193190721097
     ]
   },
   "warnings": []

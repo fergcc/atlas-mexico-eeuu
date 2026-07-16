@@ -1,5 +1,5 @@
 {
-  "pair_id": "mx-chh_aeroespacial__us-tx_aeroespacial",
+  "pair_id": "mx-nl_aeroespacial__us-tx_aeroespacial",
   "sector": {
     "id": "aeroespacial",
     "scian": "336410",
@@ -7,14 +7,14 @@
     "label": "Aeroespacial"
   },
   "series_a": {
-    "id": "mx-chh_aeroespacial_itaee",
+    "id": "mx-nl_aeroespacial_itaee",
     "source": "INEGI - ITAEE (mock)",
-    "region": "08",
+    "region": "19",
     "proxy_type": "output_index",
     "seasonal_adjustment": "nsa"
   },
   "series_b": {
-    "id": "us-tx_aeroespacial_bls",
+    "id": "us-tx_aeroespacial_nl_bls",
     "source": "BLS - State and Area Employment (mock)",
     "region": "48",
     "proxy_type": "labor_input",
@@ -26,7 +26,7 @@
     "end": "2026-06-30",
     "n_obs": 66
   },
-  "generated_at": "2026-07-16T16:41:05.736122+00:00",
+  "generated_at": "2026-07-16T16:41:05.824128+00:00",
   "data_vintage": "2026-10-03",
   "data_vintage_detail": {
     "a": "2026-10-03",
@@ -35,18 +35,18 @@
   "insufficient_data": false,
   "stationarity": {
     "a": {
-      "adf_statistic": -9.8820093784045,
-      "adf_p_value": 3.748389841333152e-17,
-      "kpss_statistic": 0.11072624638696962,
+      "adf_statistic": -9.970444313854307,
+      "adf_p_value": 2.247801458087131e-17,
+      "kpss_statistic": 0.2149866437148056,
       "kpss_p_value": 0.1,
       "is_stationary": true,
       "order_of_integration": 1,
       "log_transformed": true
     },
     "b": {
-      "adf_statistic": -12.32781356083493,
-      "adf_p_value": 6.528852983385807e-23,
-      "kpss_statistic": 0.10823478780079562,
+      "adf_statistic": -10.736778225294783,
+      "adf_p_value": 2.885527643254847e-19,
+      "kpss_statistic": 0.19406165179641843,
       "kpss_p_value": 0.1,
       "is_stationary": true,
       "order_of_integration": 1,
@@ -57,27 +57,27 @@
     "optimal_lag": 1,
     "selection_criterion": "bic",
     "a_causes_b": {
-      "f_stat": 11.398317161341,
-      "p_value": 0.0009865613949884872,
-      "p_value_fdr_adj": 0.003766870780865133,
-      "significant": true
+      "f_stat": 3.4441645395461515,
+      "p_value": 0.06588860665175386,
+      "p_value_fdr_adj": 0.1383660739686831,
+      "significant": false
     },
     "b_causes_a": {
-      "f_stat": 2.9874020472491103,
-      "p_value": 0.08644467864954707,
-      "p_value_fdr_adj": 0.15785550014265115,
+      "f_stat": 0.3330255671588585,
+      "p_value": 0.5649463036746877,
+      "p_value_fdr_adj": 0.6244143356404442,
       "significant": false
     }
   },
   "cointegration_engle_granger": {
-    "statistic": -5.44935471737187,
-    "p_value": 2.2633357191853218e-05,
+    "statistic": -5.222110575599436,
+    "p_value": 6.29924414550414e-05,
     "cointegrated": true
   },
   "cointegration_johansen": {
     "trace_statistic": [
-      19.66414879988243,
-      0.08967601639369972
+      30.158554779333304,
+      2.5133026525109834
     ],
     "critical_values": [
       [
@@ -96,11 +96,11 @@
   "vecm": {
     "cointegration_vector": [
       1.0,
-      -1.4289402798929376
+      -1.3836834943615088
     ],
     "adjustment_speed": [
-      -0.04810947494095112,
-      0.4674063775420345
+      -0.3003961732377785,
+      0.4656439911483859
     ]
   },
   "warnings": []
