@@ -26,7 +26,7 @@
     "end": "2026-05-31",
     "n_obs": 401
   },
-  "generated_at": "2026-07-16T18:51:29.052966+00:00",
+  "generated_at": "2026-07-16T19:58:04.489311+00:00",
   "data_vintage": "2026-05-01",
   "data_vintage_detail": {
     "a": "2026-05-01",
@@ -35,18 +35,18 @@
   "insufficient_data": false,
   "stationarity": {
     "a": {
-      "adf_statistic": -5.395593454254102,
-      "adf_p_value": 3.4601409081082676e-06,
-      "kpss_statistic": 0.41463803928207194,
-      "kpss_p_value": 0.07084567272324487,
+      "adf_statistic": -5.39559345425397,
+      "adf_p_value": 3.4601409081104974e-06,
+      "kpss_statistic": 0.4146380392820713,
+      "kpss_p_value": 0.07084567272324513,
       "is_stationary": true,
       "order_of_integration": 1,
       "log_transformed": true
     },
     "b": {
-      "adf_statistic": -5.478556249259019,
-      "adf_p_value": 2.3119380932723214e-06,
-      "kpss_statistic": 0.051349218361488494,
+      "adf_statistic": -5.478556249259012,
+      "adf_p_value": 2.3119380932724023e-06,
+      "kpss_statistic": 0.051349218361488515,
       "kpss_p_value": 0.1,
       "is_stationary": true,
       "order_of_integration": 1,
@@ -57,27 +57,27 @@
     "optimal_lag": 6,
     "selection_criterion": "bic",
     "a_causes_b": {
-      "f_stat": 10.79910149657089,
-      "p_value": 1.49824037447686e-11,
-      "p_value_fdr_adj": 1.573152393200703e-10,
+      "f_stat": 10.79910149657084,
+      "p_value": 1.498240374477054e-11,
+      "p_value_fdr_adj": 1.573152393200907e-10,
       "significant": true
     },
     "b_causes_a": {
-      "f_stat": 29.17629412450609,
-      "p_value": 1.5805856136611957e-31,
-      "p_value_fdr_adj": 2.212819859125674e-30,
+      "f_stat": 29.17629412450601,
+      "p_value": 1.5805856136615174e-31,
+      "p_value_fdr_adj": 2.2128198591261246e-30,
       "significant": true
     }
   },
   "cointegration_engle_granger": {
-    "statistic": -0.732606675256939,
-    "p_value": 0.9430030397994864,
+    "statistic": -0.7326066752569477,
+    "p_value": 0.9430030397994854,
     "cointegrated": false
   },
   "cointegration_johansen": {
     "trace_statistic": [
       33.508546051484686,
-      2.344401688042845
+      2.3444016880428444
     ],
     "critical_values": [
       [
@@ -96,11 +96,11 @@
   "vecm": {
     "cointegration_vector": [
       1.0,
-      8.325705954016524
+      8.325705954014486
     ],
     "adjustment_speed": [
-      -0.002020853459215941,
-      -0.018128237068153044
+      -0.002020853459215704,
+      -0.018128237068148683
     ]
   },
   "warnings": []

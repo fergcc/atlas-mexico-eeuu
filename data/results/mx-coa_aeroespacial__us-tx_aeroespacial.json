@@ -26,7 +26,7 @@
     "end": "2026-06-30",
     "n_obs": 66
   },
-  "generated_at": "2026-07-16T18:51:29.148510+00:00",
+  "generated_at": "2026-07-16T19:58:04.691139+00:00",
   "data_vintage": "2026-10-03",
   "data_vintage_detail": {
     "a": "2026-10-03",
@@ -35,8 +35,8 @@
   "insufficient_data": false,
   "stationarity": {
     "a": {
-      "adf_statistic": -8.101114537545604,
-      "adf_p_value": 1.2990799568792366e-12,
+      "adf_statistic": -8.101114537545605,
+      "adf_p_value": 1.2990799568792226e-12,
       "kpss_statistic": 0.08097197810508482,
       "kpss_p_value": 0.1,
       "is_stationary": true,
@@ -45,7 +45,7 @@
     },
     "b": {
       "adf_statistic": -9.497376111497905,
-      "adf_p_value": 3.519263975814208e-16,
+      "adf_p_value": 3.5192639758142084e-16,
       "kpss_statistic": 0.028523020040092224,
       "kpss_p_value": 0.1,
       "is_stationary": true,
@@ -57,9 +57,9 @@
     "optimal_lag": 1,
     "selection_criterion": "bic",
     "a_causes_b": {
-      "f_stat": 6.58347137109139,
-      "p_value": 0.011503218524558618,
-      "p_value_fdr_adj": 0.048313517803146196,
+      "f_stat": 6.583471371091393,
+      "p_value": 0.011503218524558602,
+      "p_value_fdr_adj": 0.04831351780314613,
       "significant": true
     },
     "b_causes_a": {
@@ -70,14 +70,14 @@
     }
   },
   "cointegration_engle_granger": {
-    "statistic": -4.997504737441813,
-    "p_value": 0.0001663906726994962,
+    "statistic": -4.997504737441814,
+    "p_value": 0.0001663906726994954,
     "cointegrated": true
   },
   "cointegration_johansen": {
     "trace_statistic": [
-      28.293549826669388,
-      0.7393512882611689
+      28.293549826669384,
+      0.739351288261169
     ],
     "critical_values": [
       [
@@ -96,11 +96,11 @@
   "vecm": {
     "cointegration_vector": [
       1.0,
-      -1.51626667166171
+      -1.5162666716611743
     ],
     "adjustment_speed": [
-      0.11762704664828226,
-      0.4452499345322698
+      0.11762704664804939,
+      0.44524993453436673
     ]
   },
   "warnings": []

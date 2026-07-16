@@ -26,7 +26,7 @@
     "end": "2025-12-31",
     "n_obs": 80
   },
-  "generated_at": "2026-07-16T18:51:29.275466+00:00",
+  "generated_at": "2026-07-16T19:58:04.945267+00:00",
   "data_vintage": "2025-12-01",
   "data_vintage_detail": {
     "a": "2025-12-01",
@@ -35,19 +35,19 @@
   "insufficient_data": false,
   "stationarity": {
     "a": {
-      "adf_statistic": -5.723410952331705,
-      "adf_p_value": 6.858069836652153e-07,
-      "kpss_statistic": 0.29055443715487705,
+      "adf_statistic": -5.7234109523317045,
+      "adf_p_value": 6.858069836652215e-07,
+      "kpss_statistic": 0.2905544371548767,
       "kpss_p_value": 0.1,
       "is_stationary": true,
       "order_of_integration": 2,
       "log_transformed": true
     },
     "b": {
-      "adf_statistic": -6.230543290944926,
-      "adf_p_value": 4.965852081194925e-08,
+      "adf_statistic": -6.230543290944924,
+      "adf_p_value": 4.965852081194969e-08,
       "kpss_statistic": 0.4326337379577999,
-      "kpss_p_value": 0.06308890605267246,
+      "kpss_p_value": 0.06308890605267245,
       "is_stationary": true,
       "order_of_integration": 1,
       "log_transformed": true
@@ -57,27 +57,27 @@
     "optimal_lag": 4,
     "selection_criterion": "bic",
     "a_causes_b": {
-      "f_stat": 1.5971317186338752,
-      "p_value": 0.17891159391916625,
-      "p_value_fdr_adj": 0.3199948286868289,
+      "f_stat": 1.5971317186339027,
+      "p_value": 0.178911593919159,
+      "p_value_fdr_adj": 0.3199948286868272,
       "significant": false
     },
     "b_causes_a": {
-      "f_stat": 0.8174827805490258,
-      "p_value": 0.5162247967776504,
-      "p_value_fdr_adj": 0.6640453631075101,
+      "f_stat": 0.8174827805490227,
+      "p_value": 0.5162247967776523,
+      "p_value_fdr_adj": 0.6640453631075148,
       "significant": false
     }
   },
   "cointegration_engle_granger": {
-    "statistic": -2.1850601269186787,
-    "p_value": 0.43208054196434414,
+    "statistic": -2.18506012691869,
+    "p_value": 0.4320805419643384,
     "cointegrated": false
   },
   "cointegration_johansen": {
     "trace_statistic": [
-      10.266273126963615,
-      0.04443136607214476
+      10.266273126963625,
+      0.0444313660721361
     ],
     "critical_values": [
       [

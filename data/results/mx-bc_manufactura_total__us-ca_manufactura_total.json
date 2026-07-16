@@ -26,7 +26,7 @@
     "end": "2025-12-31",
     "n_obs": 80
   },
-  "generated_at": "2026-07-16T18:51:29.179224+00:00",
+  "generated_at": "2026-07-16T19:58:04.765667+00:00",
   "data_vintage": "2025-12-01",
   "data_vintage_detail": {
     "a": "2025-12-01",
@@ -35,17 +35,17 @@
   "insufficient_data": false,
   "stationarity": {
     "a": {
-      "adf_statistic": -7.59517005595848,
-      "adf_p_value": 2.4713729897234948e-11,
-      "kpss_statistic": 0.1536102411032818,
+      "adf_statistic": -7.5951700559584845,
+      "adf_p_value": 2.471372989723387e-11,
+      "kpss_statistic": 0.15361024110328186,
       "kpss_p_value": 0.1,
       "is_stationary": true,
       "order_of_integration": 1,
       "log_transformed": true
     },
     "b": {
-      "adf_statistic": -5.291023981758928,
-      "adf_p_value": 5.7150107157104535e-06,
+      "adf_statistic": -5.291023981758967,
+      "adf_p_value": 5.715010715709421e-06,
       "kpss_statistic": 0.09750544288067611,
       "kpss_p_value": 0.1,
       "is_stationary": true,
@@ -57,27 +57,27 @@
     "optimal_lag": 4,
     "selection_criterion": "bic",
     "a_causes_b": {
-      "f_stat": 1.5821587992188983,
-      "p_value": 0.18285418782104507,
-      "p_value_fdr_adj": 0.3199948286868289,
+      "f_stat": 1.582158799218904,
+      "p_value": 0.18285418782104412,
+      "p_value_fdr_adj": 0.3199948286868272,
       "significant": false
     },
     "b_causes_a": {
-      "f_stat": 5.005864539017495,
-      "p_value": 0.0008742668608932152,
-      "p_value_fdr_adj": 0.004079912017501671,
+      "f_stat": 5.005864539017489,
+      "p_value": 0.0008742668608932292,
+      "p_value_fdr_adj": 0.004079912017501736,
       "significant": true
     }
   },
   "cointegration_engle_granger": {
-    "statistic": -0.5472700385336927,
-    "p_value": 0.96079103811629,
+    "statistic": -0.5472700385336912,
+    "p_value": 0.9607910381162901,
     "cointegrated": false
   },
   "cointegration_johansen": {
     "trace_statistic": [
-      8.643869381003682,
-      1.3965369449694065
+      8.643869381003691,
+      1.3965369449694063
     ],
     "critical_values": [
       [

@@ -26,7 +26,7 @@
     "end": "2026-06-30",
     "n_obs": 66
   },
-  "generated_at": "2026-07-16T18:51:29.223159+00:00",
+  "generated_at": "2026-07-16T19:58:04.869256+00:00",
   "data_vintage": "2026-10-03",
   "data_vintage_detail": {
     "a": "2026-10-03",
@@ -35,8 +35,8 @@
   "insufficient_data": false,
   "stationarity": {
     "a": {
-      "adf_statistic": -10.8689738754692,
-      "adf_p_value": 1.3840324670635786e-19,
+      "adf_statistic": -10.868973875469194,
+      "adf_p_value": 1.3840324670636282e-19,
       "kpss_statistic": 0.11302996457371581,
       "kpss_p_value": 0.1,
       "is_stationary": true,
@@ -57,27 +57,27 @@
     "optimal_lag": 1,
     "selection_criterion": "bic",
     "a_causes_b": {
-      "f_stat": 5.1278473382298735,
-      "p_value": 0.025310204705960855,
-      "p_value_fdr_adj": 0.08177143058848892,
+      "f_stat": 5.127847338229873,
+      "p_value": 0.02531020470596085,
+      "p_value_fdr_adj": 0.0817714305884889,
       "significant": false
     },
     "b_causes_a": {
-      "f_stat": 0.3963982637435011,
-      "p_value": 0.5301325347725117,
-      "p_value_fdr_adj": 0.6640453631075101,
+      "f_stat": 0.3963982637434993,
+      "p_value": 0.5301325347725127,
+      "p_value_fdr_adj": 0.6640453631075148,
       "significant": false
     }
   },
   "cointegration_engle_granger": {
-    "statistic": -3.376196827526712,
-    "p_value": 0.04506391309812969,
+    "statistic": -3.3761968275267065,
+    "p_value": 0.04506391309813033,
     "cointegrated": true
   },
   "cointegration_johansen": {
     "trace_statistic": [
-      14.19393289363175,
-      1.7716598039752798
+      14.193932893631844,
+      1.771659803975287
     ],
     "critical_values": [
       [

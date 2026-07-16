@@ -26,7 +26,7 @@
     "end": "2025-12-31",
     "n_obs": 80
   },
-  "generated_at": "2026-07-16T18:51:29.263731+00:00",
+  "generated_at": "2026-07-16T19:58:04.918130+00:00",
   "data_vintage": "2025-12-01",
   "data_vintage_detail": {
     "a": "2025-12-01",
@@ -35,17 +35,17 @@
   "insufficient_data": false,
   "stationarity": {
     "a": {
-      "adf_statistic": -9.475494092373086,
-      "adf_p_value": 4.000003733465379e-16,
-      "kpss_statistic": 0.193998040030523,
+      "adf_statistic": -9.475494092373081,
+      "adf_p_value": 4.0000037334654934e-16,
+      "kpss_statistic": 0.19399804003052298,
       "kpss_p_value": 0.1,
       "is_stationary": true,
       "order_of_integration": 1,
       "log_transformed": true
     },
     "b": {
-      "adf_statistic": -5.9760853747237475,
-      "adf_p_value": 1.88607574608206e-07,
+      "adf_statistic": -5.9760853747237235,
+      "adf_p_value": 1.8860757460822726e-07,
       "kpss_statistic": 0.05478275179006375,
       "kpss_p_value": 0.1,
       "is_stationary": true,
@@ -57,20 +57,20 @@
     "optimal_lag": 4,
     "selection_criterion": "bic",
     "a_causes_b": {
-      "f_stat": 0.932166729426713,
-      "p_value": 0.44750099191296633,
-      "p_value_fdr_adj": 0.6640453631075101,
+      "f_stat": 0.9321667294267169,
+      "p_value": 0.4475009919129642,
+      "p_value_fdr_adj": 0.6640453631075148,
       "significant": false
     },
     "b_causes_a": {
-      "f_stat": 0.8732817065446067,
-      "p_value": 0.4819380886460587,
-      "p_value_fdr_adj": 0.6640453631075101,
+      "f_stat": 0.8732817065446038,
+      "p_value": 0.4819380886460606,
+      "p_value_fdr_adj": 0.6640453631075148,
       "significant": false
     }
   },
   "cointegration_engle_granger": {
-    "statistic": -0.04996630973572429,
+    "statistic": -0.049966309735721755,
     "p_value": 0.9846697260950622,
     "cointegrated": false
   },

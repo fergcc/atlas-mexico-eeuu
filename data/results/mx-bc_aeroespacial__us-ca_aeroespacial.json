@@ -26,7 +26,7 @@
     "end": "2025-12-31",
     "n_obs": 80
   },
-  "generated_at": "2026-07-16T18:51:29.127054+00:00",
+  "generated_at": "2026-07-16T19:58:04.641544+00:00",
   "data_vintage": "2025-12-01",
   "data_vintage_detail": {
     "a": "2025-12-01",
@@ -35,17 +35,17 @@
   "insufficient_data": false,
   "stationarity": {
     "a": {
-      "adf_statistic": -7.59517005595848,
-      "adf_p_value": 2.4713729897234948e-11,
-      "kpss_statistic": 0.1536102411032818,
+      "adf_statistic": -7.5951700559584845,
+      "adf_p_value": 2.471372989723387e-11,
+      "kpss_statistic": 0.15361024110328186,
       "kpss_p_value": 0.1,
       "is_stationary": true,
       "order_of_integration": 1,
       "log_transformed": true
     },
     "b": {
-      "adf_statistic": -3.8335353268804666,
-      "adf_p_value": 0.0025822500138836433,
+      "adf_statistic": -3.83353532688046,
+      "adf_p_value": 0.00258225001388371,
       "kpss_statistic": 0.1919589115924843,
       "kpss_p_value": 0.1,
       "is_stationary": true,
@@ -57,26 +57,26 @@
     "optimal_lag": 3,
     "selection_criterion": "bic",
     "a_causes_b": {
-      "f_stat": 0.3129514012619288,
-      "p_value": 0.8159946438911688,
-      "p_value_fdr_adj": 0.8980633942157074,
+      "f_stat": 0.312951401261931,
+      "p_value": 0.815994643891167,
+      "p_value_fdr_adj": 0.8980633942157079,
       "significant": false
     },
     "b_causes_a": {
-      "f_stat": 0.24358297881230961,
-      "p_value": 0.8657822327724525,
-      "p_value_fdr_adj": 0.9090713444110752,
+      "f_stat": 0.24358297881230875,
+      "p_value": 0.865782232772453,
+      "p_value_fdr_adj": 0.9090713444110757,
       "significant": false
     }
   },
   "cointegration_engle_granger": {
-    "statistic": -1.7207560752074946,
-    "p_value": 0.6673550425379049,
+    "statistic": -1.7207560752074944,
+    "p_value": 0.6673550425379051,
     "cointegrated": false
   },
   "cointegration_johansen": {
     "trace_statistic": [
-      6.858884932998123,
+      6.858884932998133,
       0.40238022805315277
     ],
     "critical_values": [

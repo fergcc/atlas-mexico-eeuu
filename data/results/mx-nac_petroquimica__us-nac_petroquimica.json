@@ -26,7 +26,7 @@
     "end": "2026-05-31",
     "n_obs": 401
   },
-  "generated_at": "2026-07-16T18:51:29.079036+00:00",
+  "generated_at": "2026-07-16T19:58:04.541936+00:00",
   "data_vintage": "2026-05-01",
   "data_vintage_detail": {
     "a": "2026-05-01",
@@ -35,17 +35,17 @@
   "insufficient_data": false,
   "stationarity": {
     "a": {
-      "adf_statistic": -5.922579816130986,
-      "adf_p_value": 2.486363315152028e-07,
-      "kpss_statistic": 0.2890239465453459,
+      "adf_statistic": -5.922579816131031,
+      "adf_p_value": 2.4863633151514507e-07,
+      "kpss_statistic": 0.28902394654534386,
       "kpss_p_value": 0.1,
       "is_stationary": true,
       "order_of_integration": 1,
       "log_transformed": true
     },
     "b": {
-      "adf_statistic": -3.9096389566299736,
-      "adf_p_value": 0.0019650438114217094,
+      "adf_statistic": -3.9096389566299763,
+      "adf_p_value": 0.001965043811421686,
       "kpss_statistic": 0.43011548392512033,
       "kpss_p_value": 0.0641743603771033,
       "is_stationary": true,
@@ -57,27 +57,27 @@
     "optimal_lag": 4,
     "selection_criterion": "bic",
     "a_causes_b": {
-      "f_stat": 0.7701251741334425,
-      "p_value": 0.5447995902053682,
-      "p_value_fdr_adj": 0.6640453631075101,
+      "f_stat": 0.7701251741334447,
+      "p_value": 0.5447995902053671,
+      "p_value_fdr_adj": 0.6640453631075148,
       "significant": false
     },
     "b_causes_a": {
-      "f_stat": 0.1446644485153855,
-      "p_value": 0.9653480149615278,
+      "f_stat": 0.1446644485153878,
+      "p_value": 0.9653480149615268,
       "p_value_fdr_adj": 0.9692718895455036,
       "significant": false
     }
   },
   "cointegration_engle_granger": {
-    "statistic": -0.38788070698887,
-    "p_value": 0.9714212703637881,
+    "statistic": -0.3878807069888816,
+    "p_value": 0.9714212703637874,
     "cointegrated": false
   },
   "cointegration_johansen": {
     "trace_statistic": [
       26.099752335195323,
-      6.462062247301108
+      6.46206224730111
     ],
     "critical_values": [
       [
@@ -95,12 +95,12 @@
   },
   "vecm": {
     "cointegration_vector": [
-      1.0,
-      -1.4408867412441792e-16
+      0.9999999999999999,
+      1.2565232674155437e-17
     ],
     "adjustment_speed": [
-      -0.07545197306805505,
-      0.020637390790493974
+      -0.07545197306805623,
+      0.02063739079049368
     ]
   },
   "warnings": []
