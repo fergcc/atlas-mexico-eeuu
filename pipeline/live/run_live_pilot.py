@@ -437,6 +437,32 @@ REAL_STATE_OVERRIDES: list[dict[str, Any]] = [
 ]
 
 
+def _try_override(
+    label: str,
+    fetch_fn,
+    series_lookup: dict[str, Any],
+    series_labels: dict[str, str],
+    status: list[tuple[str, str]],
+) -> None:
+    """Corre `fetch_fn()` (una llamada real a una fuente externa) y, si tiene
+    éxito, sustituye las series mock correspondientes por las reales. Si
+    falla por CUALQUIER motivo (credencial faltante, rate limit, caída
+    temporal de la fuente, cambio de esquema en la respuesta...), registra el
+    fallo y NO propaga la excepción — el par en cuestión simplemente se queda
+    con los datos mock ya generados en el paso 1, en vez de tumbar toda la
+    corrida. Así es seguro dejar esto corriendo sin supervisión en un cron:
+    un solo API caído degrada un par, no todo el pipeline."""
+    try:
+        frames, labels = fetch_fn()
+    except Exception as exc:  # noqa: BLE001 - resiliencia intencional, ver docstring
+        logger.warning("Par %s: fuente real falló (%s: %s) — se conserva el dato mock.", label, type(exc).__name__, exc)
+        status.append((label, "mock (fallback: fuente real falló)"))
+        return
+    series_lookup.update(frames)
+    series_labels.update(labels)
+    status.append((label, "real"))
+
+
 def main() -> dict[str, Any]:
     sectors = _load_sectors()
     sectors_by_id = {s["id"]: s for s in sectors}
@@ -446,6 +472,7 @@ def main() -> dict[str, Any]:
     series_lookup: dict[str, Any] = {}
     series_labels: dict[str, str] = {}
     pair_defs: list[dict[str, Any]] = []
+    override_status: list[tuple[str, str]] = []
 
     # 1) Generar TODO en modo mock primero (idéntico a generate_mock_data.main),
     #    para no perder cobertura de los pares sin claves reales verificadas.
@@ -479,81 +506,102 @@ def main() -> dict[str, Any]:
 
     # 2) Sustituir por datos REALES el par nacional+estatal del piloto original
     #    (manufactura_total: INEGI 736407/ITAEE 741651 vs FRED INDPRO/BLS
-    #    transporte-TX) — sin cambios de comportamiento respecto al piloto ya
-    #    commiteado, solo pasado por la función genérica en vez de la original.
+    #    transporte-TX), cada llamada protegida por `_try_override` — si
+    #    alguna fuente falla, ese par se queda con el mock del paso 1.
     logger.info("Descargando datos reales del piloto original (manufactura_total)...")
     real_sector = sectors_by_id["manufactura_total"]
-    frames, labels = _fetch_real_national_pair(
-        real_sector, mx_indicator_id=inegi.DEFAULT_INDICATOR_ID, us_series_id_real=fred.DEFAULT_SERIES_ID,
+    _try_override(
+        "mx-nac_manufactura_total__us-nac_manufactura_total",
+        lambda: _fetch_real_national_pair(
+            real_sector, mx_indicator_id=inegi.DEFAULT_INDICATOR_ID, us_series_id_real=fred.DEFAULT_SERIES_ID,
+        ),
+        series_lookup, series_labels, override_status,
     )
-    series_lookup.update(frames)
-    series_labels.update(labels)
-    frames, labels = _fetch_real_state_pair(
-        real_sector,
-        mx_area_code=CHIHUAHUA_CODE, mx_abbr="CHH", mx_state_label="Chihuahua",
-        us_region_code=TEXAS_FIPS, us_abbr="TX", us_state_label="Texas",
-        mx_indicator_id=inegi.ITAEE_MANUFACTURING_INDICATOR_ID,
-        us_series_id_real=bls.DEFAULT_SERIES_ID,
-        us_series_disambiguator="CHH",
+    _try_override(
+        "mx-chh_manufactura_total__us-tx_manufactura_total",
+        lambda: _fetch_real_state_pair(
+            real_sector,
+            mx_area_code=CHIHUAHUA_CODE, mx_abbr="CHH", mx_state_label="Chihuahua",
+            us_region_code=TEXAS_FIPS, us_abbr="TX", us_state_label="Texas",
+            mx_indicator_id=inegi.ITAEE_MANUFACTURING_INDICATOR_ID,
+            us_series_id_real=bls.DEFAULT_SERIES_ID,
+            us_series_disambiguator="CHH",
+        ),
+        series_lookup, series_labels, override_status,
     )
-    series_lookup.update(frames)
-    series_labels.update(labels)
 
     # 3) Sustituir por datos REALES los 5 sectores nacionales nuevos.
     logger.info("Descargando %d pares nacionales reales nuevos...", len(REAL_NATIONAL_OVERRIDES))
     for override in REAL_NATIONAL_OVERRIDES:
         sector = sectors_by_id[override["sector_id"]]
-        frames, labels = _fetch_real_national_pair(
-            sector,
-            mx_indicator_id=override["mx_indicator_id"],
-            us_series_id_real=override["us_series_id_real"],
-            mx_scian_code=override.get("mx_scian_code"),
-            mx_naics_code=override.get("mx_naics_code"),
-            approximation_note=override.get("approximation_note"),
+        _try_override(
+            f"mx-nac_{override['sector_id']}__us-nac_{override['sector_id']}",
+            lambda o=override, s=sector: _fetch_real_national_pair(
+                s,
+                mx_indicator_id=o["mx_indicator_id"],
+                us_series_id_real=o["us_series_id_real"],
+                mx_scian_code=o.get("mx_scian_code"),
+                mx_naics_code=o.get("mx_naics_code"),
+                approximation_note=o.get("approximation_note"),
+            ),
+            series_lookup, series_labels, override_status,
         )
-        series_lookup.update(frames)
-        series_labels.update(labels)
 
     # 4) Sustituir por datos REALES los 7 pares estatales nuevos verificados.
     logger.info("Descargando %d pares estatales reales nuevos...", len(REAL_STATE_OVERRIDES))
     for override in REAL_STATE_OVERRIDES:
         sector = sectors_by_id[override["sector_id"]]
-        frames, labels = _fetch_real_state_pair(
-            sector,
-            mx_area_code=override["mx_area_code"],
-            mx_abbr=override["mx_abbr"],
-            mx_state_label=override["mx_state_label"],
-            mx_indicator_id=override["mx_indicator_id"],
-            us_region_code=override["us_region_code"],
-            us_abbr=override["us_abbr"],
-            us_state_label=override["us_state_label"],
-            us_series_id_real=override["us_series_id_real"],
-            us_series_disambiguator=override.get("us_series_disambiguator"),
-            approximation_note=override.get("approximation_note"),
+        pair_label = f"mx-{override['mx_abbr'].lower()}_{override['sector_id']}__us-{override['us_abbr'].lower()}_{override['sector_id']}"
+        _try_override(
+            pair_label,
+            lambda o=override, s=sector: _fetch_real_state_pair(
+                s,
+                mx_area_code=o["mx_area_code"],
+                mx_abbr=o["mx_abbr"],
+                mx_state_label=o["mx_state_label"],
+                mx_indicator_id=o["mx_indicator_id"],
+                us_region_code=o["us_region_code"],
+                us_abbr=o["us_abbr"],
+                us_state_label=o["us_state_label"],
+                us_series_id_real=o["us_series_id_real"],
+                us_series_disambiguator=o.get("us_series_disambiguator"),
+                approximation_note=o.get("approximation_note"),
+            ),
+            series_lookup, series_labels, override_status,
         )
-        series_lookup.update(frames)
-        series_labels.update(labels)
 
-    n_real_pairs = 2 + len(REAL_NATIONAL_OVERRIDES) + len(REAL_STATE_OVERRIDES)
+    n_real_pairs = sum(1 for _, status in override_status if status == "real")
+    n_attempted = len(override_status)
+    if n_real_pairs == 0:
+        mode = "mock"
+    elif n_real_pairs == len(pair_defs):
+        mode = "live"
+    else:
+        mode = "mixed"
+
+    logger.info("Resumen de fuentes reales intentadas (%d/%d exitosas):", n_real_pairs, n_attempted)
+    for label, status in override_status:
+        logger.info("  %-70s %s", label, status)
+
     logger.info(
-        "Corriendo motor econométrico sobre %d pares (%d con datos reales)...",
-        len(pair_defs), n_real_pairs,
+        "Corriendo motor econométrico sobre %d pares (%d con datos reales, mode=%s)...",
+        len(pair_defs), n_real_pairs, mode,
     )
     results = run_all(pair_defs, series_lookup, sectors_by_id)
 
-    logger.info("Exportando manifest/series/results a data/ (mode=mixed)...")
+    logger.info("Exportando manifest/series/results a data/ (mode=%s)...", mode)
     manifest = export_all(
         sectors=sectors,
         series_lookup=series_lookup,
         series_labels=series_labels,
         pair_defs=pair_defs,
         results=results,
-        mode="mixed",
+        mode=mode,
         refresh_cadence="trimestral",
     )
     logger.info(
-        "Listo: %d sectores, %d series, %d pares (mixed: %d pares con datos reales).",
-        len(sectors), len(series_lookup), len(pair_defs), n_real_pairs,
+        "Listo: %d sectores, %d series, %d pares (%s: %d pares con datos reales).",
+        len(sectors), len(series_lookup), len(pair_defs), mode, n_real_pairs,
     )
     return manifest
 

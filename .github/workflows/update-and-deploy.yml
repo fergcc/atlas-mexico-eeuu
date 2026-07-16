@@ -41,7 +41,7 @@ jobs:
       - name: Correr pruebas unitarias del motor econométrico
         run: python -m pytest pipeline/tests/ -v
 
-      - name: Ejecutar pipeline
+      - name: Ejecutar pipeline (live con fallback automático a mock por fuente)
         env:
           INEGI_TOKEN: ${{ secrets.INEGI_TOKEN }}
           BANXICO_TOKEN: ${{ secrets.BANXICO_TOKEN }}
@@ -49,15 +49,16 @@ jobs:
           BEA_API_KEY: ${{ secrets.BEA_API_KEY }}
           BLS_API_KEY: ${{ secrets.BLS_API_KEY }}
         run: |
-          # TODO: cuando exista un orquestador de ingesta real (pipeline/ingestion/*
-          # ya tiene los clientes por fuente, pero falta el script que los conecte
-          # end-to-end con pipeline_runner.run_pair), esta línea debe elegir entre
-          # modo live y mock según si las credenciales están presentes. Por ahora
-          # siempre corre en modo mock — ver docs/arquitectura.md.
+          # pipeline/live/run_live_pilot.py intenta datos reales para 14/21
+          # pares (ver su docstring para la tabla de cobertura) y cae solo a
+          # mock, por par, si una credencial falta o una fuente falla — nunca
+          # tumba toda la corrida (ver `_try_override`). El manifest resultante
+          # declara mode="live"/"mixed"/"mock" según cuántos pares realmente
+          # se resolvieron con datos reales en esta corrida particular.
           if [ -z "$INEGI_TOKEN" ]; then
-            echo "Sin credenciales configuradas todavía — corriendo en modo mock." | tee -a "$GITHUB_STEP_SUMMARY"
+            echo "Sin credenciales configuradas todavía — todos los pares caerán a mock." | tee -a "$GITHUB_STEP_SUMMARY"
           fi
-          python -m pipeline.mock.generate_mock_data
+          python -m pipeline.live.run_live_pilot
 
       - name: Detectar cambios en /data
         id: diff
