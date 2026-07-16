@@ -2,11 +2,11 @@
   "id": "us-nac_manufactura_total_ip",
   "meta": {
     "id": "us-nac_manufactura_total_ip",
-    "nombre": "Industrial Production Index - Total (US, national, FRED real)",
+    "nombre": "Industrial Production Index - Total manufacturing (national reference) (US, national, FRED real)",
     "pais": "US",
     "region_code": "NAC",
     "sector_id": "manufactura_total",
-    "fuente": "FRED - INDPRO (Industrial Production: Total Index)",
+    "fuente": "FRED - INDPRO (Industrial Production por NAICS)",
     "periodicidad": "mensual",
     "unidad": "Índice base 2017=100",
     "proxy_type": "output_index",

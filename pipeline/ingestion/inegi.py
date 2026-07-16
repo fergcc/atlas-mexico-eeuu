@@ -18,16 +18,40 @@ generaba la URL para un indicador seleccionado ahí. El área nacional es `00`
 
 Series verificadas en vivo (claves del BIE, catálogo "actualizado" — estas
 claves NO se pueden derivar de la documentación pública ni buscar por texto
-vía la API; solo se descubren con el "Constructor de consultas" del sitio):
+vía la API; solo se descubren con el "Constructor de consultas" del sitio,
+navegando el árbol hasta el nodo hoja — ver `pipeline/live/run_live_pilot.py`
+para el método programático de recorrido del árbol usado para las claves de
+abajo):
     - 736407: "Total de la actividad industrial" (IMAI), Índice de volumen
       físico, Series Originales (NSA), nacional. Existe también una variante
-      desestacionalizada bajo el mismo árbol que no se ha identificado aún
-      (TODO: ubicarla si se necesita SA en vez de NSA).
+      desestacionalizada bajo el mismo árbol ("Series desestacionalizadas y
+      tendencia-ciclo", nodo 606616) que no se ha identificado a nivel de
+      clave específica aún (TODO: ubicarla si se necesita SA en vez de NSA).
     - 741177: ITAEE total estatal, Índice de volumen físico, Series
       Originales — usar con `area_code` = código INEGI de 2 dígitos del
       estado (ver `region_registry.yaml`).
     - 741651: ITAEE del sector "31-33 Industrias manufactureras" por estado,
-      mismo uso que 741177 pero acotado a manufactura.
+      mismo uso que 741177 pero acotado a manufactura. IMPORTANTE: devuelve
+      `ErrorCode:100` (sin resultados) para `area_code` en {"04", "05", "07",
+      "19", "28", "30"} (Campeche, Coahuila, Chiapas, Nuevo León, Tamaulipas,
+      Veracruz) — verificado contra la API real, no es un bug de este
+      pipeline; el catálogo estatal de INEGI simplemente no publica ese
+      desglose para esos estados bajo esta clave.
+    - IMAI por subsector SCIAN, nacional, mismo árbol que 736407 ("Actividad
+      industrial, base 2018 > Series Originales > Índice de volumen físico >
+      31-33 Industrias manufactureras > {subsector}"): 736515 (3364,
+      aeroespacial), 736462 (3254, farmacéutica), 736491 (total subsector
+      333, maquinaria y equipo — no existe desglose a 333611/turbinas
+      eólicas en este catálogo), 736427 (3118, panadería y tortillas — proxy
+      de agroindustrial ya declarado en `scian_naics_crosswalk.csv`), 736459
+      (3251, químicos básicos — mitad de petroquímica) y 736457 (3241,
+      derivados del petróleo y carbón — la otra mitad de petroquímica, sin
+      usar actualmente). El catálogo IMAI SÍ desagrega hasta SCIAN de 4
+      dígitos a nivel nacional (a diferencia del catálogo ITAEE estatal,
+      que solo llega hasta manufactura 31-33 total o grupos gruesos
+      "31"/"32"/"33" — no hay equivalente estatal de estas claves de 4
+      dígitos). Ver `pipeline/live/run_live_pilot.py` para la tabla completa
+      de cobertura y las aproximaciones documentadas en cada caso.
 
 El token se lee de la variable de entorno `INEGI_TOKEN` (vía python-dotenv).
 """

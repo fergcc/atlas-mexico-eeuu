@@ -2,7 +2,7 @@
   "id": "mx-nac_manufactura_total_emim",
   "meta": {
     "id": "mx-nac_manufactura_total_emim",
-    "nombre": "Producción manufacturera - Actividad industrial total (México, nacional, INEGI real)",
+    "nombre": "Producción manufacturera - Manufactura total (referencia nacional) (México, nacional, INEGI real)",
     "pais": "MX",
     "region_code": "NAC",
     "sector_id": "manufactura_total",

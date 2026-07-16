@@ -8,76 +8,76 @@
   },
   "series_a": {
     "id": "mx-nac_eolica_emim",
-    "source": "INEGI - EMIM (mock)",
+    "source": "INEGI - BIE (Indicadores económicos de coyuntura, clave 736491) [APROXIMACIÓN: SCIAN/NAICS 333611 (turbinas eólicas) no está desagregado ni en el catálogo IMAI de INEGI ni en FRED; se usa el subsector 333 completo ('Fabricación de maquinaria y equipo') en ambos lados para mantener granularidad consistente.]",
     "region": "NAC",
     "proxy_type": "output_index",
     "seasonal_adjustment": "nsa"
   },
   "series_b": {
     "id": "us-nac_eolica_ip",
-    "source": "FRED - Industrial Production (mock)",
+    "source": "FRED - IPG333N (Industrial Production por NAICS)",
     "region": "NAC",
     "proxy_type": "output_index",
     "seasonal_adjustment": "nsa"
   },
   "sample": {
     "frequency_used": "monthly",
-    "start": "2010-01-31",
-    "end": "2026-06-30",
-    "n_obs": 198
+    "start": "1993-01-31",
+    "end": "2026-05-31",
+    "n_obs": 401
   },
-  "generated_at": "2026-07-16T17:48:53.836551+00:00",
-  "data_vintage": "2026-08-14",
+  "generated_at": "2026-07-16T18:27:56.138885+00:00",
+  "data_vintage": "2026-05-01",
   "data_vintage_detail": {
-    "a": "2026-08-14",
-    "b": "2026-07-15"
+    "a": "2026-05-01",
+    "b": "2026-05-01"
   },
   "insufficient_data": false,
   "stationarity": {
     "a": {
-      "adf_statistic": -7.660254956171895,
-      "adf_p_value": 1.6961105538169946e-11,
-      "kpss_statistic": 0.05387206778260302,
+      "adf_statistic": -5.9263352482114255,
+      "adf_p_value": 2.438729571794988e-07,
+      "kpss_statistic": 0.20063406562539327,
       "kpss_p_value": 0.1,
       "is_stationary": true,
       "order_of_integration": 1,
       "log_transformed": true
     },
     "b": {
-      "adf_statistic": -6.847347398129261,
-      "adf_p_value": 1.7292210102557155e-09,
-      "kpss_statistic": 0.026756951356896163,
+      "adf_statistic": -3.8853799657854404,
+      "adf_p_value": 0.002145116270329567,
+      "kpss_statistic": 0.2953165132838806,
       "kpss_p_value": 0.1,
       "is_stationary": true,
-      "order_of_integration": 1,
+      "order_of_integration": 0,
       "log_transformed": true
     }
   },
   "granger": {
-    "optimal_lag": 1,
+    "optimal_lag": 8,
     "selection_criterion": "bic",
     "a_causes_b": {
-      "f_stat": 24.47141728814959,
-      "p_value": 1.127904519297089e-06,
-      "p_value_fdr_adj": 1.3136962338411471e-05,
+      "f_stat": 26.273009596619104,
+      "p_value": 5.6113016740353295e-36,
+      "p_value_fdr_adj": 2.3567467030948385e-34,
       "significant": true
     },
     "b_causes_a": {
-      "f_stat": 2.241525875490336,
-      "p_value": 0.13516558079913418,
-      "p_value_fdr_adj": 0.2002453048876062,
-      "significant": false
+      "f_stat": 24.293678562223775,
+      "p_value": 2.387057735565465e-33,
+      "p_value_fdr_adj": 5.012821244687476e-32,
+      "significant": true
     }
   },
   "cointegration_engle_granger": {
-    "statistic": -4.0129073166835205,
-    "p_value": 0.006882762285239028,
-    "cointegrated": true
+    "statistic": -2.4033871000871954,
+    "p_value": 0.32325244738132863,
+    "cointegrated": false
   },
   "cointegration_johansen": {
     "trace_statistic": [
-      48.906472535036606,
-      0.055471024553647524
+      79.37058386269118,
+      14.459618339135746
     ],
     "critical_values": [
       [
@@ -91,16 +91,16 @@
         6.6349
       ]
     ],
-    "cointegration_rank": 1
+    "cointegration_rank": 2
   },
   "vecm": {
     "cointegration_vector": [
-      1.0,
-      -1.2589682683788035
+      0.9999999999999998,
+      3.194953109444658e-17
     ],
     "adjustment_speed": [
-      -0.027191017522837934,
-      0.3880007764005383
+      -0.3613512593959359,
+      -0.021777210352502113
     ]
   },
   "warnings": []

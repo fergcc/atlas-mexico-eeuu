@@ -2,11 +2,11 @@
   "id": "mx-chh_manufactura_total_itaee",
   "meta": {
     "id": "mx-chh_manufactura_total_itaee",
-    "nombre": "ITAEE - Manufactura 31-33 (Chihuahua, INEGI real)",
+    "nombre": "ITAEE - Actividad industrial (Chihuahua, INEGI real)",
     "pais": "MX",
     "region_code": "08",
     "sector_id": "manufactura_total",
-    "fuente": "INEGI - ITAEE (Series Originales, clave 741651, manufactura 31-33)",
+    "fuente": "INEGI - ITAEE (Series Originales, clave 741651)",
     "periodicidad": "trimestral",
     "unidad": "Índice base 2018=100",
     "proxy_type": "output_index",

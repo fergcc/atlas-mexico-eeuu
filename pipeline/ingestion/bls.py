@@ -6,12 +6,26 @@ Endpoint real:
 Documentación: https://www.bls.gov/developers/api_signature_v2.htm
 
 Serie de ejemplo usada como referencia de integración: `SMU48000003133600001`
-(CES estatal, Texas, manufactura de equipo de transporte — proxy ilustrativo
-del sector aeroespacial; el id exacto por SCIAN/NAICS y estado debe resolverse
-con el buscador de series de BLS antes de usarse en producción, ver
-https://data.bls.gov/cgi-bin/surveymost). Este es el proxy declarado
-`labor_input` (empleo), no `output_index` — nunca se debe presentar como
-"producción" sin ese matiz (ver docs/metodologia.md).
+(CES estatal, Texas, manufactura de equipo de transporte). Este es el proxy
+declarado `labor_input` (empleo), no `output_index` — nunca se debe presentar
+como "producción" sin ese matiz (ver docs/metodologia.md).
+
+Convención de construcción del `series_id` (documentada en
+https://www.bls.gov/help/hlpforma.htm#SM, verificada con ejemplos reales de
+la propia página): a diferencia de INEGI, BLS SÍ permite construir IDs
+determinísticamente sin necesidad de un "buscador" — pero cada ID construido
+debe VERIFICARSE contra la API real antes de usarse (una serie inexistente
+no da error claro, ver más abajo). Formato de 20 caracteres:
+    "SM" + "U" (no ajustado estacionalmente) + estado FIPS (2 dígitos) +
+    código de área (5 dígitos, "00000" = todo el estado) +
+    código de supersector+industria (8 dígitos, catálogo CES — NO es
+    literalmente el código NAICS, aunque para las industrias manufactureras
+    de 4-6 dígitos suele coincidir con el prefijo NAICS + ceros de relleno,
+    ver `download.bls.gov/pub/time.series/sm/sm.industry` para el catálogo
+    completo) + tipo de dato (2 dígitos, "01" = todos los empleados).
+Ejemplos usados en `pipeline/live/run_live_pilot.py`: "30000000" (industria
+manufacturera total), "31336400" (equipo aeroespacial, NAICS 3364),
+"32325400" (farmacéutica, NAICS 3254).
 
 La API key (v2, 500 consultas/día) se lee de la variable de entorno
 `BLS_API_KEY` (vía python-dotenv). Sin key, BLS v1 permite 25 consultas/día,

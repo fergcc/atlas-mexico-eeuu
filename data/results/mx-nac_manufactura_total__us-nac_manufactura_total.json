@@ -15,10 +15,10 @@
   },
   "series_b": {
     "id": "us-nac_manufactura_total_ip",
-    "source": "FRED - INDPRO (Industrial Production: Total Index)",
+    "source": "FRED - INDPRO (Industrial Production por NAICS)",
     "region": "NAC",
     "proxy_type": "output_index",
-    "seasonal_adjustment": "sa"
+    "seasonal_adjustment": "nsa"
   },
   "sample": {
     "frequency_used": "monthly",
@@ -26,7 +26,7 @@
     "end": "2026-05-31",
     "n_obs": 401
   },
-  "generated_at": "2026-07-16T17:48:53.948144+00:00",
+  "generated_at": "2026-07-16T18:27:56.295541+00:00",
   "data_vintage": "2026-05-01",
   "data_vintage_detail": {
     "a": "2026-05-01",
@@ -59,13 +59,13 @@
     "a_causes_b": {
       "f_stat": 0.3571983178883071,
       "p_value": 0.5502371923095105,
-      "p_value_fdr_adj": 0.6107527607293921,
+      "p_value_fdr_adj": 0.6640453631075101,
       "significant": false
     },
     "b_causes_a": {
       "f_stat": 30.919956554934753,
       "p_value": 3.677341339711016e-08,
-      "p_value_fdr_adj": 7.354682679422031e-07,
+      "p_value_fdr_adj": 2.79381517302577e-07,
       "significant": true
     }
   },

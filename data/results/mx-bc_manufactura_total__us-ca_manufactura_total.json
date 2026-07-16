@@ -8,76 +8,76 @@
   },
   "series_a": {
     "id": "mx-bc_manufactura_total_itaee",
-    "source": "INEGI - ITAEE (mock)",
+    "source": "INEGI - ITAEE (Series Originales, clave 741651)",
     "region": "02",
     "proxy_type": "output_index",
     "seasonal_adjustment": "nsa"
   },
   "series_b": {
     "id": "us-ca_manufactura_total_bc_bls",
-    "source": "BLS - State and Area Employment (mock)",
+    "source": "BLS - CES SMU06000003000000001 (California)",
     "region": "06",
     "proxy_type": "labor_input",
     "seasonal_adjustment": "nsa"
   },
   "sample": {
     "frequency_used": "quarterly",
-    "start": "2010-03-31",
-    "end": "2026-06-30",
-    "n_obs": 66
+    "start": "2006-03-31",
+    "end": "2025-12-31",
+    "n_obs": 80
   },
-  "generated_at": "2026-07-16T17:48:54.019818+00:00",
-  "data_vintage": "2026-10-03",
+  "generated_at": "2026-07-16T18:27:56.368885+00:00",
+  "data_vintage": "2025-12-01",
   "data_vintage_detail": {
-    "a": "2026-10-03",
-    "b": "2026-07-21"
+    "a": "2025-12-01",
+    "b": "2025-12-01"
   },
   "insufficient_data": false,
   "stationarity": {
     "a": {
-      "adf_statistic": -3.122214827970629,
-      "adf_p_value": 0.02495227771234306,
-      "kpss_statistic": 0.3103631423488311,
+      "adf_statistic": -7.59517005595848,
+      "adf_p_value": 2.4713729897234948e-11,
+      "kpss_statistic": 0.1536102411032818,
       "kpss_p_value": 0.1,
       "is_stationary": true,
       "order_of_integration": 1,
       "log_transformed": true
     },
     "b": {
-      "adf_statistic": -6.541583209645064,
-      "adf_p_value": 9.317899823021718e-09,
-      "kpss_statistic": 0.39423930084422615,
-      "kpss_p_value": 0.07963823239473011,
+      "adf_statistic": -5.291023981758928,
+      "adf_p_value": 5.7150107157104535e-06,
+      "kpss_statistic": 0.09750544288067611,
+      "kpss_p_value": 0.1,
       "is_stationary": true,
-      "order_of_integration": 1,
+      "order_of_integration": 2,
       "log_transformed": true
     }
   },
   "granger": {
-    "optimal_lag": 2,
+    "optimal_lag": 4,
     "selection_criterion": "bic",
     "a_causes_b": {
-      "f_stat": 4.391838338504327,
-      "p_value": 0.014501477993066064,
-      "p_value_fdr_adj": 0.04461993228635712,
-      "significant": true
+      "f_stat": 1.5821587992188983,
+      "p_value": 0.18285418782104507,
+      "p_value_fdr_adj": 0.3199948286868289,
+      "significant": false
     },
     "b_causes_a": {
-      "f_stat": 0.8918694822070169,
-      "p_value": 0.41268040992497307,
-      "p_value_fdr_adj": 0.5158505124062163,
-      "significant": false
+      "f_stat": 5.005864539017495,
+      "p_value": 0.0008742668608932152,
+      "p_value_fdr_adj": 0.004079912017501671,
+      "significant": true
     }
   },
   "cointegration_engle_granger": {
-    "statistic": -7.474724516184851,
-    "p_value": 6.099959584491066e-10,
-    "cointegrated": true
+    "statistic": -0.5472700385336927,
+    "p_value": 0.96079103811629,
+    "cointegrated": false
   },
   "cointegration_johansen": {
     "trace_statistic": [
-      43.119308506473374,
-      2.037747209107227
+      8.643869381003682,
+      1.3965369449694065
     ],
     "critical_values": [
       [
@@ -91,17 +91,8 @@
         6.6349
       ]
     ],
-    "cointegration_rank": 1
+    "cointegration_rank": 0
   },
-  "vecm": {
-    "cointegration_vector": [
-      1.0,
-      -1.3657569860456547
-    ],
-    "adjustment_speed": [
-      -0.2788772404244863,
-      0.6475880231611602
-    ]
-  },
+  "vecm": null,
   "warnings": []
 }

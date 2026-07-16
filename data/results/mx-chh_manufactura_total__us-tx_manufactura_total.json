@@ -8,37 +8,91 @@
   },
   "series_a": {
     "id": "mx-chh_manufactura_total_itaee",
-    "source": "INEGI - ITAEE (Series Originales, clave 741651, manufactura 31-33)",
+    "source": "INEGI - ITAEE (Series Originales, clave 741651)",
     "region": "08",
     "proxy_type": "output_index",
     "seasonal_adjustment": "nsa"
   },
   "series_b": {
     "id": "us-tx_manufactura_total_chh_bls",
-    "source": "BLS - CES SMU48000003133600001 (Texas, equipo de transporte)",
+    "source": "BLS - CES SMU48000003133600001 (Texas)",
     "region": "48",
     "proxy_type": "labor_input",
     "seasonal_adjustment": "nsa"
   },
   "sample": {
     "frequency_used": "quarterly",
-    "start": "2024-03-31",
+    "start": "2006-03-31",
     "end": "2025-12-31",
-    "n_obs": 8
+    "n_obs": 80
   },
-  "generated_at": "2026-07-16T17:48:54.039202+00:00",
-  "data_vintage": "2026-05-01",
+  "generated_at": "2026-07-16T18:27:56.390927+00:00",
+  "data_vintage": "2025-12-01",
   "data_vintage_detail": {
-    "a": "2003-03-01",
-    "b": "2026-05-01"
+    "a": "2025-12-01",
+    "b": "2025-12-01"
   },
-  "insufficient_data": true,
-  "warnings": [
-    "n_obs=8 < mínimo requerido=30 para frecuencia 'quarterly'; no se corrió el motor econométrico sobre este par (resultado se omite para evitar un estadístico espurio)."
-  ],
-  "stationarity": null,
-  "granger": null,
-  "cointegration_engle_granger": null,
-  "cointegration_johansen": null,
-  "vecm": null
+  "insufficient_data": false,
+  "stationarity": {
+    "a": {
+      "adf_statistic": -9.804400411054633,
+      "adf_p_value": 5.878435501576187e-17,
+      "kpss_statistic": 0.09975510371725839,
+      "kpss_p_value": 0.1,
+      "is_stationary": true,
+      "order_of_integration": 1,
+      "log_transformed": true
+    },
+    "b": {
+      "adf_statistic": -3.927434966674117,
+      "adf_p_value": 0.0018419661070804786,
+      "kpss_statistic": 0.20090690521484364,
+      "kpss_p_value": 0.1,
+      "is_stationary": true,
+      "order_of_integration": 1,
+      "log_transformed": true
+    }
+  },
+  "granger": {
+    "optimal_lag": 1,
+    "selection_criterion": "bic",
+    "a_causes_b": {
+      "f_stat": 5.476395361102707,
+      "p_value": 0.02059257193353288,
+      "p_value_fdr_adj": 0.07207400176736509,
+      "significant": false
+    },
+    "b_causes_a": {
+      "f_stat": 2.307877776995514,
+      "p_value": 0.13082465746201996,
+      "p_value_fdr_adj": 0.25257727847069406,
+      "significant": false
+    }
+  },
+  "cointegration_engle_granger": {
+    "statistic": -1.7056146118490783,
+    "p_value": 0.6743349975886407,
+    "cointegrated": false
+  },
+  "cointegration_johansen": {
+    "trace_statistic": [
+      6.852053109575962,
+      1.25130947685025
+    ],
+    "critical_values": [
+      [
+        13.4294,
+        15.4943,
+        19.9349
+      ],
+      [
+        2.7055,
+        3.8415,
+        6.6349
+      ]
+    ],
+    "cointegration_rank": 0
+  },
+  "vecm": null,
+  "warnings": []
 }

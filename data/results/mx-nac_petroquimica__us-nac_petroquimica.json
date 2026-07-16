@@ -8,76 +8,76 @@
   },
   "series_a": {
     "id": "mx-nac_petroquimica_emim",
-    "source": "INEGI - EMIM (mock)",
+    "source": "INEGI - BIE (Indicadores económicos de coyuntura, clave 736459) [APROXIMACIÓN: sectors.yaml declara 2 códigos SCIAN para petroquímica (324110 refinación + 325100 química básica); se usa solo 325100/3251 para una correspondencia 1:1 clara con una serie FRED real (IPG3251N).]",
     "region": "NAC",
     "proxy_type": "output_index",
     "seasonal_adjustment": "nsa"
   },
   "series_b": {
     "id": "us-nac_petroquimica_ip",
-    "source": "FRED - Industrial Production (mock)",
+    "source": "FRED - IPG3251N (Industrial Production por NAICS)",
     "region": "NAC",
     "proxy_type": "output_index",
     "seasonal_adjustment": "nsa"
   },
   "sample": {
     "frequency_used": "monthly",
-    "start": "2010-01-31",
-    "end": "2026-06-30",
-    "n_obs": 198
+    "start": "1993-01-31",
+    "end": "2026-05-31",
+    "n_obs": 401
   },
-  "generated_at": "2026-07-16T17:48:53.928705+00:00",
-  "data_vintage": "2026-08-14",
+  "generated_at": "2026-07-16T18:27:56.270665+00:00",
+  "data_vintage": "2026-05-01",
   "data_vintage_detail": {
-    "a": "2026-08-14",
-    "b": "2026-07-15"
+    "a": "2026-05-01",
+    "b": "2026-05-01"
   },
   "insufficient_data": false,
   "stationarity": {
     "a": {
-      "adf_statistic": -7.976428245085354,
-      "adf_p_value": 2.6946765454406625e-12,
-      "kpss_statistic": 0.07026391720952249,
+      "adf_statistic": -5.922579816130986,
+      "adf_p_value": 2.486363315152028e-07,
+      "kpss_statistic": 0.2890239465453459,
       "kpss_p_value": 0.1,
       "is_stationary": true,
       "order_of_integration": 1,
       "log_transformed": true
     },
     "b": {
-      "adf_statistic": -7.3738571894751805,
-      "adf_p_value": 8.827082019132225e-11,
-      "kpss_statistic": 0.06627691171409913,
-      "kpss_p_value": 0.1,
+      "adf_statistic": -3.9096389566299736,
+      "adf_p_value": 0.0019650438114217094,
+      "kpss_statistic": 0.43011548392512033,
+      "kpss_p_value": 0.0641743603771033,
       "is_stationary": true,
-      "order_of_integration": 1,
+      "order_of_integration": 0,
       "log_transformed": true
     }
   },
   "granger": {
-    "optimal_lag": 1,
+    "optimal_lag": 4,
     "selection_criterion": "bic",
     "a_causes_b": {
-      "f_stat": 24.1591431622527,
-      "p_value": 1.3136962338411471e-06,
-      "p_value_fdr_adj": 1.3136962338411471e-05,
-      "significant": true
+      "f_stat": 0.7701251741334425,
+      "p_value": 0.5447995902053682,
+      "p_value_fdr_adj": 0.6640453631075101,
+      "significant": false
     },
     "b_causes_a": {
-      "f_stat": 0.07300205881024475,
-      "p_value": 0.7871593048594686,
-      "p_value_fdr_adj": 0.8073428767789422,
+      "f_stat": 0.1446644485153855,
+      "p_value": 0.9653480149615278,
+      "p_value_fdr_adj": 0.9692718895455036,
       "significant": false
     }
   },
   "cointegration_engle_granger": {
-    "statistic": -9.281564805433884,
-    "p_value": 1.6603677402676757e-14,
-    "cointegrated": true
+    "statistic": -0.38788070698887,
+    "p_value": 0.9714212703637881,
+    "cointegrated": false
   },
   "cointegration_johansen": {
     "trace_statistic": [
-      53.28253081921259,
-      0.020272788575050313
+      26.099752335195323,
+      6.462062247301108
     ],
     "critical_values": [
       [
@@ -91,16 +91,16 @@
         6.6349
       ]
     ],
-    "cointegration_rank": 1
+    "cointegration_rank": 2
   },
   "vecm": {
     "cointegration_vector": [
       1.0,
-      -1.2434843015475174
+      -1.4408867412441792e-16
     ],
     "adjustment_speed": [
-      -0.18515893906695544,
-      0.3445097405146365
+      -0.07545197306805505,
+      0.020637390790493974
     ]
   },
   "warnings": []
