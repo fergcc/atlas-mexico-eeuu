@@ -20,7 +20,7 @@ export default function RegionesPage() {
     <Section className="pt-10">
       <Container className="flex flex-col gap-10">
         <PageHeader
-          eyebrow="Fase 1 · agregados por grupo de estados"
+          eyebrow="Vista simple · agregados por grupo de estados"
           title="Corredores industriales"
           description="Los 5 corredores territoriales multi-municipio del Atlas Prospectivo 2021, tratados aquí como tablas agregadas por grupo de estados. El mapa municipal detallado de cada corredor queda para una fase posterior."
         />
