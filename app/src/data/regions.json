@@ -1,0 +1,35 @@
+{
+  "_comment": "Corredores industriales replicados desde pipeline/reference/region_registry.yaml (corridors:). Fase 1 los trata como tablas/agregados por grupo de estados MX, no como mapa municipal. Si el archivo YAML cambia, actualizar aquí también.",
+  "corridors": [
+    {
+      "id": "aeroespacial-noreste",
+      "label": "Corredor aeroespacial del noreste",
+      "sector_id": "aeroespacial",
+      "mx_state_codes": ["08", "22", "02", "05", "19"]
+    },
+    {
+      "id": "farmaceutico-laguna-culiacan",
+      "label": "Corredor farmacéutico La Laguna–Culiacán",
+      "sector_id": "farmaceutica",
+      "mx_state_codes": ["05", "10", "25", "14"]
+    },
+    {
+      "id": "agroindustrial-sureste",
+      "label": "Corredor agroindustrial Coatzacoalcos–Villahermosa–Palenque",
+      "sector_id": "agroindustrial",
+      "mx_state_codes": ["30", "27", "07"]
+    },
+    {
+      "id": "petroquimico-tamaulipas",
+      "label": "Polo petroquímico de Tamaulipas",
+      "sector_id": "petroquimica",
+      "mx_state_codes": ["28", "05"]
+    },
+    {
+      "id": "siderurgico-metalico",
+      "label": "Complejos siderúrgicos y metal-mecánicos",
+      "sector_id": "manufactura_total",
+      "mx_state_codes": ["19", "24", "21", "15", "11", "14"]
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+# Python
+pipeline/.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Node / Next.js
+app/node_modules/
+app/.next/
+app/out/
+app/next-env.d.ts
+
+# Copia sincronizada de /data (regenerada por scripts/sync-data.mjs en predev/prebuild)
+app/public/data/
+
+# Env / secrets
+.env
+.env.local
+*.env
+
+# OS
+.DS_Store
+
+# Pipeline raw cache (regenerable, not versioned to keep the repo light)
+pipeline/data/raw/*.parquet

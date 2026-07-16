@@ -1,0 +1,278 @@
+{
+  "generated_at": "2026-07-16T15:38:35.993456+00:00",
+  "mode": "mock",
+  "refresh_cadence": "trimestral",
+  "sectors": [
+    {
+      "id": "eolica",
+      "label": "Energía eólica y aerogeneradores",
+      "icon": "wind",
+      "priority": "strategic"
+    },
+    {
+      "id": "farmaceutica",
+      "label": "Farmacéutica",
+      "icon": "pill",
+      "priority": "strategic"
+    },
+    {
+      "id": "aeroespacial",
+      "label": "Aeroespacial",
+      "icon": "plane",
+      "priority": "strategic"
+    },
+    {
+      "id": "agroindustrial",
+      "label": "Agroindustrial (cacao y vainilla)",
+      "icon": "bean",
+      "priority": "strategic"
+    },
+    {
+      "id": "petroquimica",
+      "label": "Petroquímica",
+      "icon": "flask-conical",
+      "priority": "strategic"
+    },
+    {
+      "id": "manufactura_total",
+      "label": "Manufactura total (referencia nacional)",
+      "icon": "factory",
+      "priority": "reference"
+    }
+  ],
+  "series_catalog": [
+    {
+      "id": "mx-nac_eolica_emim",
+      "nombre": "Producción manufacturera - Energía eólica y aerogeneradores (México, nacional)",
+      "pais": "MX",
+      "region_code": "NAC",
+      "sector_id": "eolica",
+      "fuente": "INEGI - EMIM (mock)",
+      "periodicidad": "mensual",
+      "unidad": "Índice base 2018=100 (sintético)",
+      "proxy_type": "output_index",
+      "ultima_actualizacion": "2026-06-30",
+      "proxima_actualizacion_estimada": "2026-07-30"
+    },
+    {
+      "id": "us-nac_eolica_ip",
+      "nombre": "Industrial Production Index - Wind energy & turbines (US, national)",
+      "pais": "US",
+      "region_code": "NAC",
+      "sector_id": "eolica",
+      "fuente": "FRED - Industrial Production (mock)",
+      "periodicidad": "mensual",
+      "unidad": "Índice base 2017=100 (sintético)",
+      "proxy_type": "output_index",
+      "ultima_actualizacion": "2026-06-30",
+      "proxima_actualizacion_estimada": "2026-07-30"
+    },
+    {
+      "id": "mx-nac_farmaceutica_emim",
+      "nombre": "Producción manufacturera - Farmacéutica (México, nacional)",
+      "pais": "MX",
+      "region_code": "NAC",
+      "sector_id": "farmaceutica",
+      "fuente": "INEGI - EMIM (mock)",
+      "periodicidad": "mensual",
+      "unidad": "Índice base 2018=100 (sintético)",
+      "proxy_type": "output_index",
+      "ultima_actualizacion": "2026-06-30",
+      "proxima_actualizacion_estimada": "2026-07-30"
+    },
+    {
+      "id": "us-nac_farmaceutica_ip",
+      "nombre": "Industrial Production Index - Pharmaceuticals (US, national)",
+      "pais": "US",
+      "region_code": "NAC",
+      "sector_id": "farmaceutica",
+      "fuente": "FRED - Industrial Production (mock)",
+      "periodicidad": "mensual",
+      "unidad": "Índice base 2017=100 (sintético)",
+      "proxy_type": "output_index",
+      "ultima_actualizacion": "2026-06-30",
+      "proxima_actualizacion_estimada": "2026-07-30"
+    },
+    {
+      "id": "mx-nac_aeroespacial_emim",
+      "nombre": "Producción manufacturera - Aeroespacial (México, nacional)",
+      "pais": "MX",
+      "region_code": "NAC",
+      "sector_id": "aeroespacial",
+      "fuente": "INEGI - EMIM (mock)",
+      "periodicidad": "mensual",
+      "unidad": "Índice base 2018=100 (sintético)",
+      "proxy_type": "output_index",
+      "ultima_actualizacion": "2026-06-30",
+      "proxima_actualizacion_estimada": "2026-07-30"
+    },
+    {
+      "id": "us-nac_aeroespacial_ip",
+      "nombre": "Industrial Production Index - Aerospace (US, national)",
+      "pais": "US",
+      "region_code": "NAC",
+      "sector_id": "aeroespacial",
+      "fuente": "FRED - Industrial Production (mock)",
+      "periodicidad": "mensual",
+      "unidad": "Índice base 2017=100 (sintético)",
+      "proxy_type": "output_index",
+      "ultima_actualizacion": "2026-06-30",
+      "proxima_actualizacion_estimada": "2026-07-30"
+    },
+    {
+      "id": "mx-chh_aeroespacial_itaee",
+      "nombre": "ITAEE - Actividad industrial (Chihuahua)",
+      "pais": "MX",
+      "region_code": "08",
+      "sector_id": "aeroespacial",
+      "fuente": "INEGI - ITAEE (mock)",
+      "periodicidad": "trimestral",
+      "unidad": "Índice base 2018=100 (sintético)",
+      "proxy_type": "output_index",
+      "ultima_actualizacion": "2026-06-30",
+      "proxima_actualizacion_estimada": "2026-09-30"
+    },
+    {
+      "id": "us-tx_aeroespacial_bls",
+      "nombre": "Empleo manufacturero - Aerospace (Texas)",
+      "pais": "US",
+      "region_code": "48",
+      "sector_id": "aeroespacial",
+      "fuente": "BLS - State and Area Employment (mock)",
+      "periodicidad": "mensual",
+      "unidad": "Miles de empleos (sintético)",
+      "proxy_type": "labor_input",
+      "ultima_actualizacion": "2026-06-30",
+      "proxima_actualizacion_estimada": "2026-07-30"
+    },
+    {
+      "id": "mx-nac_agroindustrial_emim",
+      "nombre": "Producción manufacturera - Agroindustrial (cacao y vainilla) (México, nacional)",
+      "pais": "MX",
+      "region_code": "NAC",
+      "sector_id": "agroindustrial",
+      "fuente": "INEGI - EMIM (mock)",
+      "periodicidad": "mensual",
+      "unidad": "Índice base 2018=100 (sintético)",
+      "proxy_type": "output_index",
+      "ultima_actualizacion": "2026-06-30",
+      "proxima_actualizacion_estimada": "2026-07-30"
+    },
+    {
+      "id": "us-nac_agroindustrial_ip",
+      "nombre": "Industrial Production Index - Agroindustry (cocoa & vanilla) (US, national)",
+      "pais": "US",
+      "region_code": "NAC",
+      "sector_id": "agroindustrial",
+      "fuente": "FRED - Industrial Production (mock)",
+      "periodicidad": "mensual",
+      "unidad": "Índice base 2017=100 (sintético)",
+      "proxy_type": "output_index",
+      "ultima_actualizacion": "2026-06-30",
+      "proxima_actualizacion_estimada": "2026-07-30"
+    },
+    {
+      "id": "mx-nac_petroquimica_emim",
+      "nombre": "Producción manufacturera - Petroquímica (México, nacional)",
+      "pais": "MX",
+      "region_code": "NAC",
+      "sector_id": "petroquimica",
+      "fuente": "INEGI - EMIM (mock)",
+      "periodicidad": "mensual",
+      "unidad": "Índice base 2018=100 (sintético)",
+      "proxy_type": "output_index",
+      "ultima_actualizacion": "2026-06-30",
+      "proxima_actualizacion_estimada": "2026-07-30"
+    },
+    {
+      "id": "us-nac_petroquimica_ip",
+      "nombre": "Industrial Production Index - Petrochemicals (US, national)",
+      "pais": "US",
+      "region_code": "NAC",
+      "sector_id": "petroquimica",
+      "fuente": "FRED - Industrial Production (mock)",
+      "periodicidad": "mensual",
+      "unidad": "Índice base 2017=100 (sintético)",
+      "proxy_type": "output_index",
+      "ultima_actualizacion": "2026-06-30",
+      "proxima_actualizacion_estimada": "2026-07-30"
+    },
+    {
+      "id": "mx-nac_manufactura_total_emim",
+      "nombre": "Producción manufacturera - Manufactura total (referencia nacional) (México, nacional)",
+      "pais": "MX",
+      "region_code": "NAC",
+      "sector_id": "manufactura_total",
+      "fuente": "INEGI - EMIM (mock)",
+      "periodicidad": "mensual",
+      "unidad": "Índice base 2018=100 (sintético)",
+      "proxy_type": "output_index",
+      "ultima_actualizacion": "2026-06-30",
+      "proxima_actualizacion_estimada": "2026-07-30"
+    },
+    {
+      "id": "us-nac_manufactura_total_ip",
+      "nombre": "Industrial Production Index - Total manufacturing (national reference) (US, national)",
+      "pais": "US",
+      "region_code": "NAC",
+      "sector_id": "manufactura_total",
+      "fuente": "FRED - Industrial Production (mock)",
+      "periodicidad": "mensual",
+      "unidad": "Índice base 2017=100 (sintético)",
+      "proxy_type": "output_index",
+      "ultima_actualizacion": "2026-06-30",
+      "proxima_actualizacion_estimada": "2026-07-30"
+    }
+  ],
+  "pairs": [
+    {
+      "pair_id": "mx-nac_eolica__us-nac_eolica",
+      "level": "nacional",
+      "sector_id": "eolica",
+      "series_a": "mx-nac_eolica_emim",
+      "series_b": "us-nac_eolica_ip"
+    },
+    {
+      "pair_id": "mx-nac_farmaceutica__us-nac_farmaceutica",
+      "level": "nacional",
+      "sector_id": "farmaceutica",
+      "series_a": "mx-nac_farmaceutica_emim",
+      "series_b": "us-nac_farmaceutica_ip"
+    },
+    {
+      "pair_id": "mx-nac_aeroespacial__us-nac_aeroespacial",
+      "level": "nacional",
+      "sector_id": "aeroespacial",
+      "series_a": "mx-nac_aeroespacial_emim",
+      "series_b": "us-nac_aeroespacial_ip"
+    },
+    {
+      "pair_id": "mx-chh_aeroespacial__us-tx_aeroespacial",
+      "level": "estatal",
+      "sector_id": "aeroespacial",
+      "series_a": "mx-chh_aeroespacial_itaee",
+      "series_b": "us-tx_aeroespacial_bls"
+    },
+    {
+      "pair_id": "mx-nac_agroindustrial__us-nac_agroindustrial",
+      "level": "nacional",
+      "sector_id": "agroindustrial",
+      "series_a": "mx-nac_agroindustrial_emim",
+      "series_b": "us-nac_agroindustrial_ip"
+    },
+    {
+      "pair_id": "mx-nac_petroquimica__us-nac_petroquimica",
+      "level": "nacional",
+      "sector_id": "petroquimica",
+      "series_a": "mx-nac_petroquimica_emim",
+      "series_b": "us-nac_petroquimica_ip"
+    },
+    {
+      "pair_id": "mx-nac_manufactura_total__us-nac_manufactura_total",
+      "level": "nacional",
+      "sector_id": "manufactura_total",
+      "series_a": "mx-nac_manufactura_total_emim",
+      "series_b": "us-nac_manufactura_total_ip"
+    }
+  ]
+}
