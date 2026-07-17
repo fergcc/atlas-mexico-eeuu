@@ -26,7 +26,7 @@
     "end": "2026-06-30",
     "n_obs": 66
   },
-  "generated_at": "2026-07-16T19:58:04.892321+00:00",
+  "generated_at": "2026-07-17T21:21:32.493915+00:00",
   "data_vintage": "2026-10-03",
   "data_vintage_detail": {
     "a": "2026-10-03",
@@ -35,18 +35,18 @@
   "insufficient_data": false,
   "stationarity": {
     "a": {
-      "adf_statistic": -9.397673097530308,
-      "adf_p_value": 6.309918803602555e-16,
-      "kpss_statistic": 0.20438190401953304,
+      "adf_statistic": -9.397673097530305,
+      "adf_p_value": 6.309918803602761e-16,
+      "kpss_statistic": 0.204381904019533,
       "kpss_p_value": 0.1,
       "is_stationary": true,
       "order_of_integration": 1,
       "log_transformed": true
     },
     "b": {
-      "adf_statistic": -8.884044118472449,
-      "adf_p_value": 1.2946214324340034e-14,
-      "kpss_statistic": 0.2584250842878078,
+      "adf_statistic": -8.884044118472447,
+      "adf_p_value": 1.2946214324340128e-14,
+      "kpss_statistic": 0.25842508428780775,
       "kpss_p_value": 0.1,
       "is_stationary": true,
       "order_of_integration": 1,
@@ -57,27 +57,27 @@
     "optimal_lag": 1,
     "selection_criterion": "bic",
     "a_causes_b": {
-      "f_stat": 2.2959032288935637,
-      "p_value": 0.13230238396083968,
-      "p_value_fdr_adj": 0.25257727847069394,
+      "f_stat": 2.2959032288935632,
+      "p_value": 0.13230238396083976,
+      "p_value_fdr_adj": 0.26460476792167953,
       "significant": false
     },
     "b_causes_a": {
-      "f_stat": 0.5113397791496126,
-      "p_value": 0.47592564388920683,
-      "p_value_fdr_adj": 0.6640453631075148,
+      "f_stat": 0.5113397791496123,
+      "p_value": 0.47592564388920694,
+      "p_value_fdr_adj": 0.684037846308016,
       "significant": false
     }
   },
   "cointegration_engle_granger": {
-    "statistic": -4.549312999949113,
-    "p_value": 0.0010150240064953349,
+    "statistic": -4.549312999949201,
+    "p_value": 0.0010150240064949914,
     "cointegrated": true
   },
   "cointegration_johansen": {
     "trace_statistic": [
-      37.101689174843344,
-      4.165305419164003
+      37.101689174844964,
+      4.165305419163996
     ],
     "critical_values": [
       [
@@ -95,12 +95,12 @@
   },
   "vecm": {
     "cointegration_vector": [
-      0.9999999999999999,
-      2.1313591143224535e-17
+      1.0,
+      5.325806520414833e-17
     ],
     "adjustment_speed": [
-      -0.40937497632026193,
-      0.40323617086667024
+      -0.409374976321741,
+      0.4032361708680125
     ]
   },
   "warnings": []

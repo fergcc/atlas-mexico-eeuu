@@ -17,6 +17,23 @@ import { MX_STATES } from "@/data/mx-states";
 const COUNTRY_NAMES: Record<string, string> = {
   MX: "México",
   US: "Estados Unidos",
+  CA: "Canadá",
+};
+
+const CA_PROVINCES: Record<string, string> = {
+  "10": "Terranova y Labrador",
+  "11": "Isla del Príncipe Eduardo",
+  "12": "Nueva Escocia",
+  "13": "Nuevo Brunswick",
+  "24": "Quebec",
+  "35": "Ontario",
+  "46": "Manitoba",
+  "47": "Saskatchewan",
+  "48": "Alberta",
+  "59": "Columbia Británica",
+  "60": "Yukón",
+  "61": "Territorios del Noroeste",
+  "62": "Nunavut",
 };
 
 function regionLabel(entry: SeriesCatalogEntry): string {
@@ -25,9 +42,9 @@ function regionLabel(entry: SeriesCatalogEntry): string {
     const state = MX_STATES.find((s) => s.code === entry.region_code);
     return state?.name ?? entry.region_code;
   }
-  // No hay un catálogo de estados de EEUU en el frontend todavía; el código
-  // FIPS crudo sigue siendo mejor que nada, y muy raramente es lo único que
-  // se muestra (casi siempre acompaña al nombre completo de la serie).
+  if (entry.pais === "CA") {
+    return CA_PROVINCES[entry.region_code] ?? entry.region_code;
+  }
   return entry.region_code;
 }
 

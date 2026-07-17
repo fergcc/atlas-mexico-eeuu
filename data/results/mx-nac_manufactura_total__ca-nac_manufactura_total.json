@@ -1,5 +1,5 @@
 {
-  "pair_id": "mx-nac_manufactura_total__us-nac_manufactura_total",
+  "pair_id": "mx-nac_manufactura_total__ca-nac_manufactura_total",
   "sector": {
     "id": "manufactura_total",
     "scian": "31-33",
@@ -14,8 +14,8 @@
     "seasonal_adjustment": "nsa"
   },
   "series_b": {
-    "id": "us-nac_manufactura_total_ip",
-    "source": "FRED - Industrial Production (mock)",
+    "id": "ca-nac_manufactura_total_sc",
+    "source": "Statistics Canada — Monthly GDP (mock)",
     "region": "NAC",
     "proxy_type": "output_index",
     "seasonal_adjustment": "nsa"
@@ -26,11 +26,11 @@
     "end": "2026-06-30",
     "n_obs": 198
   },
-  "generated_at": "2026-07-17T21:21:32.369596+00:00",
-  "data_vintage": "2026-08-14",
+  "generated_at": "2026-07-17T21:21:32.628327+00:00",
+  "data_vintage": "2026-08-29",
   "data_vintage_detail": {
     "a": "2026-08-14",
-    "b": "2026-07-15"
+    "b": "2026-08-29"
   },
   "insufficient_data": false,
   "stationarity": {
@@ -44,9 +44,9 @@
       "log_transformed": true
     },
     "b": {
-      "adf_statistic": -8.05021781040871,
-      "adf_p_value": 1.7501899364595326e-12,
-      "kpss_statistic": 0.06846809467707533,
+      "adf_statistic": -3.969663323168665,
+      "adf_p_value": 0.0015779645016031243,
+      "kpss_statistic": 0.04470347129587269,
       "kpss_p_value": 0.1,
       "is_stationary": true,
       "order_of_integration": 1,
@@ -57,27 +57,27 @@
     "optimal_lag": 1,
     "selection_criterion": "bic",
     "a_causes_b": {
-      "f_stat": 0.6600300444729171,
-      "p_value": 0.41705009349603633,
-      "p_value_fdr_adj": 0.6156453761131966,
-      "significant": false
+      "f_stat": 26.38105781665453,
+      "p_value": 4.456550302609272e-07,
+      "p_value_fdr_adj": 2.7630611876177487e-05,
+      "significant": true
     },
     "b_causes_a": {
-      "f_stat": 0.26009857880437826,
-      "p_value": 0.6103439191348303,
-      "p_value_fdr_adj": 0.7203431187415519,
+      "f_stat": 0.05863040314599429,
+      "p_value": 0.8088024807482332,
+      "p_value_fdr_adj": 0.8220615378096797,
       "significant": false
     }
   },
   "cointegration_engle_granger": {
-    "statistic": -2.574090273869667,
-    "p_value": 0.2474053154840064,
-    "cointegrated": false
+    "statistic": -8.333519090505394,
+    "p_value": 4.3492148962177205e-12,
+    "cointegrated": true
   },
   "cointegration_johansen": {
     "trace_statistic": [
-      7.150117174933957,
-      0.07292845070793998
+      58.11846563662836,
+      0.245791443133013
     ],
     "critical_values": [
       [
@@ -91,8 +91,17 @@
         6.6349
       ]
     ],
-    "cointegration_rank": 0
+    "cointegration_rank": 1
   },
-  "vecm": null,
+  "vecm": {
+    "cointegration_vector": [
+      1.0,
+      -1.2258205992683981
+    ],
+    "adjustment_speed": [
+      -0.1943432525422507,
+      0.3547539266116633
+    ]
+  },
   "warnings": []
 }
