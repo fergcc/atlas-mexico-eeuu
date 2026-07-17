@@ -97,7 +97,7 @@ export default async function EstadoPage({ params }: { params: Promise<{ estado:
                   </div>
 
                   {result ? (
-                    <SectionDisclosure summary="Ver análisis completo de este par" className="mt-4">
+                    <SectionDisclosure summary="Ver análisis completo de este par" className="mt-4" defaultOpen>
                       <TimeSeriesChart
                         seriesA={getSeries(pair.series_a)}
                         seriesB={getSeries(pair.series_b)}

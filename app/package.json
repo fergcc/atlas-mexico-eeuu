@@ -9,7 +9,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "sync-data": "node scripts/sync-data.mjs"
+    "sync-data": "node scripts/sync-data.mjs",
+    "sync-from-engine": "node scripts/sync-from-engine.mjs"
   },
   "dependencies": {
     "@visx/axis": "^4.0.0",

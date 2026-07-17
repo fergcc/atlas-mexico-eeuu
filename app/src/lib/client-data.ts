@@ -4,15 +4,28 @@ import type { Manifest, SeriesFile, ResultFile } from "./types";
 import type { Topology } from "topojson-specification";
 
 /**
- * Client-side counterparts to `data-loader.ts`, for Client Components that
- * need to fetch data after interaction (e.g. the /comparativa series
- * picker). Statically exported apps serve `public/data/**` as plain files,
- * so a relative `fetch` works with no server/API route involved.
+ * Client-side data fetchers.
+ *
+ * Two modes, controlled by NEXT_PUBLIC_ENGINE_URL:
+ *   1. Engine mode (NEXT_PUBLIC_ENGINE_URL set):
+ *      Fetches from a running Atlas Engine API.
+ *      Example: NEXT_PUBLIC_ENGINE_URL=http://localhost:8000/api/v1
+ *   2. Static mode (default, no NEXT_PUBLIC_ENGINE_URL):
+ *      Fetches local files from /data/*.json (static export).
  */
+
+function resolvePath(localPath: string): string {
+  const engine = process.env.NEXT_PUBLIC_ENGINE_URL;
+  if (!engine) return localPath;
+  const base = engine.replace(/\/+$/, "");
+  if (localPath === "/data/manifest.json") return `${base}/data/manifest`;
+  return `${base}/data/${localPath.replace(/^\/data\//, "")}`;
+}
 
 async function fetchJson<T>(path: string): Promise<T | null> {
   try {
-    const res = await fetch(path, { cache: "force-cache" });
+    const url = resolvePath(path);
+    const res = await fetch(url, { cache: "force-cache" });
     if (!res.ok) return null;
     return (await res.json()) as T;
   } catch {

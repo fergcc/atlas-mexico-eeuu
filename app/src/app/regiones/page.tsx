@@ -51,19 +51,21 @@ export default function RegionesPage() {
                 </div>
 
                 <div className="mb-4 flex flex-wrap gap-2">
-                  {states.map(
-                    (s) =>
-                      s && (
-                        <Link
-                          key={s.code}
-                          href={`/estatal/${s.slug}`}
-                          className="rounded-full border border-border-glass px-3 py-1 text-xs text-foreground-muted transition-colors hover:bg-foreground/5 hover:text-foreground"
-                        >
-                          {s.name}
-                          {s.border && <span className="ml-1 text-us">·frontera</span>}
-                        </Link>
-                      )
-                  )}
+                  {states
+                    .filter((s) => s && rows.some((r) => r.code === s.code))
+                    .map(
+                      (s) =>
+                        s && (
+                          <Link
+                            key={s.code}
+                            href={`/estatal/${s.slug}`}
+                            className="rounded-full border border-border-glass px-3 py-1 text-xs text-foreground-muted transition-colors hover:bg-foreground/5 hover:text-foreground"
+                          >
+                            {s.name}
+                            {s.border && <span className="ml-1 text-us">·frontera</span>}
+                          </Link>
+                        )
+                    )}
                 </div>
 
                 {rows.length === 0 ? (

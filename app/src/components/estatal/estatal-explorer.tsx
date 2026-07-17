@@ -56,7 +56,7 @@ export function EstatalExplorer({ datasets }: EstatalExplorerProps) {
           name="sector"
           value={sectorId}
           onChange={(e) => setSectorId(e.target.value)}
-          className="rounded-full border border-border-glass bg-background-elevated px-3.5 py-2 text-sm text-foreground"
+          className="rounded-full glass-dropdown px-3.5 py-2 text-sm text-foreground"
         >
           {datasets.map((d) => (
             <option key={d.sectorId} value={d.sectorId}>
@@ -89,17 +89,6 @@ export function EstatalExplorer({ datasets }: EstatalExplorerProps) {
         </div>
       </div>
 
-      <GlassPanel className="p-6">
-        <ChoroplethMap
-          values={values}
-          unit={metric === "valor" ? active?.unit : undefined}
-          onSelectState={(code) => {
-            const state = getMxStateByCode(code);
-            if (state) router.push(`/estatal/${state.slug}`);
-          }}
-        />
-      </GlassPanel>
-
       <div>
         <h2 className="mb-3 font-display text-lg font-semibold text-foreground">
           Estados con dato para {active?.label}
@@ -120,6 +109,17 @@ export function EstatalExplorer({ datasets }: EstatalExplorerProps) {
           </div>
         )}
       </div>
+
+      <GlassPanel className="p-6">
+        <ChoroplethMap
+          values={values}
+          unit={metric === "valor" ? active?.unit : undefined}
+          onSelectState={(code) => {
+            const state = getMxStateByCode(code);
+            if (state) router.push(`/estatal/${state.slug}`);
+          }}
+        />
+      </GlassPanel>
     </div>
   );
 }

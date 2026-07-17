@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useQueryState, parseAsString } from "nuqs";
 import { GlassPanel } from "@/components/ui/glass-panel";
 import { Badge } from "@/components/ui/badge";
@@ -13,38 +13,63 @@ interface ComparativaClientProps {
   catalog: SeriesCatalogEntry[];
 }
 
-function SeriesSelect({
+function CountryVarSelect({
   id,
   label,
   value,
   onChange,
   catalog,
+  defaultCountry,
 }: {
   id: string;
   label: string;
   value: string;
   onChange: (v: string) => void;
   catalog: SeriesCatalogEntry[];
+  defaultCountry: "MX" | "US";
 }) {
+  const country =
+    (catalog.find((s) => s.id === value)?.pais as "MX" | "US") || defaultCountry;
+
+  const filtered = useMemo(
+    () => catalog.filter((s) => s.pais === country),
+    [catalog, country]
+  );
+
+  const handleCountryChange = (newCountry: "MX" | "US") => {
+    const first = catalog.find((s) => s.pais === newCountry);
+    if (first) onChange(first.id);
+  };
+
   return (
     <div className="flex min-w-0 flex-1 flex-col gap-1.5">
-      <label htmlFor={id} className="text-sm font-medium text-foreground-muted">
-        {label}
-      </label>
-      <select
-        id={id}
-        name={id}
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        className="w-full min-w-0 rounded-xl border border-border-glass bg-background-elevated px-3.5 py-2.5 text-sm text-foreground"
-      >
-        <option value="">Selecciona una serie…</option>
-        {catalog.map((s) => (
-          <option key={s.id} value={s.id}>
-            [{s.pais}] {s.nombre}
-          </option>
-        ))}
-      </select>
+      <span className="text-sm font-medium text-foreground-muted">{label}</span>
+      <div className="flex gap-2">
+        <select
+          id={`${id}-pais`}
+          name={`${id}-pais`}
+          value={country}
+          onChange={(e) => handleCountryChange(e.target.value as "MX" | "US")}
+          className="min-w-0 flex-1 rounded-xl glass-dropdown px-3.5 py-2.5 text-sm text-foreground"
+        >
+          <option value="MX">Mexico</option>
+          <option value="US">Estados Unidos</option>
+        </select>
+        <select
+          id={id}
+          name={id}
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          className="min-w-0 flex-[2] rounded-xl glass-dropdown px-3.5 py-2.5 text-sm text-foreground"
+        >
+          <option value="">Selecciona una variable...</option>
+          {filtered.map((s) => (
+            <option key={s.id} value={s.id}>
+              {s.nombre}
+            </option>
+          ))}
+        </select>
+      </div>
     </div>
   );
 }
@@ -56,9 +81,6 @@ export function ComparativaClient({ catalog }: ComparativaClientProps) {
   const [seriesAId, setSeriesAId] = useQueryState("a", parseAsString.withDefault(defaultA));
   const [seriesBId, setSeriesBId] = useQueryState("b", parseAsString.withDefault(defaultB));
 
-  // Keyed by the ids it was fetched for, so `loading` can be *derived*
-  // (current ids vs. the ids the last fetch resolved) instead of set
-  // synchronously inside the effect body.
   const [fetched, setFetched] = useState<{
     aId: string;
     bId: string;
@@ -89,8 +111,22 @@ export function ComparativaClient({ catalog }: ComparativaClientProps) {
   return (
     <div className="flex flex-col gap-6">
       <GlassPanel className="flex flex-col gap-4 p-6 sm:flex-row sm:items-end">
-        <SeriesSelect id="serie-a" label="Serie A (normalmente México)" value={seriesAId} onChange={setSeriesAId} catalog={catalog} />
-        <SeriesSelect id="serie-b" label="Serie B (normalmente EEUU)" value={seriesBId} onChange={setSeriesBId} catalog={catalog} />
+        <CountryVarSelect
+          id="serie-a"
+          label="Serie A"
+          value={seriesAId}
+          onChange={setSeriesAId}
+          catalog={catalog}
+          defaultCountry="MX"
+        />
+        <CountryVarSelect
+          id="serie-b"
+          label="Serie B"
+          value={seriesBId}
+          onChange={setSeriesBId}
+          catalog={catalog}
+          defaultCountry="US"
+        />
       </GlassPanel>
 
       <GlassPanel className="p-6">
