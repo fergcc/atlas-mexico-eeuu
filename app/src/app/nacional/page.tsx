@@ -6,11 +6,12 @@ import { Badge } from "@/components/ui/badge";
 import { FreshnessBadge } from "@/components/ui/freshness-badge";
 import { EmptyState } from "@/components/ui/empty-state";
 import { TimeSeriesChart } from "@/components/charts/time-series-chart";
-import { GrangerGraph } from "@/components/charts/granger-graph";
-import { CointegrationHeatmap } from "@/components/charts/cointegration-heatmap";
+import { CausalityCorridor } from "@/components/charts/causality-corridor";
+import { EvidenceGrid } from "@/components/charts/evidence-grid";
 import { ResultSummary } from "@/components/indicador/result-summary";
+import { SectionDisclosure } from "@/components/ui/section-disclosure";
 import { getManifest, getPairsByLevel, getResult, getSeries, getSectorById } from "@/lib/data-loader";
-import { buildGrangerGraphData, buildHeatmapRow, HEATMAP_COLUMNS, seriesShortLabel } from "@/lib/pair-helpers";
+import { buildCorridorData, buildEvidenceRow, pairResultBadge, EVIDENCE_COLUMNS, seriesShortLabel } from "@/lib/pair-helpers";
 
 export const metadata: Metadata = { title: "Nacional" };
 
@@ -20,10 +21,10 @@ export default function NacionalPage() {
   const seriesById = new Map(manifest.series_catalog.map((s) => [s.id, s]));
 
   const resultsByPairId = Object.fromEntries(pairs.map((p) => [p.pair_id, getResult(p.pair_id)]));
-  const { nodes, edges } = buildGrangerGraphData(pairs, manifest.series_catalog, resultsByPairId);
-  const heatmapRows = pairs.map((p) => {
+  const corridorPairs = buildCorridorData(pairs, manifest.series_catalog, resultsByPairId, manifest.sectors);
+  const evidenceRows = pairs.map((p) => {
     const sector = getSectorById(p.sector_id);
-    return buildHeatmapRow(p, resultsByPairId[p.pair_id], sector?.label ?? p.sector_id);
+    return buildEvidenceRow(p, resultsByPairId[p.pair_id], sector?.label ?? p.sector_id);
   });
 
   return (
@@ -42,21 +43,28 @@ export default function NacionalPage() {
           />
         ) : (
           <>
-            <GlassPanel className="p-6">
-              <h2 className="mb-4 font-display text-lg font-semibold text-foreground">
-                Mapa de causalidad (todos los sectores nacionales)
-              </h2>
-              <GrangerGraph nodes={nodes} edges={edges} height={Math.max(260, nodes.length * 40)} />
+            <GlassPanel className="p-4 sm:p-5">
+              <p className="mb-3 px-0.5 text-xs font-medium uppercase tracking-wide text-foreground-muted">
+                Panorama · los {corridorPairs.length} sectores nacionales de un vistazo
+              </p>
+              <CausalityCorridor pairs={corridorPairs} variant="overview" />
             </GlassPanel>
 
             <GlassPanel className="p-6">
               <h2 className="mb-4 font-display text-lg font-semibold text-foreground">
-                Evidencia por sector
+                Corredor de causalidad — sector por sector
               </h2>
-              <CointegrationHeatmap columns={HEATMAP_COLUMNS} rows={heatmapRows} />
+              <CausalityCorridor pairs={corridorPairs} variant="detail" />
             </GlassPanel>
 
-            <div className="flex flex-col gap-8">
+            <GlassPanel className="p-6">
+              <h2 className="mb-4 font-display text-lg font-semibold text-foreground">
+                Tablero de evidencia por sector
+              </h2>
+              <EvidenceGrid columns={EVIDENCE_COLUMNS} rows={evidenceRows} />
+            </GlassPanel>
+
+            <div className="flex flex-col gap-4">
               {pairs.map((pair) => {
                 const sector = getSectorById(pair.sector_id);
                 const seriesA = seriesById.get(pair.series_a);
@@ -64,10 +72,11 @@ export default function NacionalPage() {
                 const result = resultsByPairId[pair.pair_id];
                 const seriesFileA = getSeries(pair.series_a);
                 const seriesFileB = getSeries(pair.series_b);
+                const badge = result ? pairResultBadge(result) : null;
 
                 return (
                   <GlassPanel key={pair.pair_id} className="p-6">
-                    <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
+                    <div className="flex flex-wrap items-center justify-between gap-3">
                       <div>
                         <h3 className="font-display text-xl font-semibold text-foreground">
                           {sector?.label ?? pair.sector_id}
@@ -76,47 +85,59 @@ export default function NacionalPage() {
                           {seriesA?.nombre} vs. {seriesB?.nombre}
                         </p>
                       </div>
-                      {seriesA && (
-                        <FreshnessBadge
-                          periodicidad={seriesA.periodicidad}
-                          ultima_actualizacion={seriesA.ultima_actualizacion}
-                          proxima_actualizacion_estimada={seriesA.proxima_actualizacion_estimada}
-                          referenceIso={manifest.generated_at}
-                        />
-                      )}
+                      <div className="flex flex-wrap items-center gap-2">
+                        {badge ? (
+                          <Badge tone={badge.tone}>{badge.label}</Badge>
+                        ) : (
+                          <Badge tone="neutral">Resultado aún no disponible</Badge>
+                        )}
+                        {seriesA && (
+                          <FreshnessBadge
+                            periodicidad={seriesA.periodicidad}
+                            ultima_actualizacion={seriesA.ultima_actualizacion}
+                            proxima_actualizacion_estimada={seriesA.proxima_actualizacion_estimada}
+                            referenceIso={manifest.generated_at}
+                          />
+                        )}
+                      </div>
                     </div>
 
-                    <div className="mb-6 flex flex-wrap gap-2">
-                      {seriesA && <Badge tone="mx">{seriesA.proxy_type}</Badge>}
-                      {seriesB && <Badge tone="us">{seriesB.proxy_type}</Badge>}
-                    </div>
+                    {result ? (
+                      <SectionDisclosure summary="Ver análisis completo de este par" className="mt-4">
+                        <div className="mb-6 flex flex-wrap gap-2">
+                          {seriesA && <Badge tone="mx">{seriesA.proxy_type}</Badge>}
+                          {seriesB && <Badge tone="us">{seriesB.proxy_type}</Badge>}
+                        </div>
 
-                    <TimeSeriesChart
-                      seriesA={seriesFileA}
-                      seriesB={seriesFileB}
-                      labelA={seriesShortLabel(seriesA)}
-                      labelB={seriesShortLabel(seriesB)}
-                      unitA={seriesA?.unidad}
-                      unitB={seriesB?.unidad}
-                    />
-
-                    <div className="mt-6">
-                      {result ? (
-                        <ResultSummary
-                          result={result}
-                          pair={pair}
-                          seriesA={seriesA}
-                          seriesB={seriesB}
+                        <TimeSeriesChart
+                          seriesA={seriesFileA}
+                          seriesB={seriesFileB}
                           labelA={seriesShortLabel(seriesA)}
                           labelB={seriesShortLabel(seriesB)}
+                          unitA={seriesA?.unidad}
+                          unitB={seriesB?.unidad}
                         />
-                      ) : (
+
+                        <div className="mt-6">
+                          <ResultSummary
+                            result={result}
+                            pair={pair}
+                            seriesA={seriesA}
+                            seriesB={seriesB}
+                            labelA={seriesShortLabel(seriesA)}
+                            labelB={seriesShortLabel(seriesB)}
+                            sectorLabel={sector?.label}
+                          />
+                        </div>
+                      </SectionDisclosure>
+                    ) : (
+                      <div className="mt-4">
                         <EmptyState
                           title="Resultado aún no disponible"
-                          description={`Falta data/results/${pair.pair_id}.json.`}
+                          description="Aún no hay resultado para este par — se genera en la próxima actualización trimestral."
                         />
-                      )}
-                    </div>
+                      </div>
+                    )}
                   </GlassPanel>
                 );
               })}

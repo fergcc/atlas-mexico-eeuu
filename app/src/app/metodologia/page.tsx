@@ -27,16 +27,17 @@ export default function MetodologiaPage() {
         <PageHeader
           eyebrow="Transparencia metodológica"
           title="Cómo se calcula lo que ves en este sitio"
-          description="Este dashboard extiende el Atlas Prospectivo 2021 (SRE/ONUDI/ONU-Hábitat) con una capa de causalidad de Granger y cointegración que el estudio original no incluía. Ambas capas se documentan aquí sin tecnicismos ocultos."
+          description="Este dashboard extiende el Atlas prospectivo territorial-industrial para la atracción de inversiones, de Javier Jileta-Ockholm (Scientika, 2025), con una capa de causalidad de Granger y cointegración que el libro original no incluía. Ambas capas se documentan aquí sin tecnicismos ocultos."
         />
 
         <GlassPanel className="border-accent/30 p-6">
           <p className="flex items-center gap-2 font-medium text-accent">Aclaración importante</p>
           <p className="mt-2 text-sm leading-relaxed text-foreground-muted">
-            El Atlas Prospectivo 2021 original <strong className="text-foreground">no usa</strong> causalidad de
+            El Atlas prospectivo territorial-industrial original de Javier Jileta-Ockholm{" "}
+            <strong className="text-foreground">no usa</strong> causalidad de
             Granger ni cointegración. Su metodología se basó en Ventaja Comparativa Revelada, matriz
             insumo-producto y análisis shift-share, con datos de corte transversal de 2019. Este sitio toma
-            de ese estudio únicamente el armazón sectorial (5 sectores estratégicos SCIAN) y territorial
+            de ese libro únicamente el armazón sectorial (5 sectores estratégicos SCIAN) y territorial
             (corredores multi-estado), y construye desde cero, como <strong className="text-foreground">extensión propia</strong>,
             la capa de series de tiempo, causalidad y cointegración que se muestra en{" "}
             <span className="font-mono-data">/nacional</span>, <span className="font-mono-data">/estatal</span> y{" "}
@@ -88,10 +89,11 @@ export default function MetodologiaPage() {
         <GlassPanel className="p-6">
           <h2 className="mb-4 font-display text-xl font-semibold text-foreground">Umbrales de significancia</h2>
           <p className="text-sm leading-relaxed text-foreground-muted">
-            Un resultado se marca <Badge tone="success">significativo</Badge> cuando el p-value ajustado por
-            FDR es menor a 0.05. Los resultados no significativos nunca se ocultan — se muestran atenuados
-            con un patrón de rayas en los mapas de calor y grafos, para dejar claro que la prueba se corrió
-            y no encontró evidencia suficiente, en vez de simplemente omitir esa relación.
+            Un resultado se marca <Badge tone="signal-strong">Sí, hay evidencia clara</Badge> cuando el
+            p-value ajustado por FDR es menor a 0.05. Los resultados no significativos nunca se ocultan — se
+            muestran con un círculo hueco en vez de relleno en el corredor de causalidad y el tablero de
+            evidencia, para dejar claro que la prueba se corrió y no encontró evidencia suficiente, en vez de
+            simplemente omitir esa relación.
           </p>
         </GlassPanel>
 

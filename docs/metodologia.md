@@ -1,8 +1,8 @@
 # Metodología
 
-## Qué extiende y qué no del Atlas 2021
+## Qué extiende y qué no del Atlas
 
-El [*Atlas Prospectivo Territorial-Industrial*](https://www.gob.mx/sre) (SRE/ONUDI/ONU-Hábitat, 2021) es un diagnóstico estructural, no un análisis de series de tiempo: usa Ventaja Comparativa Revelada (VCR), participación en la matriz insumo-producto, y un modelo de cambio-participación (shift-share), sobre datos de corte transversal (2019 vs 2014). No prueba causalidad ni cointegración.
+El libro [*Atlas prospectivo territorial-industrial para la atracción de inversiones*](https://play.google.com/store/books/details?id=XM2cEQAAQBAJ), de Javier Jileta-Ockholm (Scientika, 2025), es un diagnóstico estructural, no un análisis de series de tiempo: usa Ventaja Comparativa Revelada (VCR), participación en la matriz insumo-producto, y un modelo de cambio-participación (shift-share), sobre datos de corte transversal (2019 vs 2014). No prueba causalidad ni cointegración.
 
 Este proyecto toma del Atlas: los 5 sectores estratégicos (energía eólica, farmacéutica, aeroespacial, agroindustrial, petroquímica), su clasificación SCIAN, y los corredores territoriales identificados. Sobre esa base construye una capa econométrica propia con series de tiempo reales.
 

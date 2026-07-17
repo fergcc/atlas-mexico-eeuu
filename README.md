@@ -1,15 +1,15 @@
 # Atlas México–EEUU
 
-Dashboard interactivo y de uso público que extiende el [*Atlas Prospectivo Territorial-Industrial para la Atracción de Inversiones*](https://www.gob.mx/sre) (SRE / ONUDI / ONU-Hábitat, 2021) con dos preguntas que el documento original no respondía:
+Dashboard interactivo y de uso público que extiende el libro [*Atlas prospectivo territorial-industrial para la atracción de inversiones*](https://play.google.com/store/books/details?id=XM2cEQAAQBAJ), de Javier Jileta-Ockholm (Scientika, 2025), con dos preguntas que el libro original no respondía:
 
 1. **¿La producción industrial de un país anticipa a la del otro?** (causalidad de Granger, México ↔ Estados Unidos)
 2. **¿Se mueven juntas en el largo plazo?** (cointegración: Engle-Granger + Johansen + VECM)
 
 A nivel nacional, estatal (32 entidades de México) y regional (corredores industriales), actualizado con datos públicos de INEGI, Banxico, FRED, BEA y BLS.
 
-**Demo en vivo:** https://atlas-mexico-eeuu.vercel.app (datos de demostración en modo `mock` hasta que se conecten credenciales reales — ver abajo).
+**Demo en vivo:** https://atlas-mexico-eeuu.vercel.app (14 de 21 pares ya con datos reales de INEGI/FRED/BLS; el resto en modo `mock` hasta identificar más claves de indicador — ver `docs/arquitectura.md`).
 
-> El Atlas 2021 original usa Ventaja Comparativa Revelada, matriz insumo-producto y shift-share — **no** usa Granger ni cointegración. Esta capa econométrica es una extensión propia construida sobre el mismo armazón sectorial y territorial del Atlas (ver [`docs/metodologia.md`](docs/metodologia.md) y la página `/metodologia` del sitio).
+> El libro original de Javier Jileta-Ockholm usa Ventaja Comparativa Revelada, matriz insumo-producto y shift-share — **no** usa Granger ni cointegración. Esta capa econométrica es una extensión propia construida sobre el mismo armazón sectorial y territorial del libro (ver [`docs/metodologia.md`](docs/metodologia.md) y la página `/metodologia` del sitio).
 
 ## Estado actual
 

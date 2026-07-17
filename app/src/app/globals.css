@@ -9,9 +9,12 @@
 /* Design tokens — "liquid glass" system                                   */
 /* ---------------------------------------------------------------------- */
 :root {
-  /* Base surface: cool slate-blue, never pure white. */
-  --background: #eef1f7;
-  --background-elevated: #e4e9f3;
+  /* Base surface: "Bruma Cálida" (warm haze) — a warm parchment tone instead
+     of the cool slate-blue this shipped with. Same text-contrast math as
+     before (nothing here changes --foreground), just a warmer neutral so the
+     dashboard reads less like a cold data terminal. */
+  --background: #f7f2e8;
+  --background-elevated: #efe6d3;
   --foreground: #131b2e;
   --foreground-muted: #48526b;
 
@@ -37,12 +40,29 @@
   --danger-soft: #ef4444;
   --success: #0d9488;
 
+  /* Dedicated "semaphore" tokens for evidence/significance readings (evidence
+     grid, causality corridor). `--success` (~#0d9488) sits one hue away from
+     `--mx` (#0f766e) — close enough that a "Significativo" badge and a
+     "México" badge were reading as the same color. These are new, separate
+     tokens that must never alias `--mx`/`--success` again. Traffic-light
+     green/gray are treated as theme-invariant status semantics (like a
+     literal traffic light) rather than surface colors, so — unlike the
+     tokens above — they intentionally do not get a `.dark` override.
+     Components must still pair them with a shape (filled vs. hollow dot,
+     dashed vs. solid line) and a 1px border, never color alone, both for
+     colorblind-safety and because the flat green/gray don't hit 3:1 against
+     every background on their own. */
+  --signal-strong: #16a34a;
+  --signal-neutral: #94a3b8;
+
   --focus-ring: #4f46e5;
 }
 
 .dark {
-  --background: #0a0e1a;
-  --background-elevated: #10162a;
+  /* Dark "grafito cálido" (warm graphite) — replaces the blue-black base so
+     dark mode matches the same warmer direction as the light theme. */
+  --background: #1a1611;
+  --background-elevated: #221d16;
   --foreground: #e6eaf5;
   --foreground-muted: #a3add1;
 
@@ -93,6 +113,8 @@
   --color-danger: var(--danger);
   --color-danger-soft: var(--danger-soft);
   --color-success: var(--success);
+  --color-signal-strong: var(--signal-strong);
+  --color-signal-neutral: var(--signal-neutral);
 
   --font-display: var(--font-space-grotesk), "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
   --font-sans: var(--font-inter), "Inter", ui-sans-serif, system-ui, sans-serif;

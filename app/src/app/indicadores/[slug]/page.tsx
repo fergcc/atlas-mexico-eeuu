@@ -4,12 +4,14 @@ import { notFound } from "next/navigation";
 import { Download, Info } from "lucide-react";
 import { Container, Section } from "@/components/layout/container";
 import { PageHeader } from "@/components/layout/page-header";
+import { Breadcrumbs } from "@/components/layout/breadcrumbs";
 import { GlassPanel } from "@/components/ui/glass-panel";
 import { Badge } from "@/components/ui/badge";
 import { FreshnessBadge } from "@/components/ui/freshness-badge";
 import { Sparkline } from "@/components/charts/sparkline";
-import { getManifest, getSeriesCatalogEntry, getSeries, getPairs } from "@/lib/data-loader";
+import { getManifest, getSeriesCatalogEntry, getSeries, getPairs, getSectorById } from "@/lib/data-loader";
 import { formatDateLong, formatNumber } from "@/lib/formatters";
+import { formatPairLabel } from "@/lib/pair-label";
 
 export function generateStaticParams() {
   return getManifest().series_catalog.map((s) => ({ slug: s.id }));
@@ -35,10 +37,19 @@ export default async function IndicadorPage({ params }: { params: Promise<{ slug
   const series = getSeries(slug);
   const relatedPairs = getPairs().filter((p) => p.series_a === slug || p.series_b === slug);
   const lastValue = series?.observations.filter((o) => o.value !== null).at(-1);
+  const sector = getSectorById(entry.sector_id);
 
   return (
     <Section className="pt-10">
       <Container className="flex flex-col gap-8">
+        <Breadcrumbs
+          items={
+            sector
+              ? [{ label: sector.label, href: `/sectores/${sector.id}` }, { label: entry.nombre }]
+              : [{ label: entry.nombre }]
+          }
+        />
+
         <PageHeader
           eyebrow={`${entry.pais} · ${entry.region_code === "NAC" ? "Nacional" : entry.region_code}`}
           title={entry.nombre}
@@ -116,15 +127,21 @@ export default async function IndicadorPage({ params }: { params: Promise<{ slug
               {relatedPairs.length === 1 ? "par" : "pares"} de causalidad/cointegración
             </h2>
             <div className="flex flex-wrap gap-2">
-              {relatedPairs.map((p) => (
-                <Link
-                  key={p.pair_id}
-                  href={`/sectores/${p.sector_id}`}
-                  className="rounded-full border border-border-glass px-3 py-1.5 text-sm text-foreground-muted hover:bg-foreground/5 hover:text-foreground"
-                >
-                  {p.pair_id}
-                </Link>
-              ))}
+              {relatedPairs.map((p) => {
+                const seriesA = manifest.series_catalog.find((s) => s.id === p.series_a);
+                const seriesB = manifest.series_catalog.find((s) => s.id === p.series_b);
+                const sector = getSectorById(p.sector_id);
+                return (
+                  <Link
+                    key={p.pair_id}
+                    href={`/sectores/${p.sector_id}`}
+                    title={p.pair_id}
+                    className="rounded-full border border-border-glass px-3 py-1.5 text-sm text-foreground-muted hover:bg-foreground/5 hover:text-foreground"
+                  >
+                    {formatPairLabel(seriesA, seriesB, sector?.label)}
+                  </Link>
+                );
+              })}
             </div>
           </GlassPanel>
         )}

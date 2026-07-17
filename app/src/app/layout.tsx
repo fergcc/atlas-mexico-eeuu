@@ -31,7 +31,7 @@ export const metadata: Metadata = {
     template: "%s | Atlas México–EEUU",
   },
   description:
-    "Dashboard abierto de causalidad de Granger y cointegración entre industrias de México y Estados Unidos, extendiendo el Atlas Prospectivo 2021 con datos trimestrales de INEGI, Banxico, FRED, BEA y BLS.",
+    "Dashboard abierto de causalidad de Granger y cointegración entre industrias de México y Estados Unidos, extendiendo el Atlas prospectivo territorial-industrial de Javier Jileta-Ockholm con datos trimestrales de INEGI, Banxico, FRED, BEA y BLS.",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

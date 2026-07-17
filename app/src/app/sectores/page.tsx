@@ -17,7 +17,7 @@ export default function SectoresPage() {
         <PageHeader
           eyebrow={`${manifest.sectors.length} sectores`}
           title="Sectores estratégicos"
-          description="El armazón sectorial parte de los 5 sectores del Atlas Prospectivo 2021 (eólica, farmacéutica, aeroespacial, agroindustrial y petroquímica), más manufactura total como referencia. El motor de causalidad/cointegración es genérico por código SCIAN/NAICS, así que crecer a todo el árbol industrial no requiere rediseño."
+          description="El armazón sectorial parte de los 5 sectores del Atlas prospectivo territorial-industrial de Javier Jileta-Ockholm (eólica, farmacéutica, aeroespacial, agroindustrial y petroquímica), más manufactura total como referencia. El motor de causalidad/cointegración es genérico por código SCIAN/NAICS, así que crecer a todo el árbol industrial no requiere rediseño."
         />
 
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">

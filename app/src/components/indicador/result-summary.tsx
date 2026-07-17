@@ -1,8 +1,20 @@
 import { AlertTriangle, ArrowRight, ArrowLeftRight } from "lucide-react";
 import { GlassPanel } from "@/components/ui/glass-panel";
 import { Badge } from "@/components/ui/badge";
+import { TechnicalDetail } from "@/components/ui/technical-detail";
 import { formatPValue, formatDateShort, significanceLabel } from "@/lib/formatters";
-import type { ResultFile, PairMeta, SeriesCatalogEntry } from "@/lib/types";
+import { formatPairLabel } from "@/lib/pair-label";
+import {
+  GRANGER_PLAIN_QUESTION,
+  COINTEGRATION_PLAIN_QUESTION,
+  COINTEGRATION_SCREENING_LABEL,
+  COINTEGRATION_CONFIRMATION_LABEL,
+  STATIONARITY_PLAIN_QUESTION,
+  grangerPlainLabel,
+  stationarityPlainLabel,
+  cointegrationRankPlainLabel,
+} from "@/lib/plain-language";
+import type { ResultFile, PairMeta, SeriesCatalogEntry, StationarityResult } from "@/lib/types";
 
 interface ResultSummaryProps {
   result: ResultFile;
@@ -11,30 +23,27 @@ interface ResultSummaryProps {
   seriesB?: SeriesCatalogEntry;
   labelA: string;
   labelB: string;
+  sectorLabel?: string;
 }
 
-function StationarityRow({ label, kind }: { label: string; kind: import("@/lib/types").StationarityResult }) {
+function StationarityRow({ label, kind }: { label: string; kind: StationarityResult }) {
   return (
     <tr className="border-t border-border-glass">
       <td className="py-2 pr-4 text-foreground-muted">{label}</td>
-      <td className="py-2 pr-4">
+      <td className="py-2">
         {kind.is_stationary === undefined ? (
           "s/d"
         ) : (
-          <Badge tone={kind.is_stationary ? "success" : "accent"}>
-            {kind.is_stationary ? "Estacionaria" : "No estacionaria"}
+          <Badge tone={kind.is_stationary ? "signal-strong" : "signal-neutral"}>
+            {stationarityPlainLabel(kind.is_stationary)}
           </Badge>
         )}
       </td>
-      <td className="py-2 pr-4 font-mono-data">
-        {kind.order_of_integration !== undefined ? `I(${kind.order_of_integration})` : "s/d"}
-      </td>
-      <td className="py-2 font-mono-data">{formatPValue(kind.adf_p_value)}</td>
     </tr>
   );
 }
 
-export function ResultSummary({ result, pair, labelA, labelB }: ResultSummaryProps) {
+export function ResultSummary({ result, pair, seriesA, seriesB, labelA, labelB, sectorLabel }: ResultSummaryProps) {
   const { granger, cointegration_engle_granger, cointegration_johansen, stationarity, sample, warnings } = result;
 
   if (result.insufficient_data) {
@@ -52,11 +61,13 @@ export function ResultSummary({ result, pair, labelA, labelB }: ResultSummaryPro
     );
   }
 
+  const johansenRank = cointegration_johansen.cointegration_rank;
+
   return (
     <div className="flex flex-col gap-6">
       <GlassPanel className="p-6">
         <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
-          <h3 className="font-display text-lg font-semibold text-foreground">Causalidad de Granger</h3>
+          <h3 className="font-display text-lg font-semibold text-foreground">{GRANGER_PLAIN_QUESTION}</h3>
           <Badge tone="neutral">{sample.n_obs} observaciones</Badge>
         </div>
         <div className="grid gap-4 sm:grid-cols-2">
@@ -66,12 +77,14 @@ export function ResultSummary({ result, pair, labelA, labelB }: ResultSummaryPro
               <ArrowRight size={14} className="text-foreground-muted" aria-hidden="true" />
               <span className="text-us">{labelB}</span>
             </p>
-            <Badge tone={granger.a_causes_b.significant ? "success" : "neutral"}>
-              {significanceLabel(granger.a_causes_b.p_value_fdr_adj, granger.a_causes_b.significant)}
+            <Badge tone={granger.a_causes_b.significant ? "signal-strong" : "signal-neutral"}>
+              {grangerPlainLabel(granger.a_causes_b.significant)}
             </Badge>
-            <p className="mt-2 font-mono-data text-xs text-foreground-muted">
-              F = {granger.a_causes_b.f_stat?.toFixed?.(2) ?? "s/d"} · p cruda = {formatPValue(granger.a_causes_b.p_value)}
-            </p>
+            <TechnicalDetail className="mt-2">
+              Causalidad de Granger · F = {granger.a_causes_b.f_stat?.toFixed?.(2) ?? "s/d"} · p cruda ={" "}
+              {formatPValue(granger.a_causes_b.p_value)} ·{" "}
+              {significanceLabel(granger.a_causes_b.p_value_fdr_adj, granger.a_causes_b.significant)}
+            </TechnicalDetail>
           </div>
           <div className="rounded-xl bg-foreground/[0.03] p-4">
             <p className="mb-2 flex items-center gap-2 text-sm font-medium text-foreground">
@@ -79,54 +92,53 @@ export function ResultSummary({ result, pair, labelA, labelB }: ResultSummaryPro
               <ArrowRight size={14} className="text-foreground-muted" aria-hidden="true" />
               <span className="text-mx">{labelA}</span>
             </p>
-            <Badge tone={granger.b_causes_a.significant ? "success" : "neutral"}>
-              {significanceLabel(granger.b_causes_a.p_value_fdr_adj, granger.b_causes_a.significant)}
+            <Badge tone={granger.b_causes_a.significant ? "signal-strong" : "signal-neutral"}>
+              {grangerPlainLabel(granger.b_causes_a.significant)}
             </Badge>
-            <p className="mt-2 font-mono-data text-xs text-foreground-muted">
-              F = {granger.b_causes_a.f_stat?.toFixed?.(2) ?? "s/d"} · p cruda = {formatPValue(granger.b_causes_a.p_value)}
-            </p>
+            <TechnicalDetail className="mt-2">
+              Causalidad de Granger · F = {granger.b_causes_a.f_stat?.toFixed?.(2) ?? "s/d"} · p cruda ={" "}
+              {formatPValue(granger.b_causes_a.p_value)} ·{" "}
+              {significanceLabel(granger.b_causes_a.p_value_fdr_adj, granger.b_causes_a.significant)}
+            </TechnicalDetail>
           </div>
         </div>
       </GlassPanel>
 
       <GlassPanel className="p-6">
         <h3 className="mb-4 flex items-center gap-2 font-display text-lg font-semibold text-foreground">
-          <ArrowLeftRight size={17} className="text-primary" aria-hidden="true" /> Cointegración
+          <ArrowLeftRight size={17} className="text-primary" aria-hidden="true" /> {COINTEGRATION_PLAIN_QUESTION}
         </h3>
         <div className="grid gap-4 sm:grid-cols-2">
           <div className="rounded-xl bg-foreground/[0.03] p-4">
-            <p className="mb-2 text-sm font-medium text-foreground">Engle-Granger (screening)</p>
-            <Badge tone={cointegration_engle_granger.cointegrated ? "success" : "neutral"}>
+            <p className="mb-2 text-sm font-medium text-foreground">{COINTEGRATION_SCREENING_LABEL}</p>
+            <Badge tone={cointegration_engle_granger.cointegrated ? "signal-strong" : "signal-neutral"}>
               {cointegration_engle_granger.cointegrated ? "Cointegradas" : "Sin evidencia"}
             </Badge>
-            <p className="mt-2 font-mono-data text-xs text-foreground-muted">
-              p = {formatPValue(cointegration_engle_granger.p_value)}
-            </p>
+            <TechnicalDetail className="mt-2">
+              Engle-Granger (screening) · p = {formatPValue(cointegration_engle_granger.p_value)}
+            </TechnicalDetail>
           </div>
           <div className="rounded-xl bg-foreground/[0.03] p-4">
-            <p className="mb-2 text-sm font-medium text-foreground">Johansen (autoritativo)</p>
-            <Badge tone={((cointegration_johansen.cointegration_rank ?? 0) > 0) ? "success" : "neutral"}>
-              Rango {cointegration_johansen.cointegration_rank ?? "s/d"}
+            <p className="mb-2 text-sm font-medium text-foreground">{COINTEGRATION_CONFIRMATION_LABEL}</p>
+            <Badge tone={(johansenRank ?? 0) > 0 ? "signal-strong" : "signal-neutral"}>
+              {cointegrationRankPlainLabel(johansenRank)}
             </Badge>
+            <TechnicalDetail className="mt-2">
+              Johansen (autoritativo) · rango de cointegración = {johansenRank ?? "s/d"}
+              {result.vecm && " · VECM ajustado — velocidad de ajuste disponible en el JSON crudo del resultado."}
+            </TechnicalDetail>
           </div>
         </div>
-        {result.vecm && (
-          <p className="mt-3 text-xs text-foreground-muted">
-            VECM ajustado — velocidad de ajuste disponible en el JSON crudo del resultado.
-          </p>
-        )}
       </GlassPanel>
 
       <GlassPanel className="p-6">
-        <h3 className="mb-3 font-display text-lg font-semibold text-foreground">Estacionariedad (ADF)</h3>
+        <h3 className="mb-3 font-display text-lg font-semibold text-foreground">{STATIONARITY_PLAIN_QUESTION}</h3>
         <div className="overflow-x-auto">
           <table className="w-full text-left text-sm">
             <thead>
               <tr className="text-xs uppercase tracking-wide text-foreground-muted">
                 <th className="pb-2 pr-4 font-medium">Serie</th>
-                <th className="pb-2 pr-4 font-medium">Resultado</th>
-                <th className="pb-2 pr-4 font-medium">Orden</th>
-                <th className="pb-2 font-medium">p (ADF)</th>
+                <th className="pb-2 font-medium">Resultado</th>
               </tr>
             </thead>
             <tbody>
@@ -135,6 +147,20 @@ export function ResultSummary({ result, pair, labelA, labelB }: ResultSummaryPro
             </tbody>
           </table>
         </div>
+        <TechnicalDetail className="mt-3" summary="Ver detalle técnico (prueba ADF)">
+          <ul className="flex flex-col gap-1">
+            <li>
+              {labelA}: orden de integración ={" "}
+              {stationarity.a.order_of_integration !== undefined ? `I(${stationarity.a.order_of_integration})` : "s/d"}{" "}
+              · p (ADF) = {formatPValue(stationarity.a.adf_p_value)}
+            </li>
+            <li>
+              {labelB}: orden de integración ={" "}
+              {stationarity.b.order_of_integration !== undefined ? `I(${stationarity.b.order_of_integration})` : "s/d"}{" "}
+              · p (ADF) = {formatPValue(stationarity.b.adf_p_value)}
+            </li>
+          </ul>
+        </TechnicalDetail>
       </GlassPanel>
 
       {warnings.length > 0 && (
@@ -150,8 +176,8 @@ export function ResultSummary({ result, pair, labelA, labelB }: ResultSummaryPro
         </GlassPanel>
       )}
 
-      <p className="text-xs text-foreground-muted">
-        Par <code className="font-mono-data">{pair.pair_id}</code> · generado {formatDateShort(result.generated_at)} ·
+      <p className="text-xs text-foreground-muted" title={pair.pair_id}>
+        Par {formatPairLabel(seriesA, seriesB, sectorLabel)} · generado {formatDateShort(result.generated_at)} ·
         vintage de datos {formatDateShort(result.data_vintage)}
       </p>
     </div>

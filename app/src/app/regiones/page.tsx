@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { getManifest, getPairsByStateCode, getResult } from "@/lib/data-loader";
 import { getMxStateByCode } from "@/data/mx-states";
 import { significanceLabel } from "@/lib/formatters";
+import { grangerPlainLabel } from "@/lib/plain-language";
 import regionsData from "@/data/regions.json";
 
 export const metadata: Metadata = { title: "Regiones" };
@@ -22,7 +23,7 @@ export default function RegionesPage() {
         <PageHeader
           eyebrow="Vista simple · agregados por grupo de estados"
           title="Corredores industriales"
-          description="Los 5 corredores territoriales multi-municipio del Atlas Prospectivo 2021, tratados aquí como tablas agregadas por grupo de estados. El mapa municipal detallado de cada corredor queda para una fase posterior."
+          description="Los 5 corredores territoriales multi-municipio del Atlas prospectivo territorial-industrial de Javier Jileta-Ockholm, tratados aquí como tablas agregadas por grupo de estados. El mapa municipal detallado de cada corredor queda para una fase posterior."
         />
 
         <div className="flex flex-col gap-6">
@@ -90,11 +91,15 @@ export default function RegionesPage() {
                             <td className="py-2 pr-4 text-foreground-muted">{mxEntry?.nombre ?? "s/d"}</td>
                             <td className="py-2">
                               {result && !result.insufficient_data ? (
-                                <Badge tone={result.granger.a_causes_b.significant ? "success" : "neutral"}>
-                                  {significanceLabel(
+                                <Badge
+                                  tone={result.granger.a_causes_b.significant ? "signal-strong" : "signal-neutral"}
+                                  className="cursor-default"
+                                  title={significanceLabel(
                                     result.granger.a_causes_b.p_value_fdr_adj,
                                     result.granger.a_causes_b.significant
                                   )}
+                                >
+                                  {grangerPlainLabel(result.granger.a_causes_b.significant)}
                                 </Badge>
                               ) : (
                                 <span className="text-foreground-muted">Sin resultado aún</span>

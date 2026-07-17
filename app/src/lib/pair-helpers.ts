@@ -1,12 +1,40 @@
-import type { Manifest, PairMeta, SeriesCatalogEntry, ResultFile } from "./types";
-import type { HeatmapRow } from "@/components/charts/cointegration-heatmap";
-import type { GrangerGraphNode, GrangerGraphEdge } from "@/components/charts/granger-graph";
+import type { Manifest, PairMeta, SeriesCatalogEntry, ResultFile, SectorMeta } from "./types";
+import type { EvidenceRow } from "@/components/charts/evidence-grid";
+import type { CorridorPairData, CorridorSeriesInfo } from "@/components/charts/causality-corridor";
 import { getSeries, getResult } from "./data-loader";
 import { seriesShortLabel } from "./series-label";
+import { grangerPlainLabel } from "./plain-language";
 
 // Re-exported for backwards compatibility with existing imports; the
 // canonical, client-safe definition now lives in `series-label.ts`.
 export { seriesShortLabel };
+
+export interface PairResultBadge {
+  tone: "signal-strong" | "signal-neutral";
+  label: string;
+}
+
+/**
+ * Collapses a full result down to the one badge shown on a pair's *compact*
+ * row (`grangerPlainLabel`-style "Sí, hay evidencia clara" / "No hay
+ * evidencia suficiente"), used by `/nacional`, `/sectores/[sector]` and
+ * `/estatal/[estado]` so the default view never needs the full
+ * Granger/cointegration breakdown to answer "is there evidence here at all".
+ * "Evidence" means any direction of Granger significance, or cointegration
+ * (screening or Johansen-confirmed) — matches the criteria already used to
+ * build the evidence grid and corridor.
+ */
+export function pairResultBadge(result: ResultFile): PairResultBadge {
+  if (result.insufficient_data) {
+    return { tone: "signal-neutral", label: "Datos insuficientes" };
+  }
+  const hasEvidence =
+    result.granger.a_causes_b.significant ||
+    result.granger.b_causes_a.significant ||
+    Boolean(result.cointegration_engle_granger.cointegrated) ||
+    (result.cointegration_johansen.cointegration_rank ?? 0) > 0;
+  return { tone: hasEvidence ? "signal-strong" : "signal-neutral", label: grangerPlainLabel(hasEvidence) };
+}
 
 const MIN_STRENGTH = 0.05;
 
@@ -16,16 +44,16 @@ function strengthFromPValue(pValue: number | null | undefined): number {
 }
 
 /**
- * Builds one heatmap row per pair, with 3 fixed columns:
+ * Builds one evidence-grid row per pair, with 3 fixed columns:
  * [MX→US, US→MX, Cointegración]. Shared by /nacional, /sectores/[sector]
  * and /estatal/[estado] so the visual encoding stays consistent everywhere
  * a pair's results are summarized.
  */
-export function buildHeatmapRow(
+export function buildEvidenceRow(
   pair: PairMeta,
   result: ResultFile | null,
   rowLabel: string
-): HeatmapRow {
+): EvidenceRow {
   if (!result || result.insufficient_data) {
     return {
       id: pair.pair_id,
@@ -66,53 +94,66 @@ export function buildHeatmapRow(
   };
 }
 
-export const HEATMAP_COLUMNS = ["MX → EEUU", "EEUU → MX", "Cointegración"];
+export const EVIDENCE_COLUMNS = ["MX → EEUU", "EEUU → MX", "Cointegración"];
+
+function shortSource(fuente: string): string {
+  return fuente.split(/[-(]/)[0]?.trim() || fuente;
+}
 
 /**
- * Aggregates several pairs into a deduplicated node/edge set for
- * `GrangerGraph`. Only draws an edge when a result exists for that pair —
- * pairs without a result yet simply don't appear (no fabricated edges).
+ * Builds one `CorridorPairData` per pair with a result, for
+ * `CausalityCorridor`. Only includes a pair when a result exists — pairs
+ * without a result yet simply don't appear (no fabricated relationships).
  */
-export function buildGrangerGraphData(
+export function buildCorridorData(
   pairs: PairMeta[],
   seriesCatalog: SeriesCatalogEntry[],
-  resultsByPairId: Record<string, ResultFile | null>
-): { nodes: GrangerGraphNode[]; edges: GrangerGraphEdge[] } {
+  resultsByPairId: Record<string, ResultFile | null>,
+  sectors: SectorMeta[] = []
+): CorridorPairData[] {
   const seriesById = new Map(seriesCatalog.map((s) => [s.id, s]));
-  const nodesById = new Map<string, GrangerGraphNode>();
-  const edges: GrangerGraphEdge[] = [];
+  const sectorLabelById = new Map(sectors.map((s) => [s.id, s.label]));
 
+  const toSeriesInfo = (entry: SeriesCatalogEntry | undefined, fallbackCountry: "MX" | "US"): CorridorSeriesInfo => {
+    if (!entry) return { id: "?", label: "Serie desconocida", country: fallbackCountry };
+    const country: "MX" | "US" = entry.pais === "MX" ? "MX" : "US";
+    const countryName = country === "MX" ? "México" : "EEUU";
+    return {
+      id: entry.id,
+      label: entry.nombre,
+      sublabel: `${countryName}, ${shortSource(entry.fuente)}`,
+      fullSource: entry.fuente,
+      country,
+    };
+  };
+
+  const out: CorridorPairData[] = [];
   for (const pair of pairs) {
     const result = resultsByPairId[pair.pair_id];
     if (!result || result.insufficient_data) continue;
 
-    const a = seriesById.get(pair.series_a);
-    const b = seriesById.get(pair.series_b);
+    const seriesA = seriesById.get(pair.series_a);
+    const seriesB = seriesById.get(pair.series_b);
 
-    if (a && !nodesById.has(a.id)) {
-      nodesById.set(a.id, { id: a.id, label: a.nombre, country: "MX", sublabel: a.unidad });
-    }
-    if (b && !nodesById.has(b.id)) {
-      nodesById.set(b.id, { id: b.id, label: b.nombre, country: "US", sublabel: b.unidad });
-    }
-
-    edges.push({
-      id: `${pair.pair_id}-ab`,
-      source: pair.series_a,
-      target: pair.series_b,
-      pValue: result.granger.a_causes_b.p_value_fdr_adj,
-      significant: result.granger.a_causes_b.significant,
-    });
-    edges.push({
-      id: `${pair.pair_id}-ba`,
-      source: pair.series_b,
-      target: pair.series_a,
-      pValue: result.granger.b_causes_a.p_value_fdr_adj,
-      significant: result.granger.b_causes_a.significant,
+    out.push({
+      id: pair.pair_id,
+      rowLabel: sectorLabelById.get(pair.sector_id) ?? pair.sector_id,
+      a: toSeriesInfo(seriesA, "MX"),
+      b: toSeriesInfo(seriesB, "US"),
+      aCausesB: {
+        significant: result.granger.a_causes_b.significant,
+        pValue: result.granger.a_causes_b.p_value_fdr_adj,
+        fStat: result.granger.a_causes_b.f_stat,
+      },
+      bCausesA: {
+        significant: result.granger.b_causes_a.significant,
+        pValue: result.granger.b_causes_a.p_value_fdr_adj,
+        fStat: result.granger.b_causes_a.f_stat,
+      },
     });
   }
 
-  return { nodes: Array.from(nodesById.values()), edges };
+  return out;
 }
 
 export interface SectorStateDataset {

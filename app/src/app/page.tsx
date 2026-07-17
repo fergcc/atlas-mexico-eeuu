@@ -5,9 +5,9 @@ import { GlassPanel } from "@/components/ui/glass-panel";
 import { GlassCard } from "@/components/ui/glass-card";
 import { KpiStat } from "@/components/ui/kpi-stat";
 import { Badge } from "@/components/ui/badge";
-import { GrangerGraph } from "@/components/charts/granger-graph";
+import { CausalityCorridor } from "@/components/charts/causality-corridor";
 import { getManifest, getPairsByLevel, getResult } from "@/lib/data-loader";
-import { buildGrangerGraphData } from "@/lib/pair-helpers";
+import { buildCorridorData } from "@/lib/pair-helpers";
 import { SectorIcon } from "@/lib/icon-map";
 import { formatDateLong } from "@/lib/formatters";
 
@@ -22,7 +22,7 @@ export default function HomePage() {
     (r) => r && !r.insufficient_data && (r.granger.a_causes_b.significant || r.granger.b_causes_a.significant)
   ).length;
 
-  const { nodes, edges } = buildGrangerGraphData(nationalPairs, manifest.series_catalog, resultsByPairId);
+  const corridorPairs = buildCorridorData(nationalPairs, manifest.series_catalog, resultsByPairId, manifest.sectors);
 
   return (
     <>
@@ -38,8 +38,8 @@ export default function HomePage() {
                 ¿Qué tan conectada está la industria de México con la de Estados Unidos?
               </h1>
               <p className="mt-5 max-w-xl text-lg leading-relaxed text-foreground-muted">
-                Un dashboard abierto que extiende el Atlas Prospectivo 2021 con dos preguntas que el
-                original no respondía: ¿la producción de un país{" "}
+                Un dashboard abierto que extiende el Atlas prospectivo territorial-industrial de Javier
+                Jileta-Ockholm con dos preguntas que el libro original no respondía: ¿la producción de un país{" "}
                 <em className="not-italic text-foreground">anticipa</em> la del otro (causalidad de
                 Granger), y se mueven juntas en el largo plazo (cointegración)?
               </p>
@@ -72,11 +72,11 @@ export default function HomePage() {
                 <KpiStat label="Pares evaluados" value={manifest.pairs.length} tone="mx" />
                 <KpiStat label="Relaciones con causalidad" value={significantCount} tone="us" />
               </div>
-              <div className="rounded-xl border border-border-glass p-2">
-                <p className="mb-2 px-2 pt-1 text-xs font-medium uppercase tracking-wide text-foreground-muted">
+              <div className="rounded-xl border border-border-glass p-4">
+                <p className="mb-3 px-0.5 text-xs font-medium uppercase tracking-wide text-foreground-muted">
                   Vista previa · causalidad nacional
                 </p>
-                <GrangerGraph nodes={nodes} edges={edges} height={220} />
+                <CausalityCorridor pairs={corridorPairs} variant="overview" />
               </div>
             </GlassPanel>
           </div>
@@ -144,7 +144,7 @@ export default function HomePage() {
               <Layers className="mt-1 text-primary" size={26} aria-hidden="true" />
               <div>
                 <p className="font-display text-lg font-semibold text-foreground">
-                  ¿Y los corredores industriales del Atlas 2021?
+                  ¿Y los corredores industriales del Atlas?
                 </p>
                 <p className="mt-1 max-w-xl text-sm text-foreground-muted">
                   Los cinco corredores territoriales originales (aeroespacial del noreste,

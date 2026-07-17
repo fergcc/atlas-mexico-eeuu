@@ -46,7 +46,7 @@ export default function AcercaPage() {
           </h2>
           <p className="text-sm leading-relaxed text-foreground-muted">
             Los issues y pull requests son bienvenidos: desde ampliar la cobertura sectorial (todo el árbol
-            SCIAN/NAICS, no solo los 5 sectores estratégicos del Atlas 2021), hasta mejorar la precisión de
+            SCIAN/NAICS, no solo los 5 sectores estratégicos del Atlas), hasta mejorar la precisión de
             fronteras del mapa estatal (ver <code className="font-mono-data">data/geo/SOURCES.md</code> para
             la fuente actual y el reemplazo pendiente por el Marco Geoestadístico de INEGI),
             corregir metodología o traducir la interfaz. Revisa{" "}
@@ -59,10 +59,15 @@ export default function AcercaPage() {
             <Code2 size={18} className="text-foreground" aria-hidden="true" /> Créditos
           </h2>
           <p className="text-sm leading-relaxed text-foreground-muted">
-            Basado en el armazón sectorial y territorial del{" "}
-            <em>Atlas Prospectivo 2021</em> (Secretaría de Relaciones Exteriores, ONUDI y ONU-Hábitat). Este
-            proyecto es independiente y no está afiliado ni respaldado por esas organizaciones. La capa de
-            causalidad y cointegración es una extensión propia — ver{" "}
+            Basado en el armazón sectorial y territorial del libro{" "}
+            <a
+              href="https://play.google.com/store/books/details?id=XM2cEQAAQBAJ"
+              className="underline underline-offset-2 hover:text-foreground"
+            >
+              <em>Atlas prospectivo territorial-industrial para la atracción de inversiones</em>
+            </a>
+            , de Javier Jileta-Ockholm (Scientika, 2025). La capa de causalidad y cointegración de este
+            sitio es una extensión propia, no parte del libro original — ver{" "}
             <a href="/metodologia" className="underline underline-offset-2 hover:text-foreground">
               metodología
             </a>

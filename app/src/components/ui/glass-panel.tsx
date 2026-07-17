@@ -24,7 +24,17 @@ interface GlassPanelProps {
 export function GlassPanel({ as, strong = false, className, children, ...rest }: GlassPanelProps) {
   const Component = (as ?? "div") as ElementType;
   return (
-    <Component className={cn("rounded-2xl", strong ? "glass-panel-strong" : "glass-panel", className)} {...rest}>
+    // `min-w-0`: every page stacks these as flex/grid children (`Container`
+    // with `flex flex-col`, or a card grid). Flex/grid items default to
+    // `min-width: auto`, which lets a wide child (e.g. the evidence grid's
+    // `minmax(...)` columns) force the *whole flex container* to overflow
+    // horizontally instead of scrolling inside its own `overflow-x-auto`
+    // wrapper. `min-w-0` here is what actually makes that inner scroll
+    // container work, at any viewport.
+    <Component
+      className={cn("min-w-0 rounded-2xl", strong ? "glass-panel-strong" : "glass-panel", className)}
+      {...rest}
+    >
       {children}
     </Component>
   );

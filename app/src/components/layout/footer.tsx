@@ -9,9 +9,10 @@ export function Footer() {
           <div className="max-w-md">
             <p className="font-display text-base font-semibold text-foreground">Atlas México–EEUU</p>
             <p className="mt-2 leading-relaxed">
-              Extensión de código abierto del Atlas Prospectivo 2021 (SRE/ONUDI/ONU-Hábitat) con
-              causalidad de Granger y cointegración entre industrias de México y Estados Unidos.
-              Este proyecto es independiente y no está afiliado a las organizaciones originales.
+              Extensión de código abierto del Atlas prospectivo territorial-industrial, de Javier
+              Jileta-Ockholm (Scientika, 2025), con causalidad de Granger y cointegración entre
+              industrias de México y Estados Unidos. La capa de causalidad y cointegración es
+              propia de este proyecto, no parte del libro original.
             </p>
           </div>
           <nav aria-label="Enlaces del pie de página" className="flex flex-col gap-2">
