@@ -26,7 +26,7 @@ export interface TerritorialResponse {
   total_indicators: number;
   total_regions: number;
   data_quality: string;
-  by_region: Record<string, number>[];
+  by_region: Record<string, string | number>[];
   raw_values: IndicatorValue[];
   generated_at?: string;
 }
@@ -110,7 +110,7 @@ export async function fetchTerritorialIndicators(
     if (!data) return null;
     if (regionCodes?.length) {
       const filtered = data.raw_values.filter(v => regionCodes.includes(v.region_code));
-      const byRegion: Record<string, number>[] = [];
+      const byRegion: Record<string, string | number>[] = [];
       for (const v of filtered) {
         let region = byRegion.find(r => r.region_code === v.region_code);
         if (!region) {
