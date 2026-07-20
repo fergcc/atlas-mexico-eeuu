@@ -37,6 +37,7 @@ export default function TerritorialPage() {
   const engineUrl = process.env.NEXT_PUBLIC_ENGINE_URL ?? "";
   const [catalog, setCatalog] = useState<IndicatorCatalog | null>(null);
   const [rawValues, setRawValues] = useState<Record<string, string | number | null>[]>([]);
+  const [rawDataQuality, setRawDataQuality] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState(false);
 
   const [country, setCountry] = useState("MX");
@@ -64,7 +65,10 @@ export default function TerritorialPage() {
   const loadTerritorial = useCallback(() => {
     setLoading(true);
     fetchTerritorialIndicators(country, sector).then((data) => {
-      setRawValues(data?.raw_values.map((v) => ({
+      const qualityMap: Record<string, string> = {};
+      setRawValues(data?.raw_values.map((v) => {
+        qualityMap[v.indicator_id] = v.data_quality ?? "unknown";
+        return {
         country: v.country,
         region_code: v.region_code,
         region_name: v.region_name,
@@ -73,7 +77,8 @@ export default function TerritorialPage() {
         value: v.value,
         unit: v.unit,
         phase: v.phase,
-      })) ?? []);
+      }}) ?? []);
+      setRawDataQuality(qualityMap);
       setLoading(false);
     });
   }, [country, sector]);
@@ -198,6 +203,18 @@ export default function TerritorialPage() {
               </select>
             </div>
             <div className="flex items-center gap-2">
+              {Object.keys(rawDataQuality).length > 0 && (() => {
+                const total = Object.keys(rawDataQuality).length;
+                const real = Object.values(rawDataQuality).filter((q) => q === "real").length;
+                return (
+                  <span className="inline-flex items-center gap-1.5 rounded-full border border-border-glass px-3 py-1.5 text-xs font-medium">
+                    <span className="h-2 w-2 rounded-full bg-success" />
+                    <span className="text-foreground">{real}</span>
+                    <span className="text-foreground-muted">/ {total}</span>
+                    <span className="text-foreground-muted">real</span>
+                  </span>
+                );
+              })()}
               <CsvExport
                 data={rawValues}
                 filename={`${country}_${sector}_indicadores.csv`}
