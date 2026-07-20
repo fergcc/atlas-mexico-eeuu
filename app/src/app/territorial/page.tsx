@@ -38,6 +38,7 @@ export default function TerritorialPage() {
   const [catalog, setCatalog] = useState<IndicatorCatalog | null>(null);
   const [rawValues, setRawValues] = useState<Record<string, string | number | null>[]>([]);
   const [rawDataQuality, setRawDataQuality] = useState<Record<string, string>>({});
+  const [rawNote, setRawNote] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState(false);
 
   const [country, setCountry] = useState("MX");
@@ -66,8 +67,10 @@ export default function TerritorialPage() {
     setLoading(true);
     fetchTerritorialIndicators(country, sector).then((data) => {
       const qualityMap: Record<string, string> = {};
+      const noteMap: Record<string, string> = {};
       setRawValues(data?.raw_values.map((v) => {
         qualityMap[v.indicator_id] = v.data_quality ?? "unknown";
+        noteMap[v.indicator_id] = (v as unknown as Record<string, string>).note ?? "";
         return {
         country: v.country,
         region_code: v.region_code,
@@ -79,6 +82,7 @@ export default function TerritorialPage() {
         phase: v.phase,
       }}) ?? []);
       setRawDataQuality(qualityMap);
+      setRawNote(noteMap);
       setLoading(false);
     });
   }, [country, sector]);
@@ -129,6 +133,14 @@ export default function TerritorialPage() {
     });
     return m;
   }, [rawValues]);
+
+  const indicatorSources = useMemo(() => {
+    const sources: Record<string, string> = {};
+    for (const [indId, note] of Object.entries(rawNote)) {
+      sources[indId] = note || (rawDataQuality[indId] ?? "mock");
+    }
+    return sources;
+  }, [rawNote, rawDataQuality]);
 
   const regions = useMemo<RegionEntry[]>(() => {
     const seen = new Set<string>();
@@ -215,6 +227,15 @@ export default function TerritorialPage() {
                   </span>
                 );
               })()}
+              {engineUrl && (
+                <button
+                  onClick={loadTerritorial}
+                  disabled={loading}
+                  className="inline-flex items-center gap-1.5 rounded-full border border-border-glass px-3 py-1.5 text-xs font-medium text-foreground-muted transition-colors hover:bg-foreground/5 hover:text-foreground disabled:opacity-50"
+                >
+                  {loading ? "⟳" : "⟳ Actualizar"}
+                </button>
+              )}
               <CsvExport
                 data={rawValues}
                 filename={`${country}_${sector}_indicadores.csv`}
@@ -264,6 +285,8 @@ export default function TerritorialPage() {
                 indicatorIds={filteredIds}
                 indicatorNames={indicatorNames}
                 indicatorPhases={indicatorPhases}
+                indicatorSources={indicatorSources}
+                dataQuality={rawDataQuality}
                 data={data}
                 onCellClick={handleCellClick}
               />

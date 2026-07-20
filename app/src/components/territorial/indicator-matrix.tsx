@@ -8,6 +8,8 @@ interface IndicatorMatrixProps {
   indicatorIds: string[];
   indicatorNames: Record<string, string>;
   indicatorPhases: Record<string, string>;
+  indicatorSources: Record<string, string>;
+  dataQuality: Record<string, string>;
   data: Record<string, Record<string, number>>;
   onCellClick: (indicatorId: string, regionCode: string, value: number, regionName: string) => void;
   className?: string;
@@ -34,6 +36,8 @@ export function IndicatorMatrix({
   indicatorIds,
   indicatorNames,
   indicatorPhases,
+  indicatorSources,
+  dataQuality,
   data,
   onCellClick,
   className,
@@ -104,13 +108,20 @@ export function IndicatorMatrix({
               {indicatorIds.map((id) => {
                 const value = data[region.region_code]?.[id];
                 const hasValue = value !== undefined && value !== null;
+                const isMock = dataQuality?.[id] !== "real";
+                const source = indicatorSources?.[id] ?? (isMock ? "mock" : "real");
                 return (
                   <td
                     key={id}
                     className={cn(
                       "cursor-pointer px-2 py-2 text-center tabular-nums transition-colors hover:ring-1 hover:ring-primary/30",
-                      hasValue ? colorForValue(value, "positive") : "text-foreground/20"
+                      hasValue
+                        ? isMock
+                          ? "text-foreground/30 italic"
+                          : colorForValue(value, "positive")
+                        : "text-foreground/20"
                     )}
+                    title={`${indicatorNames[id]}\n${source}${isMock ? " (mock)" : ""}`}
                     onClick={() => {
                       if (hasValue) {
                         onCellClick(id, region.region_code, value, region.region_name);
