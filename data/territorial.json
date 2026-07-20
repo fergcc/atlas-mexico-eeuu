@@ -1,6 +1,6 @@
 {
+  "generated_at": "2026-07-20T20:49:59.859632+00:00",
   "country": "MX",
-  "sector_id": null,
   "total_indicators": 34,
   "total_regions": 32,
   "data_quality": "mixed",
@@ -21895,6 +21895,5 @@
       "data_quality": "real",
       "note": "Intensidad de consumo de agua — CONAGUA 2023, m³/millón MXN, estatal"
     }
-  ],
-  "generated_at": "2026-07-20T14:14:16.418590"
+  ]
 }
