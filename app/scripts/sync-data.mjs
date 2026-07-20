@@ -1,14 +1,9 @@
 #!/usr/bin/env node
-// Copies (never symlinks) ../data/** into app/public/data/** so that the
-// statically-exported Next.js app can `fetch('/data/...')` client-side and
-// Server Components can read the same files from `public/data` via `fs` at
-// build time. This runs in `predev`/`prebuild` so `public/data` always
-// mirrors whatever the pipeline has produced in the monorepo root, without
-// ever hardcoding which sectors/pairs/series exist.
+// Copies Engine/data/** into app/public/data/** so the Dashboard always
+// reflects whatever the Engine pipeline has produced.
 //
-// Safe to run before the pipeline has produced anything: if `../data`
-// doesn't exist yet, this is a no-op (with a warning) rather than a failure,
-// so `npm install` / first-time clones don't break.
+// Safe to run before Engine has run: if the Engine data dir doesn't exist
+// yet, this is a no-op with a warning.
 
 import { existsSync, mkdirSync, readdirSync, statSync, copyFileSync, rmSync } from "node:fs";
 import { dirname, join } from "node:path";
@@ -18,7 +13,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const projectRoot = join(__dirname, "..");
 const monorepoRoot = join(projectRoot, "..");
 
-const SRC = join(monorepoRoot, "data");
+const SRC = join(monorepoRoot, "..", "..", "Engine", "data");
 const DEST = join(projectRoot, "public", "data");
 
 function copyRecursive(src, dest) {
@@ -40,24 +35,22 @@ function copyRecursive(src, dest) {
 function main() {
   if (!existsSync(SRC)) {
     console.warn(
-      `[sync-data] No se encontró ${SRC}. El pipeline aún no ha generado datos; ` +
-        `se omite la sincronización (la app usará solo lo que ya exista en public/data, si algo).`
+      `[sync-data] Engine data not found at ${SRC}. Run the Engine pipeline first.`
     );
     return;
   }
 
   if (!statSync(SRC).isDirectory()) {
-    console.warn(`[sync-data] ${SRC} no es un directorio, se omite.`);
+    console.warn(`[sync-data] ${SRC} is not a directory, skipping.`);
     return;
   }
 
-  // Start clean so deleted/renamed source files don't linger in public/data.
   if (existsSync(DEST)) {
     rmSync(DEST, { recursive: true, force: true });
   }
 
   copyRecursive(SRC, DEST);
-  console.log(`[sync-data] Copiado ${SRC} -> ${DEST}`);
+  console.log(`[sync-data] Copied ${SRC} -> ${DEST}`);
 }
 
 main();
