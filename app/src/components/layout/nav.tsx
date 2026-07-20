@@ -16,6 +16,7 @@ const LINKS = [
   { href: "/sectores", label: "Sectores" },
   { href: "/regiones", label: "Regiones" },
   { href: "/comparativa", label: "Comparativa" },
+  { href: "/territorial", label: "Territorial" },
 ];
 
 function SectorsDropdown() {

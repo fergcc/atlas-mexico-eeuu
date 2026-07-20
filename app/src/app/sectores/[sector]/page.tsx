@@ -18,6 +18,7 @@ import { buildCorridorData, buildEvidenceRow, pairResultBadge, EVIDENCE_COLUMNS,
 import { formatPairLabel } from "@/lib/pair-label";
 import { SectorIcon } from "@/lib/icon-map";
 import regionsData from "@/data/regions.json";
+import { SectorAnalysisPanel } from "@/components/sector/sector-analysis-panel";
 
 export function generateStaticParams() {
   return getSectors().map((sector) => ({ sector: sector.id }));
@@ -157,6 +158,11 @@ export default async function SectorPage({ params }: { params: Promise<{ sector:
             </div>
           </>
         )}
+
+        <SectorAnalysisPanel
+          sectorId={sectorId}
+          sectorLabel={sector.label}
+        />
       </Container>
     </Section>
   );
