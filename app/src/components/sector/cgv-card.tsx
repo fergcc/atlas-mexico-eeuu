@@ -3,20 +3,24 @@
 import { GlassPanel } from "@/components/ui/glass-panel";
 import { Badge } from "@/components/ui/badge";
 import { Building2, Globe, TrendingUp, DollarSign } from "lucide-react";
+import type { SectorAnalysis } from "@/lib/engine-client";
 
-interface CgvCardProps {
+interface CgvProps {
   sector: string;
-  data: any;
+  data: SectorAnalysis | null;
   className?: string;
 }
 
-export function CgvCard({ sector, data, className }: CgvCardProps) {
+interface WbIndicator { value?: number; year?: string }
+interface EciItem { economic_complexity_index?: number }
+interface PatentItem { patent_count?: number }
+
+export function CgvCard({ sector, data, className }: CgvProps) {
   if (!data) return null;
 
-  const wb = data.world_bank ?? {};
-  const trade = data.trade ?? {};
-  const eci = data.economic_complexity ?? {};
-  const innovation = data.innovation ?? {};
+  const wb = (data.world_bank ?? {}) as Record<string, WbIndicator>;
+  const eci = (data.economic_complexity ?? {}) as EciItem;
+  const innovation = (data.innovation ?? {}) as PatentItem;
 
   return (
     <GlassPanel className={className}>

@@ -18,11 +18,11 @@ export function NarrativeReport({ sector, countries, content, className }: Narra
 
   return (
     <GlassPanel className={cn("max-h-[600px] overflow-auto", className)}>
-      <h3 className="mb-4 flex items-center gap-2 font-display text-lg font-semibold text-foreground sticky top-0 bg-surface-glass z-10 pb-2">
+      <h3 className="mb-4 flex items-center gap-2 font-display text-lg font-semibold text-foreground sticky top-0 bg-surface-glass pb-2" style={{ zIndex: 10 }}>
         <FileText size={18} className="text-primary" aria-hidden="true" />
         Análisis — {sector} en {countries}
       </h3>
-      <div className="prose-custom text-sm leading-relaxed text-foreground-muted space-y-4">
+      <div className="space-y-4 text-sm leading-relaxed text-foreground-muted">
         {paragraphs.map((p, i) => {
           if (p.startsWith("## ")) {
             return <h4 key={i} className="font-display text-base font-semibold text-foreground pt-2">{p.replace(/^## /, "")}</h4>;

@@ -1,23 +1,18 @@
 #!/usr/bin/env node
 /**
  * Fetches the full data tree (manifest, series, results) from a running
- * Atlas Engine instance and writes it to app/public/data/, ready for the
- * static Next.js export to consume.
+ * Atlas Engine instance and writes it to app/public/data/.
  *
  * Usage:
  *   node scripts/sync-from-engine.mjs [engine-url]
  *
- * Default engine-url: http://localhost:8000/api/v1
- *
  * Set NEXT_PUBLIC_ENGINE_URL env var to override.
  */
 
-import { existsSync, mkdirSync, writeFileSync, rmSync } from "node:fs";
+import { mkdirSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
-import { fileURLToPath } from "node:url";
 
-const __dirname = new URL(".", import.meta.url).pathname;
-const projectRoot = join(__dirname, "..");
+const projectRoot = join(new URL(".", import.meta.url).pathname, "..");
 const DEST = join(projectRoot, "public", "data");
 
 const ENGINE_URL = process.env.NEXT_PUBLIC_ENGINE_URL
@@ -27,7 +22,7 @@ const ENGINE_URL = process.env.NEXT_PUBLIC_ENGINE_URL
 async function fetchJson(url) {
   const response = await fetch(url);
   if (!response.ok) {
-    throw new Error(`HTTP ${response.status} from ${url}: ${await response.text().catch(() => "")}`.slice(0, 300));
+    throw new Error(`HTTP ${response.status} from ${url}`);
   }
   return response.json();
 }

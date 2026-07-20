@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, useCallback } from "react";
 import { Container, Section } from "@/components/layout/container";
 import { PageHeader } from "@/components/layout/page-header";
 import { GlassPanel } from "@/components/ui/glass-panel";
@@ -12,6 +12,7 @@ import {
   fetchIndicatorCatalog,
   fetchTerritorialIndicators,
 } from "@/lib/territory-client";
+import type { IndicatorCatalog, IndicatorCatalogEntry } from "@/lib/territory-client";
 
 const SECTORS = [
   { id: "manufactura_total", label: "Manufactura total" },
@@ -28,18 +29,24 @@ const COUNTRIES = [
   { code: "CA", label: "Canadá" },
 ];
 
+interface ThemeGroup { id: string; name: string; count: number }
+interface RegionEntry { region_code: string; region_name: string }
+type IndicatorMap = Record<string, Record<string, number>>;
+
 export default function TerritorialPage() {
-  const [engineUrl] = useState(process.env.NEXT_PUBLIC_ENGINE_URL ?? "");
-  const [catalog, setCatalog] = useState<any>(null);
-  const [rawValues, setRawValues] = useState<any[]>([]);
+  const engineUrl = process.env.NEXT_PUBLIC_ENGINE_URL ?? "";
+  const [catalog, setCatalog] = useState<IndicatorCatalog | null>(null);
+  const [rawValues, setRawValues] = useState<Record<string, string | number | null>[]>([]);
   const [loading, setLoading] = useState(false);
 
   const [country, setCountry] = useState("MX");
+
+  const indicators = useMemo<IndicatorCatalogEntry[]>(() => catalog?.indicators ?? [], [catalog]);
   const [sector, setSector] = useState("manufactura_total");
   const [selectedPhase, setSelectedPhase] = useState("all");
   const [selectedThemes, setSelectedThemes] = useState<Set<string>>(new Set());
 
-  const [detailIndicator, setDetailIndicator] = useState<any>(null);
+  const [detailIndicator, setDetailIndicator] = useState<IndicatorCatalogEntry | null>(null);
   const [detailValue, setDetailValue] = useState<number | null>(null);
   const [detailRegion, setDetailRegion] = useState("");
 
@@ -48,25 +55,37 @@ export default function TerritorialPage() {
       if (c) {
         setCatalog(c);
         const allThemes = new Set<string>();
-        c.indicators.forEach((i: any) => allThemes.add(i.subtheme));
+        c.indicators.forEach((i) => allThemes.add(i.subtheme));
         setSelectedThemes(allThemes);
       }
     });
   }, []);
 
-  useEffect(() => {
+  const loadTerritorial = useCallback(() => {
     setLoading(true);
     fetchTerritorialIndicators(country, sector).then((data) => {
-      setRawValues(data?.raw_values ?? []);
+      setRawValues(data?.raw_values.map((v) => ({
+        country: v.country,
+        region_code: v.region_code,
+        region_name: v.region_name,
+        indicator_id: v.indicator_id,
+        indicator_name: v.indicator_name,
+        value: v.value,
+        unit: v.unit,
+        phase: v.phase,
+      })) ?? []);
       setLoading(false);
     });
   }, [country, sector]);
 
-  const indicators = catalog?.indicators ?? [];
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    loadTerritorial();
+  }, [loadTerritorial]);
 
-  const themes = useMemo(() => {
+  const themes = useMemo<ThemeGroup[]>(() => {
     const count = new Map<string, number>();
-    indicators.forEach((i: any) => {
+    indicators.forEach((i) => {
       count.set(i.subtheme, (count.get(i.subtheme) ?? 0) + 1);
     });
     return Array.from(count.entries()).map(([id, c]) => ({ id, name: id, count: c }));
@@ -74,62 +93,53 @@ export default function TerritorialPage() {
 
   const filteredIds = useMemo(() => {
     return indicators
-      .filter((i: any) => {
+      .filter((i) => {
         if (selectedPhase !== "all" && i.phase !== selectedPhase) return false;
         if (!selectedThemes.has(i.subtheme)) return false;
         return true;
       })
-      .map((i: any) => i.id);
+      .map((i) => i.id);
   }, [indicators, selectedPhase, selectedThemes]);
 
   const indicatorNames = useMemo(() => {
     const m: Record<string, string> = {};
-    indicators.forEach((i: any) => { m[i.id] = i.name; });
+    indicators.forEach((i) => { m[i.id] = i.name; });
     return m;
   }, [indicators]);
 
   const indicatorPhases = useMemo(() => {
     const m: Record<string, string> = {};
-    indicators.forEach((i: any) => { m[i.id] = i.phase; });
+    indicators.forEach((i) => { m[i.id] = i.phase; });
     return m;
   }, [indicators]);
 
-  const data = useMemo(() => {
-    const m: Record<string, Record<string, number>> = {};
-    rawValues.forEach((v: any) => {
-      if (!m[v.region_code]) m[v.region_code] = {};
-      m[v.region_code][v.indicator_id] = v.value;
+  const data = useMemo<IndicatorMap>(() => {
+    const m: IndicatorMap = {};
+    rawValues.forEach((v) => {
+      const rc = String(v.region_code ?? "");
+      const iid = String(v.indicator_id ?? "");
+      const val = typeof v.value === "number" ? v.value : 0;
+      if (!m[rc]) m[rc] = {};
+      m[rc][iid] = val;
     });
     return m;
   }, [rawValues]);
 
-  const regions = useMemo(() => {
+  const regions = useMemo<RegionEntry[]>(() => {
     const seen = new Set<string>();
-    const result: Array<{ region_code: string; region_name: string }> = [];
-    rawValues.forEach((v: any) => {
-      if (!seen.has(v.region_code)) {
-        seen.add(v.region_code);
-        result.push({ region_code: v.region_code, region_name: v.region_name });
+    const result: RegionEntry[] = [];
+    rawValues.forEach((v) => {
+      const rc = String(v.region_code ?? "");
+      if (!seen.has(rc)) {
+        seen.add(rc);
+        result.push({ region_code: rc, region_name: String(v.region_name ?? rc) });
       }
     });
     return result;
   }, [rawValues]);
 
-  const csvData = useMemo(() => {
-    return rawValues.map((v: any) => ({
-      country: v.country,
-      region_code: v.region_code,
-      region_name: v.region_name,
-      indicator_id: v.indicator_id,
-      indicator_name: v.indicator_name,
-      value: v.value,
-      unit: v.unit,
-      phase: v.phase,
-    }));
-  }, [rawValues]);
-
   function handleCellClick(indicatorId: string, _regionCode: string, value: number, regionName: string) {
-    const ind = indicators.find((i: any) => i.id === indicatorId);
+    const ind = indicators.find((i) => i.id === indicatorId);
     setDetailIndicator(ind ?? null);
     setDetailValue(value);
     setDetailRegion(regionName);
@@ -189,7 +199,7 @@ export default function TerritorialPage() {
             </div>
             <div className="flex items-center gap-2">
               <CsvExport
-                data={csvData}
+                data={rawValues}
                 filename={`${country}_${sector}_indicadores.csv`}
                 className="inline-flex items-center gap-2 rounded-full border border-border-glass px-4 py-2 text-xs font-medium text-foreground-muted transition-colors hover:bg-foreground/5 hover:text-foreground"
               />

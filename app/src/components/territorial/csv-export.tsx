@@ -1,7 +1,7 @@
 "use client";
 
 interface CsvExportProps {
-  data: Array<Record<string, any>>;
+  data: Record<string, string | number | null>[];
   filename: string;
   className?: string;
 }
@@ -32,11 +32,7 @@ export function CsvExport({ data, filename, className }: CsvExportProps) {
   }
 
   return (
-    <button
-      type="button"
-      onClick={handleExport}
-      className={className}
-    >
+    <button type="button" onClick={handleExport} className={className}>
       Exportar CSV
     </button>
   );

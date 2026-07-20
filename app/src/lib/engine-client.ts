@@ -11,17 +11,17 @@ async function fetchEngine<T>(path: string, init?: RequestInit): Promise<T | nul
   try {
     const res = await fetch(`${ENGINE_URL}${path}`, init);
     if (!res.ok) return null;
-    return res.json();
+    return res.json() as Promise<T>;
   } catch {
     return null;
   }
 }
 
 export interface SectorAnalysis {
-  trade?: any;
-  world_bank?: Record<string, any>;
-  economic_complexity?: any;
-  innovation?: any;
+  trade?: Record<string, unknown>;
+  world_bank?: Record<string, Record<string, unknown>>;
+  economic_complexity?: Record<string, unknown>;
+  innovation?: Record<string, unknown>;
   error?: string;
 }
 
@@ -43,7 +43,7 @@ export interface NarrativeResult {
   narrative?: {
     content?: string;
     model?: string;
-    usage?: any;
+    usage?: Record<string, number>;
   };
   error?: string;
 }
@@ -64,7 +64,7 @@ export async function classifySector(
   description: string = "",
   context: string = ""
 ): Promise<ClassificationResult | null> {
-  return fetchEngine("/llm/classify-sector", {
+  return fetchEngine<ClassificationResult>("/llm/classify-sector", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ sector_name: sectorName, description, context }),
@@ -76,7 +76,7 @@ export async function generateNarrative(
   countryCodes: string[] = ["MX"],
   language: string = "es"
 ): Promise<NarrativeResult | null> {
-  return fetchEngine("/llm/generate-narrative", {
+  return fetchEngine<NarrativeResult>("/llm/generate-narrative", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ sector_id: sectorId, country_codes: countryCodes, language }),

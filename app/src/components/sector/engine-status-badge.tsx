@@ -6,14 +6,13 @@ import { Badge } from "@/components/ui/badge";
 import { Wifi, WifiOff } from "lucide-react";
 
 export function EngineStatusBadge() {
-  const [status, setStatus] = useState<"checking" | "connected" | "disconnected">("checking");
+  const [status, setStatus] = useState<"checking" | "connected" | "disconnected">(
+    process.env.NEXT_PUBLIC_ENGINE_URL ? "checking" : "disconnected"
+  );
 
   useEffect(() => {
     const engine = process.env.NEXT_PUBLIC_ENGINE_URL;
-    if (!engine) {
-      setStatus("disconnected");
-      return;
-    }
+    if (!engine) return;
     checkEngineHealth().then((ok) => {
       setStatus(ok ? "connected" : "disconnected");
     });
