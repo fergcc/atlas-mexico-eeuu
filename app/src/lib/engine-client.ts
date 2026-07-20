@@ -17,12 +17,12 @@ async function fetchEngine<T>(path: string, init?: RequestInit): Promise<T | nul
   }
 }
 
-export interface SectorAnalysis {
-  trade?: Record<string, unknown>;
-  world_bank?: Record<string, Record<string, unknown>>;
-  economic_complexity?: Record<string, unknown>;
-  innovation?: Record<string, unknown>;
-  error?: string;
+export type SectorAnalysisData = Record<string, unknown>;
+
+export interface SectorAnalysisResponse {
+  sector: string;
+  countries: string[];
+  analysis: SectorAnalysisData | null;
 }
 
 export interface ClassificationResult {
@@ -51,8 +51,8 @@ export interface NarrativeResult {
 export async function analyzeSector(
   sectorName: string,
   countryCodes: string[] = ["MX"]
-): Promise<SectorAnalysis | null> {
-  return fetchEngine<SectorAnalysis>("/analysis/sector", {
+): Promise<SectorAnalysisResponse | null> {
+  return fetchEngine<SectorAnalysisResponse>("/analysis/sector", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ sector_name: sectorName, country_codes: countryCodes, include_cgv: true }),

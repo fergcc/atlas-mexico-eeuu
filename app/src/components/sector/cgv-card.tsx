@@ -3,11 +3,11 @@
 import { GlassPanel } from "@/components/ui/glass-panel";
 import { Badge } from "@/components/ui/badge";
 import { Building2, Globe, TrendingUp, DollarSign } from "lucide-react";
-import type { SectorAnalysis } from "@/lib/engine-client";
+import type { SectorAnalysisData } from "@/lib/engine-client";
 
 interface CgvProps {
   sector: string;
-  data: SectorAnalysis | null;
+  data: SectorAnalysisData | null;
   className?: string;
 }
 

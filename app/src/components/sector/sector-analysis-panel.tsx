@@ -7,7 +7,7 @@ import { CgvCard } from "./cgv-card";
 import { ClassificationCard } from "./classification-card";
 import { NarrativeReport } from "./narrative-report";
 import { hasEngine, analyzeSector, classifySector, generateNarrative } from "@/lib/engine-client";
-import type { SectorAnalysis, ClassificationResult, NarrativeResult } from "@/lib/engine-client";
+import type { SectorAnalysisResponse, ClassificationResult, NarrativeResult } from "@/lib/engine-client";
 
 interface SectorAnalysisPanelProps {
   sectorId: string;
@@ -19,7 +19,7 @@ type TabId = "cgv" | "classification" | "narrative";
 
 export function SectorAnalysisPanel({ sectorId, sectorLabel, className }: SectorAnalysisPanelProps) {
   const [activeTab, setActiveTab] = useState<TabId>("cgv");
-  const [cgvData, setCgvData] = useState<SectorAnalysis | null>(null);
+  const [cgvData, setCgvData] = useState<SectorAnalysisResponse | null>(null);
   const [classificationData, setClassificationData] = useState<ClassificationResult | null>(null);
   const [narrativeData, setNarrativeData] = useState<NarrativeResult | null>(null);
   const [loading, setLoading] = useState(false);
@@ -108,7 +108,7 @@ export function SectorAnalysisPanel({ sectorId, sectorLabel, className }: Sector
           {activeTab === "cgv" && cgvData && (
             <CgvCard
               sector={sectorLabel}
-              data={cgvData}
+              data={cgvData.analysis}
               className="p-6"
             />
           )}
