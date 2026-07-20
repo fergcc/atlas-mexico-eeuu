@@ -1,20 +1,35 @@
 #!/usr/bin/env node
-// Copies Engine/data/** into app/public/data/** so the Dashboard always
-// reflects whatever the Engine pipeline has produced.
+// Copies data files into app/public/data/ for the static Next.js export.
 //
-// Safe to run before Engine has run: if the Engine data dir doesn't exist
-// yet, this is a no-op with a warning.
+// Source priority:
+//   1. Engine/data/ (local dev — monorepo sibling)
+//   2. ../data/     (versioned Dashboard data, used in Vercel/CI builds)
+//
+// On Vercel, only the Dashboard repo is cloned, so Engine data is unavailable.
+// The Dashboard's data/ directory is kept in sync with Engine via git.
 
 import { existsSync, mkdirSync, readdirSync, statSync, copyFileSync, rmSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const projectRoot = join(__dirname, "..");
-const monorepoRoot = join(projectRoot, "..");
+const appRoot = join(__dirname, "..");
+const dashboardRoot = join(appRoot, "..");
 
-const SRC = join(monorepoRoot, "..", "..", "Engine", "data");
-const DEST = join(projectRoot, "public", "data");
+// Try Engine data first (local dev), fall back to Dashboard data (CI/Vercel)
+const ENGINE_SRC = join(dashboardRoot, "..", "..", "Engine", "data");
+const LOCAL_SRC = join(dashboardRoot, "data");
+const DEST = join(appRoot, "public", "data");
+
+function getSource() {
+  if (existsSync(ENGINE_SRC) && statSync(ENGINE_SRC).isDirectory()) {
+    return ENGINE_SRC;
+  }
+  if (existsSync(LOCAL_SRC) && statSync(LOCAL_SRC).isDirectory()) {
+    return LOCAL_SRC;
+  }
+  return null;
+}
 
 function copyRecursive(src, dest) {
   const entries = readdirSync(src, { withFileTypes: true });
@@ -33,24 +48,23 @@ function copyRecursive(src, dest) {
 }
 
 function main() {
-  if (!existsSync(SRC)) {
+  const src = getSource();
+  if (!src) {
     console.warn(
-      `[sync-data] Engine data not found at ${SRC}. Run the Engine pipeline first.`
+      `[sync-data] No data source found. Run the Engine pipeline first, ` +
+        `or ensure data/ exists in the Dashboard repo.`
     );
     return;
   }
 
-  if (!statSync(SRC).isDirectory()) {
-    console.warn(`[sync-data] ${SRC} is not a directory, skipping.`);
-    return;
-  }
+  console.log(`[sync-data] Source: ${src}`);
 
   if (existsSync(DEST)) {
     rmSync(DEST, { recursive: true, force: true });
   }
 
-  copyRecursive(SRC, DEST);
-  console.log(`[sync-data] Copied ${SRC} -> ${DEST}`);
+  copyRecursive(src, DEST);
+  console.log(`[sync-data] Done: ${src} -> ${DEST}`);
 }
 
 main();
