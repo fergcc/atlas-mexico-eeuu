@@ -79,6 +79,8 @@ export interface GrangerDirectionResult {
 export interface GrangerResult {
   a_causes_b: GrangerDirectionResult;
   b_causes_a: GrangerDirectionResult;
+  optimal_lag?: number;
+  selection_criterion?: string;
 }
 
 export interface CointegrationEngleGranger {
@@ -101,8 +103,52 @@ export interface VecmResult {
   [key: string]: unknown;
 }
 
+/** One row of `data/territorial.json` — a single indicator's value for a single region. */
+export interface TerritorialIndicatorValue {
+  indicator_id: string;
+  indicator_name: string;
+  theme: string;
+  subtheme: string;
+  phase: string;
+  country: string;
+  region_code: string;
+  region_name: string;
+  value: number;
+  unit: string;
+  source: string;
+  data_quality: string;
+  note?: string;
+}
+
+export interface TerritorialFile {
+  generated_at: string;
+  country: string;
+  total_indicators: number;
+  total_regions: number;
+  data_quality: string;
+  raw_values: TerritorialIndicatorValue[];
+}
+
+export interface ResultSeriesMeta {
+  id: string;
+  source: string;
+  region: string;
+  proxy_type: string;
+  seasonal_adjustment?: string;
+}
+
+export interface ResultSectorMeta {
+  id: string;
+  scian?: string;
+  naics?: string;
+  label?: string;
+}
+
 export interface ResultFile {
   pair_id?: string;
+  sector?: ResultSectorMeta;
+  series_a?: ResultSeriesMeta;
+  series_b?: ResultSeriesMeta;
   sample: {
     n_obs: number;
     [key: string]: unknown;
@@ -118,5 +164,6 @@ export interface ResultFile {
   warnings: string[];
   generated_at: string;
   data_vintage: string;
+  data_vintage_detail?: { a: string; b: string };
   insufficient_data?: boolean;
 }

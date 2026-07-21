@@ -42,6 +42,22 @@ export function cointegrationRankPlainLabel(rank: number | null | undefined): st
 }
 
 /**
+ * One-line plain-language reading of the VECM's error-correction speed for
+ * `labelA` — the coefficient tells us how much of each period's gap versus
+ * the long-run relationship with `labelB` gets closed (a negative
+ * coefficient corrects back toward equilibrium; a positive one drifts away,
+ * usually a small-sample artifact worth flagging rather than hiding).
+ */
+export function vecmAdjustmentNarrative(labelA: string, labelB: string, adjustmentSpeed: number | undefined): string | null {
+  if (adjustmentSpeed === undefined || Number.isNaN(adjustmentSpeed)) return null;
+  const pct = Math.round(Math.abs(adjustmentSpeed) * 100);
+  if (adjustmentSpeed < 0) {
+    return `Cada periodo, ${labelA} corrige ~${pct}% del desajuste respecto a su relación de largo plazo con ${labelB}.`;
+  }
+  return `Cada periodo, ${labelA} se aleja ~${pct}% de su relación de largo plazo con ${labelB} en vez de corregirla — señal atípica, revisar con cautela.`;
+}
+
+/**
  * One-line narrative for a causal pair, used by both the "detail" card and
  * (shortened) the "overview" ribbon in `causality-corridor.tsx`. Mirrors the
  * plan's mockup copy exactly: names the direction that IS supported by the

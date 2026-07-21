@@ -1,10 +1,12 @@
 "use client";
 
 import { useEffect, useMemo, useState, useCallback } from "react";
-import Link from "next/link";
 import { Container, Section } from "@/components/layout/container";
 import { PageHeader } from "@/components/layout/page-header";
 import { GlassPanel } from "@/components/ui/glass-panel";
+import { DataQualityBadge } from "@/components/ui/data-quality-badge";
+import { GeneratedAtBadge } from "@/components/ui/generated-at-badge";
+import { DataProvenance } from "@/components/ui/data-provenance";
 import { IndicatorMatrix } from "@/components/territorial/indicator-matrix";
 import { IndicatorFilter } from "@/components/territorial/indicator-filter";
 import { IndicatorDetail } from "@/components/territorial/indicator-detail";
@@ -14,15 +16,8 @@ import {
   fetchTerritorialIndicators,
 } from "@/lib/territory-client";
 import type { IndicatorCatalog, IndicatorCatalogEntry } from "@/lib/territory-client";
-
-const SECTORS = [
-  { id: "manufactura_total", label: "Manufactura total" },
-  { id: "aeroespacial", label: "Aeroespacial" },
-  { id: "eolica", label: "Energía eólica" },
-  { id: "farmaceutica", label: "Farmacéutica" },
-  { id: "agroindustrial", label: "Agroindustrial" },
-  { id: "petroquimica", label: "Petroquímica" },
-];
+import { fetchManifest } from "@/lib/client-data";
+import type { Manifest } from "@/lib/types";
 
 const COUNTRIES = [
   { code: "MX", label: "México" },
@@ -40,18 +35,23 @@ export default function TerritorialPage() {
   const [rawValues, setRawValues] = useState<Record<string, string | number | null>[]>([]);
   const [rawDataQuality, setRawDataQuality] = useState<Record<string, string>>({});
   const [rawNote, setRawNote] = useState<Record<string, string>>({});
+  const [generatedAt, setGeneratedAt] = useState<string | null>(null);
+  const [manifest, setManifest] = useState<Manifest | null>(null);
   const [loading, setLoading] = useState(false);
 
   const [country, setCountry] = useState("MX");
 
   const indicators = useMemo<IndicatorCatalogEntry[]>(() => catalog?.indicators ?? [], [catalog]);
-  const [sector, setSector] = useState("manufactura_total");
   const [selectedPhase, setSelectedPhase] = useState("all");
   const [selectedThemes, setSelectedThemes] = useState<Set<string>>(new Set());
 
   const [detailIndicator, setDetailIndicator] = useState<IndicatorCatalogEntry | null>(null);
   const [detailValue, setDetailValue] = useState<number | null>(null);
   const [detailRegion, setDetailRegion] = useState("");
+
+  useEffect(() => {
+    fetchManifest().then(setManifest);
+  }, []);
 
   useEffect(() => {
     fetchIndicatorCatalog().then((c) => {
@@ -66,12 +66,14 @@ export default function TerritorialPage() {
 
   const loadTerritorial = useCallback(() => {
     setLoading(true);
-    fetchTerritorialIndicators(country, sector).then((data) => {
+    // Territorial indicators are general state-level attributes, not
+    // sector-specific — "all" is a fixed label, not a live filter.
+    fetchTerritorialIndicators(country, "all").then((data) => {
       const qualityMap: Record<string, string> = {};
       const noteMap: Record<string, string> = {};
       setRawValues(data?.raw_values.map((v) => {
         qualityMap[v.indicator_id] = v.data_quality ?? "unknown";
-        noteMap[v.indicator_id] = (v as unknown as Record<string, string>).note ?? "";
+        noteMap[v.indicator_id] = v.note ?? "";
         return {
         country: v.country,
         region_code: v.region_code,
@@ -84,9 +86,10 @@ export default function TerritorialPage() {
       }}) ?? []);
       setRawDataQuality(qualityMap);
       setRawNote(noteMap);
+      setGeneratedAt(data?.generated_at ?? null);
       setLoading(false);
     });
-  }, [country, sector]);
+  }, [country]);
 
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
@@ -163,30 +166,26 @@ export default function TerritorialPage() {
     setDetailRegion(regionName);
   }
 
-  if (!engineUrl) {
-    return (
-      <Section className="pt-10">
-        <Container>
-          <PageHeader
-            title="Indicadores territoriales"
-            description="Matriz de los 34 indicadores del Atlas Prospectivo Territorial-Industrial por región."
-          />
-          <GlassPanel className="p-8 text-center">
-            <p className="text-foreground-muted">
-              Configura <code className="font-mono-data text-primary">NEXT_PUBLIC_ENGINE_URL</code> en tu .env para conectar al Engine del Atlas.
-            </p>
-          </GlassPanel>
-        </Container>
-      </Section>
-    );
-  }
-
   return (
     <Section className="pt-10">
       <Container>
         <PageHeader
           title="Indicadores territoriales"
           description="Matriz de los 34 indicadores del Atlas Prospectivo Territorial-Industrial: Fase A (atributos urbanos) y Fase B (diagnóstico socioambiental) por región."
+          meta={
+            generatedAt && (
+              <>
+                <GeneratedAtBadge iso={generatedAt} />
+                {manifest && (
+                  <DataProvenance
+                    generatedAt={generatedAt}
+                    refreshCadence={manifest.refresh_cadence}
+                    mode={manifest.mode}
+                  />
+                )}
+              </>
+            )
+          }
         />
 
         <GlassPanel className="mb-6 p-4">
@@ -203,34 +202,12 @@ export default function TerritorialPage() {
                 ))}
               </select>
             </div>
-            <div className="flex flex-col gap-1.5">
-              <label className="text-xs font-medium text-foreground-muted">Sector</label>
-              <select
-                value={sector}
-                onChange={(e) => setSector(e.target.value)}
-                className="rounded-xl border border-border-glass bg-surface-glass px-3 py-2 text-sm text-foreground"
-              >
-                {SECTORS.map((s) => (
-                  <option key={s.id} value={s.id}>{s.label}</option>
-                ))}
-              </select>
-              <Link href={`/sectores/${sector}`} className="text-[10px] text-foreground-muted hover:text-foreground transition-colors">
-                → Ver pares del sector
-              </Link>
-            </div>
             <div className="flex items-center gap-2">
-              {Object.keys(rawDataQuality).length > 0 && (() => {
-                const total = Object.keys(rawDataQuality).length;
-                const real = Object.values(rawDataQuality).filter((q) => q === "real").length;
-                return (
-                  <span className="inline-flex items-center gap-1.5 rounded-full border border-border-glass px-3 py-1.5 text-xs font-medium">
-                    <span className="h-2 w-2 rounded-full bg-success" />
-                    <span className="text-foreground">{real}</span>
-                    <span className="text-foreground-muted">/ {total}</span>
-                    <span className="text-foreground-muted">real</span>
-                  </span>
-                );
-              })()}
+              <DataQualityBadge
+                variant="dot"
+                real={Object.values(rawDataQuality).filter((q) => q === "real").length}
+                total={Object.keys(rawDataQuality).length}
+              />
               {engineUrl && (
                 <button
                   onClick={loadTerritorial}
@@ -242,7 +219,7 @@ export default function TerritorialPage() {
               )}
               <CsvExport
                 data={rawValues}
-                filename={`${country}_${sector}_indicadores.csv`}
+                filename={`${country}_indicadores_territoriales.csv`}
                 className="inline-flex items-center gap-2 rounded-full border border-border-glass px-4 py-2 text-xs font-medium text-foreground-muted transition-colors hover:bg-foreground/5 hover:text-foreground"
               />
             </div>
@@ -280,16 +257,10 @@ export default function TerritorialPage() {
                 <span>·</span>
                 <span>{rawValues.length} valores</span>
                 <span>·</span>
-                {(() => {
-                  const total = Object.keys(rawDataQuality).length;
-                  const real = Object.values(rawDataQuality).filter(q => q === "real").length;
-                  const isAllReal = real === total;
-                  return (
-                <span className={`rounded-full px-2 py-0.5 text-xs font-medium ${isAllReal ? "bg-success/10 text-success" : "bg-warning/10 text-accent"}`}>
-                  {real}/{total} real
-                </span>
-                  );
-                })()}
+                <DataQualityBadge
+                  real={Object.values(rawDataQuality).filter((q) => q === "real").length}
+                  total={Object.keys(rawDataQuality).length}
+                />
               </div>
               <IndicatorMatrix
                 regions={regions}

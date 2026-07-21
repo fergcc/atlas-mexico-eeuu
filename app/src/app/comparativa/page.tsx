@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Suspense } from "react";
 import { Container, Section } from "@/components/layout/container";
 import { PageHeader } from "@/components/layout/page-header";
+import { GeneratedAtBadge } from "@/components/ui/generated-at-badge";
 import { ComparativaClient } from "@/components/comparativa/comparativa-client";
 import { getManifest } from "@/lib/data-loader";
 
@@ -17,6 +18,7 @@ export default function ComparativaPage() {
           eyebrow="Herramienta libre"
           title="Comparativa México vs. Estados Unidos"
           description="Elige cualquier par de series del catálogo — no tienen que pertenecer al mismo sector o par precalculado — para verlas superpuestas. Útil para explorar hipótesis antes de esperar a que el pipeline las evalúe formalmente."
+          meta={<GeneratedAtBadge iso={manifest.generated_at} />}
         />
         <Suspense fallback={<p className="text-sm text-foreground-muted">Cargando comparativa…</p>}>
           <ComparativaClient catalog={manifest.series_catalog} />

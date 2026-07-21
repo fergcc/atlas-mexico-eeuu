@@ -18,6 +18,7 @@ export interface IndicatorValue {
   polarity: string;
   source: string;
   data_quality: string;
+  note?: string;
 }
 
 export interface TerritorialResponse {
@@ -87,7 +88,7 @@ export async function fetchIndicatorCatalog(): Promise<IndicatorCatalog | null> 
         polarity: v.polarity,
         standardization: v.standardization,
         source_variables: [],
-        notes: "",
+        notes: v.note ?? "",
       }));
     return { total_indicators: indicators.length, indicators };
   }

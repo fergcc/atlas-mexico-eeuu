@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Suspense } from "react";
 import { Container, Section } from "@/components/layout/container";
 import { PageHeader } from "@/components/layout/page-header";
+import { GeneratedAtBadge } from "@/components/ui/generated-at-badge";
 import { EstatalExplorer } from "@/components/estatal/estatal-explorer";
 import { getManifest } from "@/lib/data-loader";
 import { buildSectorStateDatasets } from "@/lib/pair-helpers";
@@ -19,6 +20,7 @@ export default function EstatalPage() {
           eyebrow="Nivel estatal"
           title="Mapa de los 32 estados"
           description="Elige un sector para ver el valor más reciente del indicador estatal (ITAEE u otro proxy de producción/empleo) o la fuerza de la evidencia de causalidad de Granger frente a su contraparte en Estados Unidos."
+          meta={<GeneratedAtBadge iso={manifest.generated_at} />}
         />
         <Suspense fallback={<p className="text-sm text-foreground-muted">Cargando mapa…</p>}>
           <EstatalExplorer datasets={datasets} />

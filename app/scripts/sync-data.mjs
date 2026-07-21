@@ -65,6 +65,18 @@ function main() {
 
   copyRecursive(src, DEST);
   console.log(`[sync-data] Done: ${src} -> ${DEST}`);
+
+  // `geo/` (static map topology, e.g. mx-states.topojson) only ever lives in
+  // the Dashboard-local mirror, never in Engine/data (the Engine pipeline
+  // doesn't generate map geometry). When Engine/data wins as the primary
+  // source above, its lack of `geo/` would otherwise leave the choropleth
+  // map perpetually stuck on "Cargando mapa…" in local dev.
+  const localGeoSrc = join(LOCAL_SRC, "geo");
+  const geoDest = join(DEST, "geo");
+  if (src !== LOCAL_SRC && !existsSync(geoDest) && existsSync(localGeoSrc)) {
+    copyRecursive(localGeoSrc, geoDest);
+    console.log(`[sync-data] Also synced geo/: ${localGeoSrc} -> ${geoDest}`);
+  }
 }
 
 main();

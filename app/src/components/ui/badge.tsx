@@ -7,6 +7,7 @@ type BadgeTone =
   | "mx"
   | "us"
   | "accent"
+  | "warning"
   | "danger"
   | "success"
   | "signal-strong"
@@ -18,6 +19,7 @@ const TONE_CLASSES: Record<BadgeTone, string> = {
   mx: "bg-mx/10 text-mx border-mx/25",
   us: "bg-us/10 text-us border-us/25",
   accent: "bg-accent/10 text-accent border-accent/30",
+  warning: "bg-warning/10 text-warning border-warning/30",
   danger: "bg-danger/10 text-danger border-danger/25",
   success: "bg-success/10 text-success border-success/25",
   // Dedicated "evidence found / not found" tones — deliberately distinct

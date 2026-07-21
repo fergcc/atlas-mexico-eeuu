@@ -7,6 +7,7 @@ import { Breadcrumbs } from "@/components/layout/breadcrumbs";
 import { GlassPanel } from "@/components/ui/glass-panel";
 import { Badge } from "@/components/ui/badge";
 import { FreshnessBadge } from "@/components/ui/freshness-badge";
+import { GeneratedAtBadge } from "@/components/ui/generated-at-badge";
 import { EmptyState } from "@/components/ui/empty-state";
 import { TimeSeriesChart } from "@/components/charts/time-series-chart";
 import { CausalityCorridor } from "@/components/charts/causality-corridor";
@@ -58,9 +59,10 @@ export default async function SectorPage({ params }: { params: Promise<{ sector:
             eyebrow={sector.priority === "strategic" ? "Sector estratégico" : "Sector de referencia"}
             title={sector.label}
             description={`${pairs.length} ${pairs.length === 1 ? "par evaluado" : "pares evaluados"} entre México y Estados Unidos para este sector, a nivel ${Array.from(new Set(pairs.map((p) => p.level))).join(", ") || "n/d"}.`}
+            meta={<GeneratedAtBadge iso={manifest.generated_at} />}
           />
           <div className="flex items-center gap-3 text-sm">
-            <Link href={`/territorial?sector=${sector.id}`} className="inline-flex items-center gap-1 text-foreground-muted hover:text-foreground transition-colors">
+            <Link href="/territorial" className="inline-flex items-center gap-1 text-foreground-muted hover:text-foreground transition-colors">
               → 34 indicadores territoriales
             </Link>
           </div>

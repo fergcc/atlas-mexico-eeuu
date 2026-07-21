@@ -1,6 +1,6 @@
 import { readFileSync, existsSync, readdirSync } from "node:fs";
 import { join } from "node:path";
-import type { Manifest, SeriesFile, ResultFile, PairMeta, SectorMeta } from "./types";
+import type { Manifest, SeriesFile, ResultFile, PairMeta, SectorMeta, TerritorialFile, TerritorialIndicatorValue } from "./types";
 
 /**
  * Server-side data access for Server Components / generateStaticParams /
@@ -122,4 +122,23 @@ export function listAvailableResultIds(): string[] {
 export function getReferencedRegionCodes(): string[] {
   const codes = new Set(getManifest().series_catalog.map((s) => s.region_code));
   return Array.from(codes);
+}
+
+let territorialCache: TerritorialFile | null = null;
+
+function getTerritorial(): TerritorialFile | null {
+  if (territorialCache) return territorialCache;
+  const territorialPath = join(DATA_DIR, "territorial.json");
+  if (!existsSync(territorialPath)) return null;
+  try {
+    territorialCache = JSON.parse(readFileSync(territorialPath, "utf-8")) as TerritorialFile;
+    return territorialCache;
+  } catch {
+    return null;
+  }
+}
+
+/** The 34 territorial indicators (poverty, water stress, homicide rate, etc.) for a single MX state, by its 2-digit INEGI region code. */
+export function getTerritorialByRegion(regionCode: string): TerritorialIndicatorValue[] {
+  return getTerritorial()?.raw_values.filter((v) => v.region_code === regionCode) ?? [];
 }

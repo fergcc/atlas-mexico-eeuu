@@ -3,6 +3,8 @@ import { Container, Section } from "@/components/layout/container";
 import { PageHeader } from "@/components/layout/page-header";
 import { GlassPanel } from "@/components/ui/glass-panel";
 import { Badge } from "@/components/ui/badge";
+import { DataProvenance } from "@/components/ui/data-provenance";
+import { getManifest } from "@/lib/data-loader";
 
 export const metadata: Metadata = { title: "Metodología" };
 
@@ -21,6 +23,8 @@ function Step({ n, title, children }: { n: string; title: string; children: Reac
 }
 
 export default function MetodologiaPage() {
+  const manifest = getManifest();
+
   return (
     <Section className="pt-10">
       <Container className="flex flex-col gap-10">
@@ -106,6 +110,14 @@ export default function MetodologiaPage() {
             trimestre, así que una cadencia semanal no aportaría dato nuevo la mayoría de las semanas. El
             badge de frescura en cada indicador siempre refleja la periodicidad real de esa serie específica.
           </p>
+          <div className="mt-4 border-t border-border-glass pt-4">
+            <DataProvenance
+              generatedAt={manifest.generated_at}
+              refreshCadence={manifest.refresh_cadence}
+              mode={manifest.mode}
+              variant="static"
+            />
+          </div>
         </GlassPanel>
       </Container>
     </Section>

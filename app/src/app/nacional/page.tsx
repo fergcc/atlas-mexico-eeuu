@@ -4,6 +4,8 @@ import { PageHeader } from "@/components/layout/page-header";
 import { GlassPanel } from "@/components/ui/glass-panel";
 import { Badge } from "@/components/ui/badge";
 import { FreshnessBadge } from "@/components/ui/freshness-badge";
+import { GeneratedAtBadge } from "@/components/ui/generated-at-badge";
+import { DataProvenance } from "@/components/ui/data-provenance";
 import { EmptyState } from "@/components/ui/empty-state";
 import { TimeSeriesChart } from "@/components/charts/time-series-chart";
 import { CausalityCorridor } from "@/components/charts/causality-corridor";
@@ -34,6 +36,16 @@ export default function NacionalPage() {
           eyebrow="Nivel nacional"
           title="Causalidad y cointegración agregada México–EEUU"
           description="Compara el índice de producción manufacturera nacional de México contra el índice de producción industrial de Estados Unidos, sector por sector, con las mismas pruebas econométricas para todo el árbol SCIAN/NAICS."
+          meta={
+            <>
+              <GeneratedAtBadge iso={manifest.generated_at} />
+              <DataProvenance
+                generatedAt={manifest.generated_at}
+                refreshCadence={manifest.refresh_cadence}
+                mode={manifest.mode}
+              />
+            </>
+          }
         />
 
         {pairs.length === 0 ? (

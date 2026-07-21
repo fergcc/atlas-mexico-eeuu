@@ -5,11 +5,13 @@ interface PageHeaderProps {
   eyebrow?: string;
   title: string;
   description?: ReactNode;
+  /** Page-level metadata row (e.g. a `GeneratedAtBadge`) — renders between description and actions. */
+  meta?: ReactNode;
   actions?: ReactNode;
   className?: string;
 }
 
-export function PageHeader({ eyebrow, title, description, actions, className }: PageHeaderProps) {
+export function PageHeader({ eyebrow, title, description, meta, actions, className }: PageHeaderProps) {
   return (
     <div className={cn("max-w-3xl", className)}>
       {eyebrow && (
@@ -21,6 +23,7 @@ export function PageHeader({ eyebrow, title, description, actions, className }: 
         {title}
       </h1>
       {description && <div className="mt-4 text-base leading-relaxed text-foreground-muted">{description}</div>}
+      {meta && <div className="mt-4 flex flex-wrap items-center gap-2">{meta}</div>}
       {actions && <div className="mt-6 flex flex-wrap gap-3">{actions}</div>}
     </div>
   );

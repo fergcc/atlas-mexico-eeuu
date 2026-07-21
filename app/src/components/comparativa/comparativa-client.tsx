@@ -52,7 +52,7 @@ function CountryVarSelect({
           onChange={(e) => handleCountryChange(e.target.value as "MX" | "US")}
           className="min-w-0 flex-1 rounded-xl glass-dropdown px-3.5 py-2.5 text-sm text-foreground"
         >
-          <option value="MX">Mexico</option>
+          <option value="MX">México</option>
           <option value="US">Estados Unidos</option>
         </select>
         <select

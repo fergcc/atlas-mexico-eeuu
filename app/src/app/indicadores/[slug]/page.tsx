@@ -8,6 +8,7 @@ import { Breadcrumbs } from "@/components/layout/breadcrumbs";
 import { GlassPanel } from "@/components/ui/glass-panel";
 import { Badge } from "@/components/ui/badge";
 import { FreshnessBadge } from "@/components/ui/freshness-badge";
+import { GeneratedAtBadge } from "@/components/ui/generated-at-badge";
 import { Sparkline } from "@/components/charts/sparkline";
 import { getManifest, getSeriesCatalogEntry, getSeries, getPairs, getSectorById } from "@/lib/data-loader";
 import { formatDateLong, formatNumber } from "@/lib/formatters";
@@ -54,6 +55,7 @@ export default async function IndicadorPage({ params }: { params: Promise<{ slug
           eyebrow={`${entry.pais} · ${entry.region_code === "NAC" ? "Nacional" : entry.region_code}`}
           title={entry.nombre}
           description={PROXY_TYPE_EXPLANATION[entry.proxy_type] ?? undefined}
+          meta={<GeneratedAtBadge iso={manifest.generated_at} />}
           actions={
             <a
               href={`/data/series/${entry.id}.json`}
