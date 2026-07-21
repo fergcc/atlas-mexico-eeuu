@@ -6,9 +6,10 @@ import { ComposableMap, Geographies } from "react-simple-maps";
 import { geoMercator, type GeoProjection } from "d3-geo";
 import * as topojson from "topojson-client";
 import type { Topology, GeometryCollection } from "topojson-specification";
-import { fetchMxStatesTopology, fetchUsStatesTopology } from "@/lib/client-data";
+import { fetchMxStatesTopology, fetchUsStatesTopology, fetchCaProvincesTopology } from "@/lib/client-data";
 import { MX_STATES } from "@/data/mx-states";
 import { US_STATES } from "@/data/us-states";
+import { CA_PROVINCES } from "@/data/ca-provinces";
 import { choroplethColor, normalize, NO_DATA_COLOR_LIGHT, NO_DATA_COLOR_DARK } from "@/lib/color-scales";
 import { useMapStore } from "@/stores/map-store";
 import { formatNumber } from "@/lib/formatters";
@@ -47,13 +48,23 @@ function usFipsForGeoName(rawName: unknown): string | null {
   return US_FIPS_BY_NORMALIZED_NAME[normalized] ?? null;
 }
 
+const CA_CODE_BY_NORMALIZED_NAME: Record<string, string> = Object.fromEntries(
+  CA_PROVINCES.map((s) => [normalizeName(s.name), s.code])
+);
+
+function caCodeForGeoName(rawName: unknown): string | null {
+  if (typeof rawName !== "string" || rawName.length === 0) return null;
+  const normalized = normalizeName(rawName);
+  return CA_CODE_BY_NORMALIZED_NAME[normalized] ?? null;
+}
+
 interface StateInfo {
   code: string;
   name: string;
 }
 
 interface ChoroplethMapProps {
-  country: "MX" | "US";
+  country: "MX" | "US" | "CA";
   values: Record<string, number>;
   unit?: string;
   onSelectState?: (code: string) => void;
@@ -70,31 +81,36 @@ export function ChoroplethMap({ country, values, unit, onSelectState, selectedSt
   const noDataColor = resolvedTheme === "dark" ? NO_DATA_COLOR_DARK : NO_DATA_COLOR_LIGHT;
 
   const isUs = country === "US";
+  const isCa = country === "CA";
 
   useEffect(() => {
     let cancelled = false;
-    const fetcher = isUs ? fetchUsStatesTopology : fetchMxStatesTopology;
+    const fetcher = isCa ? fetchCaProvincesTopology : isUs ? fetchUsStatesTopology : fetchMxStatesTopology;
     fetcher().then((topo) => {
       if (!cancelled) setTopology(topo);
     });
     return () => {
       cancelled = true;
     };
-  }, [isUs]);
+  }, [isUs, isCa]);
 
   const stateLookup: StateInfo[] = useMemo(
     () =>
-      isUs
-        ? US_STATES.map((s) => ({ code: s.fips, name: s.name }))
-        : MX_STATES.map((s) => ({ code: s.code, name: s.name })),
-    [isUs]
+      isCa
+        ? CA_PROVINCES.map((s) => ({ code: s.code, name: s.name }))
+        : isUs
+          ? US_STATES.map((s) => ({ code: s.fips, name: s.name }))
+          : MX_STATES.map((s) => ({ code: s.code, name: s.name })),
+    [isUs, isCa]
   );
 
-  const codeForGeoName = isUs ? usFipsForGeoName : mxCodeForGeoName;
+  const codeForGeoName = isCa ? caCodeForGeoName : isUs ? usFipsForGeoName : mxCodeForGeoName;
 
-  const ariaLabel = isUs
-    ? "Mapa coroplético de los 51 estados de Estados Unidos"
-    : "Mapa coroplético de los 32 estados de México";
+  const ariaLabel = isCa
+    ? "Mapa coroplético de las 13 provincias de Canadá"
+    : isUs
+      ? "Mapa coroplético de los 51 estados de Estados Unidos"
+      : "Mapa coroplético de los 32 estados de México";
 
   const geoObject = useMemo(() => {
     if (!topology) return null;

@@ -54,3 +54,8 @@ export function fetchMxStatesTopology(): Promise<Topology | null> {
 export function fetchUsStatesTopology(): Promise<Topology | null> {
   return fetchJson<Topology>("/data/geo/us-states.topojson");
 }
+
+/** TopoJSON with the 13 Canadian provinces (`data/geo/ca-provinces.topojson`). */
+export function fetchCaProvincesTopology(): Promise<Topology | null> {
+  return fetchJson<Topology>("/data/geo/ca-provinces.topojson");
+}

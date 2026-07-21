@@ -7,11 +7,12 @@ import { ChoroplethMap } from "@/components/charts/choropleth-map";
 import { GlassPanel } from "@/components/ui/glass-panel";
 import { MX_STATES, getMxStateByCode } from "@/data/mx-states";
 import { US_STATES, getUsStateByFips } from "@/data/us-states";
+import { CA_PROVINCES, getCaProvinceByCode } from "@/data/ca-provinces";
 import type { SectorStateDataset } from "@/lib/pair-helpers";
 import { cn } from "@/lib/cn";
 
 interface EstatalExplorerProps {
-  country: "MX" | "US";
+  country: "MX" | "US" | "CA";
   datasets: SectorStateDataset[];
 }
 
@@ -19,6 +20,7 @@ export function EstatalExplorer({ country, datasets }: EstatalExplorerProps) {
   const router = useRouter();
   const sectorIds = useMemo(() => datasets.map((d) => d.sectorId), [datasets]);
   const isUs = country === "US";
+  const isCa = country === "CA";
 
   const [sectorId, setSectorId] = useQueryState(
     "sector",
@@ -33,8 +35,13 @@ export function EstatalExplorer({ country, datasets }: EstatalExplorerProps) {
   const values = active ? (metric === "causalidad" ? active.strengthByState : active.valuesByState) : {};
 
   const states = useMemo(
-    () => (isUs ? US_STATES.map((s) => ({ code: s.fips, name: s.name, slug: s.slug })) : MX_STATES),
-    [isUs]
+    () =>
+      isCa
+        ? CA_PROVINCES.map((s) => ({ code: s.code, name: s.name, slug: s.slug }))
+        : isUs
+          ? US_STATES.map((s) => ({ code: s.fips, name: s.name, slug: s.slug }))
+          : MX_STATES,
+    [isUs, isCa]
   );
 
   const statesWithData = useMemo(
@@ -42,7 +49,7 @@ export function EstatalExplorer({ country, datasets }: EstatalExplorerProps) {
     [active, states]
   );
 
-  const stateRoute = isUs ? "/estadounidense" : "/estatal";
+  const stateRoute = isCa ? "/canadiense" : isUs ? "/estadounidense" : "/estatal";
 
   if (datasets.length === 0) {
     return (
@@ -126,7 +133,7 @@ export function EstatalExplorer({ country, datasets }: EstatalExplorerProps) {
           values={values}
           unit={metric === "valor" ? active?.unit : undefined}
           onSelectState={(code) => {
-            const state = isUs ? getUsStateByFips(code) : getMxStateByCode(code);
+            const state = isCa ? getCaProvinceByCode(code) : isUs ? getUsStateByFips(code) : getMxStateByCode(code);
             if (state) router.push(`${stateRoute}/${state.slug}`);
           }}
         />

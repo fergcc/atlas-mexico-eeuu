@@ -181,7 +181,7 @@ function latestObservedValue(seriesId: string): number | null {
  * selector. Iterates whatever `manifest.pairs` declares — never a hardcoded
  * sector/state list.
  */
-export function buildSectorStateDatasets(manifest: Manifest, country: "MX" | "US" = "MX"): SectorStateDataset[] {
+export function buildSectorStateDatasets(manifest: Manifest, country: "MX" | "US" | "CA" = "MX"): SectorStateDataset[] {
   const estatalPairs = manifest.pairs.filter((p) => p.level === "estatal");
   const seriesById = new Map(manifest.series_catalog.map((s) => [s.id, s]));
   const bySector = new Map<string, PairMeta[]>();
