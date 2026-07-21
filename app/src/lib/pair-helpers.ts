@@ -176,11 +176,12 @@ function latestObservedValue(seriesId: string): number | null {
 
 /**
  * Server-only (reads `data/series` + `data/results` via fs). Builds one
- * dataset per sector that has at least one estatal-level pair, keyed by MX
- * state code, for the `/estatal` choropleth's sector selector. Iterates
- * whatever `manifest.pairs` declares — never a hardcoded sector/state list.
+ * dataset per sector that has at least one estatal-level pair, keyed by
+ * state code, for the `/estatal` and `/estadounidense` choropleth's sector
+ * selector. Iterates whatever `manifest.pairs` declares — never a hardcoded
+ * sector/state list.
  */
-export function buildSectorStateDatasets(manifest: Manifest): SectorStateDataset[] {
+export function buildSectorStateDatasets(manifest: Manifest, country: "MX" | "US" = "MX"): SectorStateDataset[] {
   const estatalPairs = manifest.pairs.filter((p) => p.level === "estatal");
   const seriesById = new Map(manifest.series_catalog.map((s) => [s.id, s]));
   const bySector = new Map<string, PairMeta[]>();
@@ -199,14 +200,14 @@ export function buildSectorStateDatasets(manifest: Manifest): SectorStateDataset
     let unit: string | undefined;
 
     for (const pair of pairsForSector) {
-      const mxEntry = [pair.series_a, pair.series_b]
+      const entry = [pair.series_a, pair.series_b]
         .map((id) => seriesById.get(id))
-        .find((s) => s?.pais === "MX");
-      if (!mxEntry || mxEntry.region_code === "NAC") continue;
+        .find((s) => s?.pais === country);
+      if (!entry || entry.region_code === "NAC") continue;
 
-      unit = unit ?? mxEntry.unidad;
-      const value = latestObservedValue(mxEntry.id);
-      if (value !== null) valuesByState[mxEntry.region_code] = value;
+      unit = unit ?? entry.unidad;
+      const value = latestObservedValue(entry.id);
+      if (value !== null) valuesByState[entry.region_code] = value;
 
       const result = getResult(pair.pair_id);
       if (result && !result.insufficient_data) {
@@ -214,7 +215,7 @@ export function buildSectorStateDatasets(manifest: Manifest): SectorStateDataset
           result.granger.a_causes_b.significant ? strengthFromPValue(result.granger.a_causes_b.p_value_fdr_adj) : 0,
           result.granger.b_causes_a.significant ? strengthFromPValue(result.granger.b_causes_a.p_value_fdr_adj) : 0
         );
-        strengthByState[mxEntry.region_code] = strong;
+        strengthByState[entry.region_code] = strong;
       }
     }
 

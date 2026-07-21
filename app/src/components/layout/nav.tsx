@@ -13,6 +13,7 @@ import type { SectorMeta } from "@/lib/types";
 const LINKS = [
   { href: "/nacional", label: "Nacional" },
   { href: "/estatal", label: "Estatal" },
+  { href: "/estadounidense", label: "EE.UU." },
   { href: "/sectores", label: "Sectores" },
   { href: "/regiones", label: "Regiones" },
   { href: "/comparativa", label: "Comparativa" },

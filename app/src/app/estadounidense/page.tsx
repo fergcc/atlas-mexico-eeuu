@@ -11,7 +11,7 @@ export const metadata: Metadata = { title: "Estadounidense" };
 
 export default function EstadounidensePage() {
   const manifest = getManifest();
-  const datasets = buildSectorStateDatasets(manifest);
+  const datasets = buildSectorStateDatasets(manifest, "US");
 
   return (
     <Section className="pt-10">
