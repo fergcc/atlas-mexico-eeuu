@@ -109,10 +109,13 @@ export async function fetchTerritorialIndicators(
   if (!ENGINE_URL) {
     const data = await loadStaticTerritorial();
     if (!data) return null;
+
+    const filtered = data.raw_values.filter(v => v.country === country);
+
     if (regionCodes?.length) {
-      const filtered = data.raw_values.filter(v => regionCodes.includes(v.region_code));
+      const subFiltered = filtered.filter(v => regionCodes.includes(v.region_code));
       const byRegion: Record<string, string | number>[] = [];
-      for (const v of filtered) {
+      for (const v of subFiltered) {
         let region = byRegion.find(r => r.region_code === v.region_code);
         if (!region) {
           region = { region_code: v.region_code, region_name: v.region_name };
@@ -122,12 +125,30 @@ export async function fetchTerritorialIndicators(
       }
       return {
         ...data,
+        country,
         total_regions: byRegion.length,
+        raw_values: subFiltered,
         by_region: byRegion,
-        raw_values: filtered,
       };
     }
-    return data;
+
+    const byRegion: Record<string, string | number>[] = [];
+    for (const v of filtered) {
+      let region = byRegion.find(r => r.region_code === v.region_code);
+      if (!region) {
+        region = { region_code: v.region_code, region_name: v.region_name };
+        byRegion.push(region);
+      }
+      region[v.indicator_id] = v.value;
+    }
+
+    return {
+      ...data,
+      country,
+      total_regions: byRegion.length,
+      raw_values: filtered,
+      by_region: byRegion,
+    };
   }
   try {
     const body: Record<string, unknown> = { country, sector_id: sectorId };
