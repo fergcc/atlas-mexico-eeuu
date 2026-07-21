@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-21T17:40:53.830127+00:00",
+  "generated_at": "2026-07-21T20:26:41.834205+00:00",
   "mode": "mixed",
   "refresh_cadence": "trimestral",
   "sectors": [
@@ -588,6 +588,266 @@
       "proxima_actualizacion_estimada": "2026-07-30"
     },
     {
+      "id": "mx-tam_petroquimica_itaee",
+      "nombre": "ITAEE - Actividad industrial (Tamaulipas)",
+      "pais": "MX",
+      "region_code": "28",
+      "sector_id": "petroquimica",
+      "fuente": "INEGI - ITAEE (mock)",
+      "periodicidad": "trimestral",
+      "unidad": "Índice base 2018=100 (sintético)",
+      "proxy_type": "output_index",
+      "ultima_actualizacion": "2026-06-30",
+      "proxima_actualizacion_estimada": "2026-09-30"
+    },
+    {
+      "id": "us-tx_petroquimica_tam_bls",
+      "nombre": "Empleo manufacturero - Petrochemicals (Texas)",
+      "pais": "US",
+      "region_code": "48",
+      "sector_id": "petroquimica",
+      "fuente": "BLS - State and Area Employment (mock)",
+      "periodicidad": "mensual",
+      "unidad": "Miles de empleos (sintético)",
+      "proxy_type": "labor_input",
+      "ultima_actualizacion": "2026-06-30",
+      "proxima_actualizacion_estimada": "2026-07-30"
+    },
+    {
+      "id": "mx-coa_petroquimica_itaee",
+      "nombre": "ITAEE - Actividad industrial (Coahuila)",
+      "pais": "MX",
+      "region_code": "05",
+      "sector_id": "petroquimica",
+      "fuente": "INEGI - ITAEE (mock)",
+      "periodicidad": "trimestral",
+      "unidad": "Índice base 2018=100 (sintético)",
+      "proxy_type": "output_index",
+      "ultima_actualizacion": "2026-06-30",
+      "proxima_actualizacion_estimada": "2026-09-30"
+    },
+    {
+      "id": "us-tx_petroquimica_coa_bls",
+      "nombre": "Empleo manufacturero - Petrochemicals (Texas)",
+      "pais": "US",
+      "region_code": "48",
+      "sector_id": "petroquimica",
+      "fuente": "BLS - State and Area Employment (mock)",
+      "periodicidad": "mensual",
+      "unidad": "Miles de empleos (sintético)",
+      "proxy_type": "labor_input",
+      "ultima_actualizacion": "2026-06-30",
+      "proxima_actualizacion_estimada": "2026-07-30"
+    },
+    {
+      "id": "mx-bc_farmaceutica_itaee",
+      "nombre": "ITAEE - Actividad industrial (Baja California, INEGI real [proxy: ITAEE manufactura total])",
+      "pais": "MX",
+      "region_code": "02",
+      "sector_id": "farmaceutica",
+      "fuente": "INEGI - ITAEE (clave 741651) [APROXIMACIÓN: ITAEE específico de este sector no existe en el catálogo estatal público de INEGI (la granularidad máxima es manufactura 31-33 total); se usa 741651 (ITAEE manufactura total) como mejor proxy disponible del lado MX.]",
+      "periodicidad": "trimestral",
+      "unidad": "Índice base 2018=100",
+      "proxy_type": "output_index",
+      "ultima_actualizacion": "2025-12-01",
+      "proxima_actualizacion_estimada": "2026-03-03"
+    },
+    {
+      "id": "us-ca_farmaceutica_bc_bls",
+      "nombre": "Empleo manufacturero - Pharmaceuticals (California, BLS real)",
+      "pais": "US",
+      "region_code": "06",
+      "sector_id": "farmaceutica",
+      "fuente": "BLS - CES SMU06000003232540001 (California)",
+      "periodicidad": "mensual",
+      "unidad": "Miles de empleos",
+      "proxy_type": "labor_input",
+      "ultima_actualizacion": "2025-12-01",
+      "proxima_actualizacion_estimada": "2025-12-31"
+    },
+    {
+      "id": "mx-son_farmaceutica_itaee",
+      "nombre": "ITAEE - Actividad industrial (Sonora)",
+      "pais": "MX",
+      "region_code": "26",
+      "sector_id": "farmaceutica",
+      "fuente": "INEGI - ITAEE (mock)",
+      "periodicidad": "trimestral",
+      "unidad": "Índice base 2018=100 (sintético)",
+      "proxy_type": "output_index",
+      "ultima_actualizacion": "2026-06-30",
+      "proxima_actualizacion_estimada": "2026-09-30"
+    },
+    {
+      "id": "us-az_farmaceutica_son_bls",
+      "nombre": "Empleo manufacturero - Pharmaceuticals (Arizona)",
+      "pais": "US",
+      "region_code": "04",
+      "sector_id": "farmaceutica",
+      "fuente": "BLS - State and Area Employment (mock)",
+      "periodicidad": "mensual",
+      "unidad": "Miles de empleos (sintético)",
+      "proxy_type": "labor_input",
+      "ultima_actualizacion": "2026-06-30",
+      "proxima_actualizacion_estimada": "2026-07-30"
+    },
+    {
+      "id": "mx-coa_eolica_itaee",
+      "nombre": "ITAEE - Actividad industrial (Coahuila)",
+      "pais": "MX",
+      "region_code": "05",
+      "sector_id": "eolica",
+      "fuente": "INEGI - ITAEE (mock)",
+      "periodicidad": "trimestral",
+      "unidad": "Índice base 2018=100 (sintético)",
+      "proxy_type": "output_index",
+      "ultima_actualizacion": "2026-06-30",
+      "proxima_actualizacion_estimada": "2026-09-30"
+    },
+    {
+      "id": "us-tx_eolica_coa_bls",
+      "nombre": "Empleo manufacturero - Wind energy & turbines (Texas)",
+      "pais": "US",
+      "region_code": "48",
+      "sector_id": "eolica",
+      "fuente": "BLS - State and Area Employment (mock)",
+      "periodicidad": "mensual",
+      "unidad": "Miles de empleos (sintético)",
+      "proxy_type": "labor_input",
+      "ultima_actualizacion": "2026-06-30",
+      "proxima_actualizacion_estimada": "2026-07-30"
+    },
+    {
+      "id": "mx-son_eolica_itaee",
+      "nombre": "ITAEE - Actividad industrial (Sonora, INEGI real [proxy: ITAEE manufactura total])",
+      "pais": "MX",
+      "region_code": "26",
+      "sector_id": "eolica",
+      "fuente": "INEGI - ITAEE (clave 741651) [APROXIMACIÓN: ITAEE específico de este sector no existe en el catálogo estatal público de INEGI (la granularidad máxima es manufactura 31-33 total); se usa 741651 (ITAEE manufactura total) como mejor proxy disponible del lado MX.]",
+      "periodicidad": "trimestral",
+      "unidad": "Índice base 2018=100",
+      "proxy_type": "output_index",
+      "ultima_actualizacion": "2025-12-01",
+      "proxima_actualizacion_estimada": "2026-03-03"
+    },
+    {
+      "id": "us-az_eolica_son_bls",
+      "nombre": "Empleo manufacturero - Wind energy & turbines (Arizona, BLS real)",
+      "pais": "US",
+      "region_code": "04",
+      "sector_id": "eolica",
+      "fuente": "BLS - CES SMU04000003000000001 (Arizona)",
+      "periodicidad": "mensual",
+      "unidad": "Miles de empleos",
+      "proxy_type": "labor_input",
+      "ultima_actualizacion": "2025-12-01",
+      "proxima_actualizacion_estimada": "2025-12-31"
+    },
+    {
+      "id": "mx-tam_eolica_itaee",
+      "nombre": "ITAEE - Actividad industrial (Tamaulipas)",
+      "pais": "MX",
+      "region_code": "28",
+      "sector_id": "eolica",
+      "fuente": "INEGI - ITAEE (mock)",
+      "periodicidad": "trimestral",
+      "unidad": "Índice base 2018=100 (sintético)",
+      "proxy_type": "output_index",
+      "ultima_actualizacion": "2026-06-30",
+      "proxima_actualizacion_estimada": "2026-09-30"
+    },
+    {
+      "id": "us-tx_eolica_tam_bls",
+      "nombre": "Empleo manufacturero - Wind energy & turbines (Texas)",
+      "pais": "US",
+      "region_code": "48",
+      "sector_id": "eolica",
+      "fuente": "BLS - State and Area Employment (mock)",
+      "periodicidad": "mensual",
+      "unidad": "Miles de empleos (sintético)",
+      "proxy_type": "labor_input",
+      "ultima_actualizacion": "2026-06-30",
+      "proxima_actualizacion_estimada": "2026-07-30"
+    },
+    {
+      "id": "mx-coa_agroindustrial_itaee",
+      "nombre": "ITAEE - Actividad industrial (Coahuila)",
+      "pais": "MX",
+      "region_code": "05",
+      "sector_id": "agroindustrial",
+      "fuente": "INEGI - ITAEE (mock)",
+      "periodicidad": "trimestral",
+      "unidad": "Índice base 2018=100 (sintético)",
+      "proxy_type": "output_index",
+      "ultima_actualizacion": "2026-06-30",
+      "proxima_actualizacion_estimada": "2026-09-30"
+    },
+    {
+      "id": "us-tx_agroindustrial_coa_bls",
+      "nombre": "Empleo manufacturero - Agroindustry (cocoa & vanilla) (Texas)",
+      "pais": "US",
+      "region_code": "48",
+      "sector_id": "agroindustrial",
+      "fuente": "BLS - State and Area Employment (mock)",
+      "periodicidad": "mensual",
+      "unidad": "Miles de empleos (sintético)",
+      "proxy_type": "labor_input",
+      "ultima_actualizacion": "2026-06-30",
+      "proxima_actualizacion_estimada": "2026-07-30"
+    },
+    {
+      "id": "mx-son_agroindustrial_itaee",
+      "nombre": "ITAEE - Actividad industrial (Sonora, INEGI real [proxy: ITAEE manufactura total])",
+      "pais": "MX",
+      "region_code": "26",
+      "sector_id": "agroindustrial",
+      "fuente": "INEGI - ITAEE (clave 741651) [APROXIMACIÓN: ITAEE específico de este sector no existe en el catálogo estatal público de INEGI (la granularidad máxima es manufactura 31-33 total); se usa 741651 (ITAEE manufactura total) como mejor proxy disponible del lado MX.]",
+      "periodicidad": "trimestral",
+      "unidad": "Índice base 2018=100",
+      "proxy_type": "output_index",
+      "ultima_actualizacion": "2025-12-01",
+      "proxima_actualizacion_estimada": "2026-03-03"
+    },
+    {
+      "id": "us-az_agroindustrial_son_bls",
+      "nombre": "Empleo manufacturero - Agroindustry (cocoa & vanilla) (Arizona, BLS real)",
+      "pais": "US",
+      "region_code": "04",
+      "sector_id": "agroindustrial",
+      "fuente": "BLS - CES SMU04000003000000001 (Arizona)",
+      "periodicidad": "mensual",
+      "unidad": "Miles de empleos",
+      "proxy_type": "labor_input",
+      "ultima_actualizacion": "2025-12-01",
+      "proxima_actualizacion_estimada": "2025-12-31"
+    },
+    {
+      "id": "mx-nl_agroindustrial_itaee",
+      "nombre": "ITAEE - Actividad industrial (Nuevo León)",
+      "pais": "MX",
+      "region_code": "19",
+      "sector_id": "agroindustrial",
+      "fuente": "INEGI - ITAEE (mock)",
+      "periodicidad": "trimestral",
+      "unidad": "Índice base 2018=100 (sintético)",
+      "proxy_type": "output_index",
+      "ultima_actualizacion": "2026-06-30",
+      "proxima_actualizacion_estimada": "2026-09-30"
+    },
+    {
+      "id": "us-tx_agroindustrial_nl_bls",
+      "nombre": "Empleo manufacturero - Agroindustry (cocoa & vanilla) (Texas)",
+      "pais": "US",
+      "region_code": "48",
+      "sector_id": "agroindustrial",
+      "fuente": "BLS - State and Area Employment (mock)",
+      "periodicidad": "mensual",
+      "unidad": "Miles de empleos (sintético)",
+      "proxy_type": "labor_input",
+      "ultima_actualizacion": "2026-06-30",
+      "proxima_actualizacion_estimada": "2026-07-30"
+    },
+    {
       "id": "ca-nac_eolica_sc",
       "nombre": "GDP by industry — Wind energy & turbines (Canada, national, StatCan real)",
       "pais": "CA",
@@ -703,19 +963,6 @@
       "proxy_type": "output_index",
       "ultima_actualizacion": "2026-04-01",
       "proxima_actualizacion_estimada": "2026-05-01"
-    },
-    {
-      "id": "mx-tam_petroquimica_itaee",
-      "nombre": "ITAEE - Actividad industrial (Tamaulipas)",
-      "pais": "MX",
-      "region_code": "28",
-      "sector_id": "petroquimica",
-      "fuente": "INEGI - ITAEE (mock)",
-      "periodicidad": "trimestral",
-      "unidad": "Índice base 2018=100 (sintético)",
-      "proxy_type": "output_index",
-      "ultima_actualizacion": "2026-06-30",
-      "proxima_actualizacion_estimada": "2026-09-30"
     },
     {
       "id": "ca-ab_petroquimica_sc",
@@ -878,6 +1125,76 @@
       "sector_id": "agroindustrial",
       "series_a": "mx-ver_agroindustrial_itaee",
       "series_b": "us-fl_agroindustrial_ver_bls"
+    },
+    {
+      "pair_id": "mx-tam_petroquimica__us-tx_petroquimica",
+      "level": "estatal",
+      "sector_id": "petroquimica",
+      "series_a": "mx-tam_petroquimica_itaee",
+      "series_b": "us-tx_petroquimica_tam_bls"
+    },
+    {
+      "pair_id": "mx-coa_petroquimica__us-tx_petroquimica",
+      "level": "estatal",
+      "sector_id": "petroquimica",
+      "series_a": "mx-coa_petroquimica_itaee",
+      "series_b": "us-tx_petroquimica_coa_bls"
+    },
+    {
+      "pair_id": "mx-bc_farmaceutica__us-ca_farmaceutica",
+      "level": "estatal",
+      "sector_id": "farmaceutica",
+      "series_a": "mx-bc_farmaceutica_itaee",
+      "series_b": "us-ca_farmaceutica_bc_bls"
+    },
+    {
+      "pair_id": "mx-son_farmaceutica__us-az_farmaceutica",
+      "level": "estatal",
+      "sector_id": "farmaceutica",
+      "series_a": "mx-son_farmaceutica_itaee",
+      "series_b": "us-az_farmaceutica_son_bls"
+    },
+    {
+      "pair_id": "mx-coa_eolica__us-tx_eolica",
+      "level": "estatal",
+      "sector_id": "eolica",
+      "series_a": "mx-coa_eolica_itaee",
+      "series_b": "us-tx_eolica_coa_bls"
+    },
+    {
+      "pair_id": "mx-son_eolica__us-az_eolica",
+      "level": "estatal",
+      "sector_id": "eolica",
+      "series_a": "mx-son_eolica_itaee",
+      "series_b": "us-az_eolica_son_bls"
+    },
+    {
+      "pair_id": "mx-tam_eolica__us-tx_eolica",
+      "level": "estatal",
+      "sector_id": "eolica",
+      "series_a": "mx-tam_eolica_itaee",
+      "series_b": "us-tx_eolica_tam_bls"
+    },
+    {
+      "pair_id": "mx-coa_agroindustrial__us-tx_agroindustrial",
+      "level": "estatal",
+      "sector_id": "agroindustrial",
+      "series_a": "mx-coa_agroindustrial_itaee",
+      "series_b": "us-tx_agroindustrial_coa_bls"
+    },
+    {
+      "pair_id": "mx-son_agroindustrial__us-az_agroindustrial",
+      "level": "estatal",
+      "sector_id": "agroindustrial",
+      "series_a": "mx-son_agroindustrial_itaee",
+      "series_b": "us-az_agroindustrial_son_bls"
+    },
+    {
+      "pair_id": "mx-nl_agroindustrial__us-tx_agroindustrial",
+      "level": "estatal",
+      "sector_id": "agroindustrial",
+      "series_a": "mx-nl_agroindustrial_itaee",
+      "series_b": "us-tx_agroindustrial_nl_bls"
     },
     {
       "pair_id": "mx-nac_eolica__ca-nac_eolica",

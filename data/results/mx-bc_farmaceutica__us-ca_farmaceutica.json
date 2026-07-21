@@ -1,21 +1,21 @@
 {
-  "pair_id": "mx-bc_aeroespacial__us-ca_aeroespacial",
+  "pair_id": "mx-bc_farmaceutica__us-ca_farmaceutica",
   "sector": {
-    "id": "aeroespacial",
-    "scian": "336410",
-    "naics": "3364",
-    "label": "Aeroespacial"
+    "id": "farmaceutica",
+    "scian": "325400",
+    "naics": "3254",
+    "label": "Farmacéutica"
   },
   "series_a": {
-    "id": "mx-bc_aeroespacial_itaee",
+    "id": "mx-bc_farmaceutica_itaee",
     "source": "INEGI - ITAEE (clave 741651) [APROXIMACIÓN: ITAEE específico de este sector no existe en el catálogo estatal público de INEGI (la granularidad máxima es manufactura 31-33 total); se usa 741651 (ITAEE manufactura total) como mejor proxy disponible del lado MX.]",
     "region": "02",
     "proxy_type": "output_index",
     "seasonal_adjustment": "nsa"
   },
   "series_b": {
-    "id": "us-ca_aeroespacial_bc_bls",
-    "source": "BLS - CES SMU06000003133640001 (California)",
+    "id": "us-ca_farmaceutica_bc_bls",
+    "source": "BLS - CES SMU06000003232540001 (California)",
     "region": "06",
     "proxy_type": "labor_input",
     "seasonal_adjustment": "nsa"
@@ -26,7 +26,7 @@
     "end": "2025-12-31",
     "n_obs": 80
   },
-  "generated_at": "2026-07-21T20:26:41.280638+00:00",
+  "generated_at": "2026-07-21T20:26:41.445730+00:00",
   "data_vintage": "2025-12-01",
   "data_vintage_detail": {
     "a": "2025-12-01",
@@ -44,12 +44,12 @@
       "log_transformed": true
     },
     "b": {
-      "adf_statistic": -3.8335353268804666,
-      "adf_p_value": 0.0025822500138836433,
-      "kpss_statistic": 0.1919589115924843,
+      "adf_statistic": -10.102450481999139,
+      "adf_p_value": 1.0507886710400478e-17,
+      "kpss_statistic": 0.13277597277964134,
       "kpss_p_value": 0.1,
       "is_stationary": true,
-      "order_of_integration": 1,
+      "order_of_integration": 2,
       "log_transformed": true
     }
   },
@@ -57,27 +57,27 @@
     "optimal_lag": 3,
     "selection_criterion": "bic",
     "a_causes_b": {
-      "f_stat": 0.3129514012619288,
-      "p_value": 0.8159946438911688,
-      "p_value_fdr_adj": 0.9210128182480896,
+      "f_stat": 0.5337184038378632,
+      "p_value": 0.6599269060629067,
+      "p_value_fdr_adj": 0.8380626067428268,
       "significant": false
     },
     "b_causes_a": {
-      "f_stat": 0.24358297881230961,
-      "p_value": 0.8657822327724525,
-      "p_value_fdr_adj": 0.928520075726978,
-      "significant": false
+      "f_stat": 6.918856390173893,
+      "p_value": 0.00022734272553346093,
+      "p_value_fdr_adj": 0.0016823361689476107,
+      "significant": true
     }
   },
   "cointegration_engle_granger": {
-    "statistic": -1.7207560752074946,
-    "p_value": 0.6673550425379049,
+    "statistic": -1.5646971116393473,
+    "p_value": 0.7355576970426076,
     "cointegrated": false
   },
   "cointegration_johansen": {
     "trace_statistic": [
-      6.858884932998123,
-      0.40238022805315277
+      16.124577120349937,
+      2.938100644663789
     ],
     "critical_values": [
       [
@@ -91,8 +91,17 @@
         6.6349
       ]
     ],
-    "cointegration_rank": 0
+    "cointegration_rank": 1
   },
-  "vecm": null,
+  "vecm": {
+    "cointegration_vector": [
+      0.9999999999999999,
+      -2.1517631135617656
+    ],
+    "adjustment_speed": [
+      -0.19210400020677035,
+      -0.0156593350479181
+    ]
+  },
   "warnings": []
 }

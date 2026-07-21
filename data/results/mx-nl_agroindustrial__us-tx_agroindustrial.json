@@ -1,20 +1,20 @@
 {
-  "pair_id": "mx-nl_manufactura_total__us-tx_manufactura_total",
+  "pair_id": "mx-nl_agroindustrial__us-tx_agroindustrial",
   "sector": {
-    "id": "manufactura_total",
-    "scian": "31-33",
-    "naics": "31-33",
-    "label": "Manufactura total (referencia nacional)"
+    "id": "agroindustrial",
+    "scian": "311800",
+    "naics": "3118",
+    "label": "Agroindustrial (cacao y vainilla)"
   },
   "series_a": {
-    "id": "mx-nl_manufactura_total_itaee",
+    "id": "mx-nl_agroindustrial_itaee",
     "source": "INEGI - ITAEE (mock)",
     "region": "19",
     "proxy_type": "output_index",
     "seasonal_adjustment": "nsa"
   },
   "series_b": {
-    "id": "us-tx_manufactura_total_nl_bls",
+    "id": "us-tx_agroindustrial_nl_bls",
     "source": "BLS - State and Area Employment (mock)",
     "region": "48",
     "proxy_type": "labor_input",
@@ -26,7 +26,7 @@
     "end": "2026-06-30",
     "n_obs": 66
   },
-  "generated_at": "2026-07-21T20:26:41.375088+00:00",
+  "generated_at": "2026-07-21T20:26:41.518623+00:00",
   "data_vintage": "2026-10-03",
   "data_vintage_detail": {
     "a": "2026-10-03",
@@ -35,18 +35,18 @@
   "insufficient_data": false,
   "stationarity": {
     "a": {
-      "adf_statistic": -9.669683882872182,
-      "adf_p_value": 1.286844069325947e-16,
-      "kpss_statistic": 0.10155572902484857,
+      "adf_statistic": -8.709630952119046,
+      "adf_p_value": 3.620569457763629e-14,
+      "kpss_statistic": 0.11090116416368916,
       "kpss_p_value": 0.1,
       "is_stationary": true,
       "order_of_integration": 1,
       "log_transformed": true
     },
     "b": {
-      "adf_statistic": -10.734970787733673,
-      "adf_p_value": 2.9147711200438133e-19,
-      "kpss_statistic": 0.10057282068294494,
+      "adf_statistic": -4.02317880924233,
+      "adf_p_value": 0.0012938869282620514,
+      "kpss_statistic": 0.10479202079668264,
       "kpss_p_value": 0.1,
       "is_stationary": true,
       "order_of_integration": 1,
@@ -57,27 +57,27 @@
     "optimal_lag": 1,
     "selection_criterion": "bic",
     "a_causes_b": {
-      "f_stat": 0.017254797153017278,
-      "p_value": 0.895708867270272,
-      "p_value_fdr_adj": 0.9468922311142876,
-      "significant": false
+      "f_stat": 9.490665540330518,
+      "p_value": 0.002552657365948927,
+      "p_value_fdr_adj": 0.013492617505730041,
+      "significant": true
     },
     "b_causes_a": {
-      "f_stat": 0.13294485924692415,
-      "p_value": 0.7160292803638502,
-      "p_value_fdr_adj": 0.8686256843758182,
+      "f_stat": 1.274659433009318,
+      "p_value": 0.26110950063258004,
+      "p_value_fdr_adj": 0.533809677536449,
       "significant": false
     }
   },
   "cointegration_engle_granger": {
-    "statistic": -2.6614186397643076,
-    "p_value": 0.21376056536673765,
-    "cointegrated": false
+    "statistic": -4.896377356549137,
+    "p_value": 0.00025414230377993324,
+    "cointegrated": true
   },
   "cointegration_johansen": {
     "trace_statistic": [
-      9.86350292276569,
-      0.6869724349549738
+      20.808895744992025,
+      2.0143504138590864
     ],
     "critical_values": [
       [
@@ -91,8 +91,17 @@
         6.6349
       ]
     ],
-    "cointegration_rank": 0
+    "cointegration_rank": 1
   },
-  "vecm": null,
+  "vecm": {
+    "cointegration_vector": [
+      1.0,
+      -1.3532616887804951
+    ],
+    "adjustment_speed": [
+      -0.17894677292636077,
+      0.3517016973454332
+    ]
+  },
   "warnings": []
 }

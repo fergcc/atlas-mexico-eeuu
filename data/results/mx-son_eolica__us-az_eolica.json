@@ -1,20 +1,20 @@
 {
-  "pair_id": "mx-son_manufactura_total__us-az_manufactura_total",
+  "pair_id": "mx-son_eolica__us-az_eolica",
   "sector": {
-    "id": "manufactura_total",
-    "scian": "31-33",
-    "naics": "31-33",
-    "label": "Manufactura total (referencia nacional)"
+    "id": "eolica",
+    "scian": "333611",
+    "naics": "333611",
+    "label": "Energía eólica y aerogeneradores"
   },
   "series_a": {
-    "id": "mx-son_manufactura_total_itaee",
-    "source": "INEGI - ITAEE (clave 741177)",
+    "id": "mx-son_eolica_itaee",
+    "source": "INEGI - ITAEE (clave 741651) [APROXIMACIÓN: ITAEE específico de este sector no existe en el catálogo estatal público de INEGI (la granularidad máxima es manufactura 31-33 total); se usa 741651 (ITAEE manufactura total) como mejor proxy disponible del lado MX.]",
     "region": "26",
     "proxy_type": "output_index",
     "seasonal_adjustment": "nsa"
   },
   "series_b": {
-    "id": "us-az_manufactura_total_son_bls",
+    "id": "us-az_eolica_son_bls",
     "source": "BLS - CES SMU04000003000000001 (Arizona)",
     "region": "04",
     "proxy_type": "labor_input",
@@ -26,7 +26,7 @@
     "end": "2025-12-31",
     "n_obs": 80
   },
-  "generated_at": "2026-07-21T20:26:41.342955+00:00",
+  "generated_at": "2026-07-21T20:26:41.477124+00:00",
   "data_vintage": "2025-12-01",
   "data_vintage_detail": {
     "a": "2025-12-01",
@@ -35,9 +35,9 @@
   "insufficient_data": false,
   "stationarity": {
     "a": {
-      "adf_statistic": -4.622894887007201,
-      "adf_p_value": 0.0001171838274011263,
-      "kpss_statistic": 0.04657623158599714,
+      "adf_statistic": -8.554247831342666,
+      "adf_p_value": 9.049119453955629e-14,
+      "kpss_statistic": 0.09078126560497378,
       "kpss_p_value": 0.1,
       "is_stationary": true,
       "order_of_integration": 1,
@@ -57,27 +57,27 @@
     "optimal_lag": 3,
     "selection_criterion": "bic",
     "a_causes_b": {
-      "f_stat": 0.5049429252258814,
-      "p_value": 0.6795102216833732,
-      "p_value_fdr_adj": 0.8380626067428268,
+      "f_stat": 1.3310647927286086,
+      "p_value": 0.2669048387682245,
+      "p_value_fdr_adj": 0.533809677536449,
       "significant": false
     },
     "b_causes_a": {
-      "f_stat": 0.6599655205492108,
-      "p_value": 0.5780673489701411,
-      "p_value_fdr_adj": 0.7921663671072304,
+      "f_stat": 0.5784392075930868,
+      "p_value": 0.6301405093786456,
+      "p_value_fdr_adj": 0.8180771525266627,
       "significant": false
     }
   },
   "cointegration_engle_granger": {
-    "statistic": -2.6204931275386225,
-    "p_value": 0.22946625163242407,
+    "statistic": -1.3891785829413814,
+    "p_value": 0.8011984506393699,
     "cointegrated": false
   },
   "cointegration_johansen": {
     "trace_statistic": [
-      16.570832232062724,
-      1.6567971044753265
+      9.938711219133724,
+      0.6127642995467324
     ],
     "critical_values": [
       [
@@ -91,17 +91,8 @@
         6.6349
       ]
     ],
-    "cointegration_rank": 1
+    "cointegration_rank": 0
   },
-  "vecm": {
-    "cointegration_vector": [
-      1.0,
-      -0.3175601564560806
-    ],
-    "adjustment_speed": [
-      -0.08065434915968413,
-      0.05486283954909801
-    ]
-  },
+  "vecm": null,
   "warnings": []
 }
