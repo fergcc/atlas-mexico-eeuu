@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState, useCallback } from "react";
+import Link from "next/link";
 import { Container, Section } from "@/components/layout/container";
 import { PageHeader } from "@/components/layout/page-header";
 import { GlassPanel } from "@/components/ui/glass-panel";
@@ -213,6 +214,9 @@ export default function TerritorialPage() {
                   <option key={s.id} value={s.id}>{s.label}</option>
                 ))}
               </select>
+              <Link href={`/sectores/${sector}`} className="text-[10px] text-foreground-muted hover:text-foreground transition-colors">
+                → Ver pares del sector
+              </Link>
             </div>
             <div className="flex items-center gap-2">
               {Object.keys(rawDataQuality).length > 0 && (() => {
@@ -276,12 +280,16 @@ export default function TerritorialPage() {
                 <span>·</span>
                 <span>{rawValues.length} valores</span>
                 <span>·</span>
-                <span className={cn(
-                  "rounded-full px-2 py-0.5 text-xs font-medium",
-                  realCount === totalCount ? "bg-success/10 text-success" : "bg-warning/10 text-accent"
-                )}>
-                  {realCount}/{totalCount} real
+                {(() => {
+                  const total = Object.keys(rawDataQuality).length;
+                  const real = Object.values(rawDataQuality).filter(q => q === "real").length;
+                  const isAllReal = real === total;
+                  return (
+                <span className={`rounded-full px-2 py-0.5 text-xs font-medium ${isAllReal ? "bg-success/10 text-success" : "bg-warning/10 text-accent"}`}>
+                  {real}/{total} real
                 </span>
+                  );
+                })()}
               </div>
               <IndicatorMatrix
                 regions={regions}

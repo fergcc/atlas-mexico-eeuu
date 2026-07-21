@@ -77,7 +77,7 @@ export default function HomePage() {
                 <KpiStat label="Sectores" value={manifest.sectors.length} tone="primary" />
                 <KpiStat label="Pares evaluados" value={manifest.pairs.length} tone="mx" />
                 <KpiStat label="Con causalidad" value={significantCount} tone="us" />
-                <KpiStat label="Cointegrados" value={cointCount} tone="ca" hint={caCount > 0 ? `${caCount} series CA` : undefined} />
+                <KpiStat label="Cointegrados" value={cointCount} tone="accent" hint={caCount > 0 ? `${caCount} series CA` : undefined} />
               </div>
               <div className="rounded-xl border border-border-glass p-4">
                 <p className="mb-3 px-0.5 text-xs font-medium uppercase tracking-wide text-foreground-muted">

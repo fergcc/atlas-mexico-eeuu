@@ -66,8 +66,12 @@ export default function NacionalPage() {
 
             {(() => {
               const total = pairs.length;
-              const significant = evidenceRows.filter(r => r.granger).length;
-              const coint = evidenceRows.filter(r => r.cointegrated).length;
+              const significant = Object.values(resultsByPairId).filter(
+                r => r && !r.insufficient_data && (r.granger?.a_causes_b?.significant || r.granger?.b_causes_a?.significant)
+              ).length;
+              const coint = Object.values(resultsByPairId).filter(
+                r => r && r.cointegration_engle_granger?.cointegrated
+              ).length;
               return (
                 <div className="flex flex-wrap items-center gap-3 text-sm text-foreground-muted">
                   <span className="rounded-full bg-foreground/5 px-3 py-1.5 text-xs">
@@ -114,7 +118,7 @@ export default function NacionalPage() {
                           <Badge tone="neutral">Resultado aún no disponible</Badge>
                         )}
                         {seriesA && (
-                          <Badge tone="muted" className="text-[10px]">{seriesA.proxy_type === "output_index" ? "producción" : "empleo"}</Badge>
+                          <Badge tone="neutral" className="text-[10px]">{seriesA.proxy_type === "output_index" ? "producción" : "empleo"}</Badge>
                         )}
                         {seriesA && (
                           <FreshnessBadge

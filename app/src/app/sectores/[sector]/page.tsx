@@ -59,6 +59,11 @@ export default async function SectorPage({ params }: { params: Promise<{ sector:
             title={sector.label}
             description={`${pairs.length} ${pairs.length === 1 ? "par evaluado" : "pares evaluados"} entre México y Estados Unidos para este sector, a nivel ${Array.from(new Set(pairs.map((p) => p.level))).join(", ") || "n/d"}.`}
           />
+          <div className="flex items-center gap-3 text-sm">
+            <Link href={`/territorial?sector=${sector.id}`} className="inline-flex items-center gap-1 text-foreground-muted hover:text-foreground transition-colors">
+              → 34 indicadores territoriales
+            </Link>
+          </div>
         </div>
 
         {relatedCorridors.length > 0 && (
@@ -114,10 +119,10 @@ export default async function SectorPage({ params }: { params: Promise<{ sector:
                           <Badge tone="neutral">Resultado aún no disponible</Badge>
                         )}
                         {seriesA && (
-                          <Badge tone="muted" className="text-[10px]">{seriesA.proxy_type === "output_index" ? "producción" : "empleo"}</Badge>
+                          <Badge tone="neutral" className="text-[10px]">{seriesA.proxy_type === "output_index" ? "producción" : "empleo"}</Badge>
                         )}
                         {pair.pair_id.includes("ca-") && (
-                          <Badge tone="muted" className="text-[10px]">CA</Badge>
+                          <Badge tone="neutral" className="text-[10px]">CA</Badge>
                         )}
                         {seriesA && (
                           <FreshnessBadge
