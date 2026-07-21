@@ -276,8 +276,11 @@ export default function TerritorialPage() {
                 <span>·</span>
                 <span>{rawValues.length} valores</span>
                 <span>·</span>
-                <span className="rounded-full bg-signal-neutral/10 px-2 py-0.5 text-signal-neutral">
-                  Datos sintéticos
+                <span className={cn(
+                  "rounded-full px-2 py-0.5 text-xs font-medium",
+                  realCount === totalCount ? "bg-success/10 text-success" : "bg-warning/10 text-accent"
+                )}>
+                  {realCount}/{totalCount} real
                 </span>
               </div>
               <IndicatorMatrix

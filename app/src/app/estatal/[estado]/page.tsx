@@ -86,6 +86,9 @@ export default async function EstadoPage({ params }: { params: Promise<{ estado:
                         <Badge tone="neutral">Resultado aún no disponible</Badge>
                       )}
                       {seriesA && (
+                        <Badge tone="muted" className="text-[10px]">{seriesA.proxy_type === "output_index" ? "producción" : "empleo"}</Badge>
+                      )}
+                      {seriesA && (
                         <FreshnessBadge
                           periodicidad={seriesA.periodicidad}
                           ultima_actualizacion={seriesA.ultima_actualizacion}

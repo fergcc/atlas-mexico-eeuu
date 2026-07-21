@@ -3,7 +3,7 @@ import { Container, Section } from "@/components/layout/container";
 import { PageHeader } from "@/components/layout/page-header";
 import { GlassCard } from "@/components/ui/glass-card";
 import { Badge } from "@/components/ui/badge";
-import { getManifest, getPairsBySector } from "@/lib/data-loader";
+import { getManifest, getPairsBySector, getResult } from "@/lib/data-loader";
 import { SectorIcon } from "@/lib/icon-map";
 
 export const metadata: Metadata = { title: "Sectores" };
@@ -22,7 +22,12 @@ export default function SectoresPage() {
 
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {manifest.sectors.map((sector) => {
-            const pairCount = getPairsBySector(sector.id).length;
+            const pairs = getPairsBySector(sector.id);
+            const pairCount = pairs.length;
+            const sigCount = pairs.filter(p => {
+              const r = getResult(p.pair_id);
+              return r?.granger?.a_causes_b?.significant || r?.granger?.b_causes_a?.significant;
+            }).length;
             return (
               <GlassCard key={sector.id} href={`/sectores/${sector.id}`}>
                 <div className="flex items-start justify-between">
@@ -35,7 +40,10 @@ export default function SectoresPage() {
                 </div>
                 <p className="font-display text-lg font-semibold text-foreground">{sector.label}</p>
                 <p className="mt-2 text-sm text-foreground-muted">
-                  {pairCount} {pairCount === 1 ? "par evaluado" : "pares evaluados"}
+                  {pairCount} {pairCount === 1 ? "par" : "pares"}
+                  {sigCount > 0 && (
+                    <span className="ml-2 text-success">{sigCount} con evidencia</span>
+                  )}
                 </p>
               </GlassCard>
             );

@@ -64,6 +64,25 @@ export default function NacionalPage() {
               <EvidenceGrid columns={EVIDENCE_COLUMNS} rows={evidenceRows} />
             </GlassPanel>
 
+            {(() => {
+              const total = pairs.length;
+              const significant = evidenceRows.filter(r => r.granger).length;
+              const coint = evidenceRows.filter(r => r.cointegrated).length;
+              return (
+                <div className="flex flex-wrap items-center gap-3 text-sm text-foreground-muted">
+                  <span className="rounded-full bg-foreground/5 px-3 py-1.5 text-xs">
+                    <strong className="text-foreground">{total}</strong> pares evaluados
+                  </span>
+                  <span className="rounded-full bg-success/10 px-3 py-1.5 text-xs text-success">
+                    <strong>{significant}</strong> con evidencia de causalidad
+                  </span>
+                  <span className="rounded-full bg-accent/10 px-3 py-1.5 text-xs text-accent">
+                    <strong>{coint}</strong> cointegrados
+                  </span>
+                </div>
+              );
+            })()}
+
             <div className="flex flex-col gap-4">
               {pairs.map((pair) => {
                 const sector = getSectorById(pair.sector_id);
@@ -80,6 +99,9 @@ export default function NacionalPage() {
                       <div>
                         <h3 className="font-display text-xl font-semibold text-foreground">
                           {sector?.label ?? pair.sector_id}
+                          {pair.pair_id.includes("ca-") && (
+                            <span className="ml-2 text-xs font-normal text-foreground-muted">CA</span>
+                          )}
                         </h3>
                         <p className="text-sm text-foreground-muted">
                           {seriesA?.nombre} vs. {seriesB?.nombre}
@@ -90,6 +112,9 @@ export default function NacionalPage() {
                           <Badge tone={badge.tone}>{badge.label}</Badge>
                         ) : (
                           <Badge tone="neutral">Resultado aún no disponible</Badge>
+                        )}
+                        {seriesA && (
+                          <Badge tone="muted" className="text-[10px]">{seriesA.proxy_type === "output_index" ? "producción" : "empleo"}</Badge>
                         )}
                         {seriesA && (
                           <FreshnessBadge

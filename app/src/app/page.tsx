@@ -22,6 +22,12 @@ export default function HomePage() {
     (r) => r && !r.insufficient_data && (r.granger.a_causes_b.significant || r.granger.b_causes_a.significant)
   ).length;
 
+  const cointCount = Object.values(resultsByPairId).filter(
+    (r) => r && r.cointegration_engle_granger?.cointegrated
+  ).length;
+
+  const caCount = manifest.series_catalog.filter(s => s.pais === "CA").length;
+
   const corridorPairs = buildCorridorData(nationalPairs, manifest.series_catalog, resultsByPairId, manifest.sectors);
 
   return (
@@ -31,7 +37,7 @@ export default function HomePage() {
           <div className="grid gap-10 lg:grid-cols-[1.1fr_1fr] lg:items-center">
             <div>
               <Badge tone="primary" className="mb-5">
-                {manifest.mode === "mock" ? "Datos de demostración" : "Datos en vivo"} · actualización{" "}
+                {manifest.mode === "live" ? "Datos en vivo" : manifest.mode === "mixed" ? "Datos mixtos (real + mock)" : "Datos de demostración"} · actualización{" "}
                 {manifest.refresh_cadence}
               </Badge>
               <h1 className="text-balance font-display text-4xl font-semibold tracking-tight text-foreground sm:text-5xl">
@@ -67,10 +73,11 @@ export default function HomePage() {
             </div>
 
             <GlassPanel className="p-6">
-              <div className="mb-4 grid grid-cols-3 gap-4">
+              <div className="mb-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
                 <KpiStat label="Sectores" value={manifest.sectors.length} tone="primary" />
                 <KpiStat label="Pares evaluados" value={manifest.pairs.length} tone="mx" />
-                <KpiStat label="Relaciones con causalidad" value={significantCount} tone="us" />
+                <KpiStat label="Con causalidad" value={significantCount} tone="us" />
+                <KpiStat label="Cointegrados" value={cointCount} tone="ca" hint={caCount > 0 ? `${caCount} series CA` : undefined} />
               </div>
               <div className="rounded-xl border border-border-glass p-4">
                 <p className="mb-3 px-0.5 text-xs font-medium uppercase tracking-wide text-foreground-muted">

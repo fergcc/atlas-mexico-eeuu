@@ -79,7 +79,8 @@ export default function RegionesPage() {
                         <tr className="text-xs uppercase tracking-wide text-foreground-muted">
                           <th className="pb-2 pr-4 font-medium">Estado</th>
                           <th className="pb-2 pr-4 font-medium">Serie MX</th>
-                          <th className="pb-2 font-medium">Causalidad hacia EEUU</th>
+                          <th className="pb-2 pr-4 font-medium">Causalidad →EEUU</th>
+                          <th className="pb-2 font-medium">Cointegración</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -105,6 +106,17 @@ export default function RegionesPage() {
                                 </Badge>
                               ) : (
                                 <span className="text-foreground-muted">Sin resultado aún</span>
+                              )}
+                            </td>
+                            <td className="py-2">
+                              {result && !result.insufficient_data && result.cointegration_engle_granger?.cointegrated ? (
+                                <Badge tone="signal-neutral" className="cursor-default">
+                                  Sí
+                                </Badge>
+                              ) : result?.insufficient_data ? (
+                                <span className="text-foreground-muted">—</span>
+                              ) : (
+                                <span className="text-xs text-foreground-muted">no</span>
                               )}
                             </td>
                           </tr>

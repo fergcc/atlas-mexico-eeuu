@@ -114,6 +114,12 @@ export default async function SectorPage({ params }: { params: Promise<{ sector:
                           <Badge tone="neutral">Resultado aún no disponible</Badge>
                         )}
                         {seriesA && (
+                          <Badge tone="muted" className="text-[10px]">{seriesA.proxy_type === "output_index" ? "producción" : "empleo"}</Badge>
+                        )}
+                        {pair.pair_id.includes("ca-") && (
+                          <Badge tone="muted" className="text-[10px]">CA</Badge>
+                        )}
+                        {seriesA && (
                           <FreshnessBadge
                             periodicidad={seriesA.periodicidad}
                             ultima_actualizacion={seriesA.ultima_actualizacion}
