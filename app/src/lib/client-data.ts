@@ -49,3 +49,8 @@ export function fetchResult(pairId: string): Promise<ResultFile | null> {
 export function fetchMxStatesTopology(): Promise<Topology | null> {
   return fetchJson<Topology>("/data/geo/mx-states.topojson");
 }
+
+/** TopoJSON with the 51 US states + DC (`data/geo/us-states.topojson`). */
+export function fetchUsStatesTopology(): Promise<Topology | null> {
+  return fetchJson<Topology>("/data/geo/us-states.topojson");
+}

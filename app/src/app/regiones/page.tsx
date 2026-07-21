@@ -83,7 +83,7 @@ export default function RegionesPage() {
                   </p>
                 ) : (
                   <div className="grid gap-6 lg:grid-cols-[1fr_1.4fr] lg:items-start">
-                    <ChoroplethMap values={mapValues} height={280} />
+                    <ChoroplethMap country="MX" values={mapValues} height={280} />
                     <div className="overflow-x-auto">
                       <table className="w-full text-left text-sm">
                         <thead>

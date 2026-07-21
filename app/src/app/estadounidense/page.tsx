@@ -7,9 +7,9 @@ import { EstatalExplorer } from "@/components/estatal/estatal-explorer";
 import { getManifest } from "@/lib/data-loader";
 import { buildSectorStateDatasets } from "@/lib/pair-helpers";
 
-export const metadata: Metadata = { title: "Estatal" };
+export const metadata: Metadata = { title: "Estadounidense" };
 
-export default function EstatalPage() {
+export default function EstadounidensePage() {
   const manifest = getManifest();
   const datasets = buildSectorStateDatasets(manifest);
 
@@ -18,12 +18,12 @@ export default function EstatalPage() {
       <Container className="flex flex-col gap-10">
         <PageHeader
           eyebrow="Nivel estatal"
-          title="Mapa de los 32 estados"
-          description="Elige un sector para ver el valor más reciente del indicador estatal (ITAEE u otro proxy de producción/empleo) o la fuerza de la evidencia de causalidad de Granger frente a su contraparte en Estados Unidos."
+          title="Mapa de los 51 estados"
+          description="Elige un sector para ver el valor más reciente del indicador estatal de empleo o producción, o la fuerza de la evidencia de causalidad de Granger frente a su contraparte en México."
           meta={<GeneratedAtBadge iso={manifest.generated_at} />}
         />
         <Suspense fallback={<p className="text-sm text-foreground-muted">Cargando mapa…</p>}>
-          <EstatalExplorer country="MX" datasets={datasets} />
+          <EstatalExplorer country="US" datasets={datasets} />
         </Suspense>
       </Container>
     </Section>

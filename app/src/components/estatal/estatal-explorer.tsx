@@ -6,16 +6,19 @@ import { useQueryState, parseAsStringEnum } from "nuqs";
 import { ChoroplethMap } from "@/components/charts/choropleth-map";
 import { GlassPanel } from "@/components/ui/glass-panel";
 import { MX_STATES, getMxStateByCode } from "@/data/mx-states";
+import { US_STATES, getUsStateByFips } from "@/data/us-states";
 import type { SectorStateDataset } from "@/lib/pair-helpers";
 import { cn } from "@/lib/cn";
 
 interface EstatalExplorerProps {
+  country: "MX" | "US";
   datasets: SectorStateDataset[];
 }
 
-export function EstatalExplorer({ datasets }: EstatalExplorerProps) {
+export function EstatalExplorer({ country, datasets }: EstatalExplorerProps) {
   const router = useRouter();
   const sectorIds = useMemo(() => datasets.map((d) => d.sectorId), [datasets]);
+  const isUs = country === "US";
 
   const [sectorId, setSectorId] = useQueryState(
     "sector",
@@ -29,10 +32,17 @@ export function EstatalExplorer({ datasets }: EstatalExplorerProps) {
   const active = datasets.find((d) => d.sectorId === sectorId) ?? datasets[0];
   const values = active ? (metric === "causalidad" ? active.strengthByState : active.valuesByState) : {};
 
-  const statesWithData = useMemo(
-    () => MX_STATES.filter((s) => active && active.valuesByState[s.code] !== undefined),
-    [active]
+  const states = useMemo(
+    () => (isUs ? US_STATES.map((s) => ({ code: s.fips, name: s.name, slug: s.slug })) : MX_STATES),
+    [isUs]
   );
+
+  const statesWithData = useMemo(
+    () => states.filter((s) => active && active.valuesByState[s.code] !== undefined),
+    [active, states]
+  );
+
+  const stateRoute = isUs ? "/estadounidense" : "/estatal";
 
   if (datasets.length === 0) {
     return (
@@ -91,7 +101,7 @@ export function EstatalExplorer({ datasets }: EstatalExplorerProps) {
 
       <div>
         <h2 className="mb-3 font-display text-lg font-semibold text-foreground">
-          Estados con dato para {active?.label}
+          {isUs ? "Estados con dato para " : "Estados con dato para "}{active?.label}
         </h2>
         {statesWithData.length === 0 ? (
           <p className="text-sm text-foreground-muted">Ningún estado tiene todavía un dato para este sector.</p>
@@ -100,7 +110,7 @@ export function EstatalExplorer({ datasets }: EstatalExplorerProps) {
             {statesWithData.map((s) => (
               <a
                 key={s.code}
-                href={`/estatal/${s.slug}`}
+                href={`${stateRoute}/${s.slug}`}
                 className="rounded-full border border-border-glass px-3 py-1.5 text-sm text-foreground-muted transition-colors hover:bg-foreground/5 hover:text-foreground"
               >
                 {s.name}
@@ -112,11 +122,12 @@ export function EstatalExplorer({ datasets }: EstatalExplorerProps) {
 
       <GlassPanel className="p-6">
         <ChoroplethMap
+          country={country}
           values={values}
           unit={metric === "valor" ? active?.unit : undefined}
           onSelectState={(code) => {
-            const state = getMxStateByCode(code);
-            if (state) router.push(`/estatal/${state.slug}`);
+            const state = isUs ? getUsStateByFips(code) : getMxStateByCode(code);
+            if (state) router.push(`${stateRoute}/${state.slug}`);
           }}
         />
       </GlassPanel>
