@@ -4,6 +4,7 @@ import { TechnicalDetail } from "@/components/ui/technical-detail";
 import { formatPValue } from "@/lib/formatters";
 import { grangerPlainLabel, causalNarrative } from "@/lib/plain-language";
 import { cn } from "@/lib/cn";
+import type { Country } from "@/lib/types";
 
 export interface CorridorSeriesInfo {
   id: string;
@@ -13,8 +14,18 @@ export interface CorridorSeriesInfo {
   sublabel?: string;
   /** Full source string, kept for the title attribute / technical layer. */
   fullSource?: string;
-  country: "MX" | "US";
+  country: Country;
 }
+
+/** Display name, compact code, and color classes per country — the single
+ * source of truth so no component hardcodes "MX"/"EEUU" text or colors. */
+const COUNTRY_META: Record<Country, { name: string; code: string; textClass: string; borderClass: string }> = {
+  MX: { name: "México", code: "MX", textClass: "text-mx", borderClass: "border-mx" },
+  US: { name: "Estados Unidos", code: "EEUU", textClass: "text-us", borderClass: "border-us" },
+  // Canadá reutiliza `accent` — ya es su identidad visual en el resto del
+  // sitio (ver `/canadiense/[provincia]`) — en vez de crear un token nuevo.
+  CA: { name: "Canadá", code: "CA", textClass: "text-accent", borderClass: "border-accent" },
+};
 
 export interface CorridorDirectionResult {
   significant: boolean;
@@ -53,9 +64,10 @@ interface CausalityCorridorProps {
  * as they need (never truncated) — used on `/sectores/[sector]` and
  * `/nacional` where a handful of pairs get real scrutiny.
  *
- * `overview`: a compact two-column MX/EEUU ribbon list — used in the
- * homepage hero and the `/nacional` header, where the goal is a glanceable
- * "how connected is this, overall" rather than per-pair detail.
+ * `overview`: a compact two-column ribbon list (per-pair country codes,
+ * never hardcoded to MX/US) — used in the homepage hero and the `/nacional`
+ * header, where the goal is a glanceable "how connected is this, overall"
+ * rather than per-pair detail.
  */
 export function CausalityCorridor({ pairs, variant = "detail", className }: CausalityCorridorProps) {
   if (pairs.length === 0) {
@@ -97,33 +109,34 @@ function CorridorDetailCard({ pair }: { pair: CorridorPairData }) {
       <div className="my-4 border-t border-border-glass" />
 
       <div className="flex flex-col gap-3">
-        <DirectionRow fromLabel="MX" toLabel="EEUU" result={pair.aCausesB} />
-        <DirectionRow fromLabel="EEUU" toLabel="MX" result={pair.bCausesA} />
+        <DirectionRow fromLabel={COUNTRY_META[pair.a.country].code} toLabel={COUNTRY_META[pair.b.country].code} result={pair.aCausesB} />
+        <DirectionRow fromLabel={COUNTRY_META[pair.b.country].code} toLabel={COUNTRY_META[pair.a.country].code} result={pair.bCausesA} />
       </div>
 
       <p className="mt-4 text-pretty text-sm italic leading-relaxed text-foreground-muted">&ldquo;{narrative}&rdquo;</p>
 
       <TechnicalDetail className="mt-3">
-        Causalidad de Granger (F-test) · MX→EEUU: F = {pair.aCausesB.fStat?.toFixed?.(2) ?? "s/d"}, p ajustada (FDR) ={" "}
-        {formatPValue(pair.aCausesB.pValue)} · EEUU→MX: F = {pair.bCausesA.fStat?.toFixed?.(2) ?? "s/d"}, p ajustada
-        (FDR) = {formatPValue(pair.bCausesA.pValue)}
+        Causalidad de Granger (F-test) · {COUNTRY_META[pair.a.country].code}→{COUNTRY_META[pair.b.country].code}: F ={" "}
+        {pair.aCausesB.fStat?.toFixed?.(2) ?? "s/d"}, p ajustada (FDR) = {formatPValue(pair.aCausesB.pValue)} ·{" "}
+        {COUNTRY_META[pair.b.country].code}→{COUNTRY_META[pair.a.country].code}: F = {pair.bCausesA.fStat?.toFixed?.(2) ?? "s/d"},
+        p ajustada (FDR) = {formatPValue(pair.bCausesA.pValue)}
       </TechnicalDetail>
     </div>
   );
 }
 
 function SeriesHeader({ series, align }: { series: CorridorSeriesInfo; align: "left" | "right" }) {
-  const isMx = series.country === "MX";
+  const meta = COUNTRY_META[series.country];
   return (
     <div
       className={cn(
         "min-w-0 border-l-[3px] pl-3",
-        isMx ? "border-mx" : "border-us",
+        meta.borderClass,
         align === "right" && "sm:border-l-0 sm:border-r-[3px] sm:pl-0 sm:pr-3 sm:text-right"
       )}
     >
-      <p className={cn("text-[10px] font-semibold uppercase tracking-wide", isMx ? "text-mx" : "text-us")}>
-        {isMx ? "México" : "Estados Unidos"}
+      <p className={cn("text-[10px] font-semibold uppercase tracking-wide", meta.textClass)}>
+        {meta.name}
       </p>
       <p className="mt-0.5 text-pretty text-sm font-semibold leading-snug text-foreground">{series.label}</p>
       {series.sublabel && (
@@ -197,8 +210,17 @@ function OverviewRow({ pair }: { pair: CorridorPairData }) {
   const ribbonHeight = Math.max(2, Math.min(5, Math.round(2 + strength * 3)));
   const anySig = aSig || bSig;
 
+  const metaA = COUNTRY_META[pair.a.country];
+  const metaB = COUNTRY_META[pair.b.country];
   const Icon = aSig && bSig ? ArrowLeftRight : aSig ? ArrowRight : bSig ? ArrowLeft : Minus;
-  const iconLabel = aSig && bSig ? "se anticipan mutuamente" : aSig ? "MX anticipa a EEUU" : bSig ? "EEUU anticipa a MX" : "sin evidencia de anticipación";
+  const iconLabel =
+    aSig && bSig
+      ? "se anticipan mutuamente"
+      : aSig
+        ? `${metaA.name} anticipa a ${metaB.name}`
+        : bSig
+          ? `${metaB.name} anticipa a ${metaA.name}`
+          : "sin evidencia de anticipación";
 
   return (
     <div className="flex items-center gap-3">
@@ -209,7 +231,7 @@ function OverviewRow({ pair }: { pair: CorridorPairData }) {
         {pair.rowLabel}
       </span>
       <div className="flex flex-1 items-center gap-1.5">
-        <span className="shrink-0 font-mono-data text-[10px] font-semibold text-mx">MX</span>
+        <span className={cn("shrink-0 font-mono-data text-[10px] font-semibold", metaA.textClass)}>{metaA.code}</span>
         <span
           className={cn("flex-1 rounded-full", anySig ? "bg-signal-strong" : "bg-signal-neutral/50")}
           style={{ height: ribbonHeight }}
@@ -229,7 +251,7 @@ function OverviewRow({ pair }: { pair: CorridorPairData }) {
           style={{ height: ribbonHeight }}
           aria-hidden="true"
         />
-        <span className="shrink-0 font-mono-data text-[10px] font-semibold text-us">EEUU</span>
+        <span className={cn("shrink-0 font-mono-data text-[10px] font-semibold", metaB.textClass)}>{metaB.code}</span>
       </div>
       <span className="sr-only">
         {pair.a.label} y {pair.b.label}: {iconLabel}

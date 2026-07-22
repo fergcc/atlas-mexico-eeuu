@@ -1,11 +1,12 @@
 import type { ReactNode } from "react";
 import { cn } from "@/lib/cn";
 
-type BadgeTone =
+export type BadgeTone =
   | "neutral"
   | "primary"
   | "mx"
   | "us"
+  | "ca"
   | "accent"
   | "warning"
   | "danger"
@@ -18,6 +19,9 @@ const TONE_CLASSES: Record<BadgeTone, string> = {
   primary: "bg-primary/10 text-primary border-primary/25",
   mx: "bg-mx/10 text-mx border-mx/25",
   us: "bg-us/10 text-us border-us/25",
+  // Canadá reutiliza `accent` — ya es su identidad visual en el resto del
+  // sitio (ver `/canadiense/[provincia]`) en vez de un token de color nuevo.
+  ca: "bg-accent/10 text-accent border-accent/30",
   accent: "bg-accent/10 text-accent border-accent/30",
   warning: "bg-warning/10 text-warning border-warning/30",
   danger: "bg-danger/10 text-danger border-danger/25",

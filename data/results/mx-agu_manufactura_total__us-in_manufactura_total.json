@@ -8,45 +8,45 @@
   },
   "series_a": {
     "id": "mx-agu_manufactura_total_itaee",
-    "source": "INEGI - ITAEE (clave 741177)",
+    "source": "INEGI - ITAEE (mock)",
     "region": "01",
     "proxy_type": "output_index",
     "seasonal_adjustment": "nsa"
   },
   "series_b": {
     "id": "us-in_manufactura_total_agu_bls",
-    "source": "BLS - CES SMU18000003000000001 (Indiana)",
+    "source": "BLS - State and Area Employment (mock)",
     "region": "18",
     "proxy_type": "labor_input",
     "seasonal_adjustment": "nsa"
   },
   "sample": {
     "frequency_used": "quarterly",
-    "start": "2006-03-31",
-    "end": "2025-12-31",
-    "n_obs": 80
+    "start": "2010-03-31",
+    "end": "2026-06-30",
+    "n_obs": 66
   },
-  "generated_at": "2026-07-21T21:27:10.381211+00:00",
-  "data_vintage": "2025-12-01",
+  "generated_at": "2026-07-22T20:11:08.292281+00:00",
+  "data_vintage": "2026-10-03",
   "data_vintage_detail": {
-    "a": "2025-12-01",
-    "b": "2025-12-01"
+    "a": "2026-10-03",
+    "b": "2026-07-21"
   },
   "insufficient_data": false,
   "stationarity": {
     "a": {
-      "adf_statistic": -6.572334234894513,
-      "adf_p_value": 7.879136331326145e-09,
-      "kpss_statistic": 0.30815505408342136,
+      "adf_statistic": -10.379083116099846,
+      "adf_p_value": 2.1626419241415633e-18,
+      "kpss_statistic": 0.16984769594615365,
       "kpss_p_value": 0.1,
       "is_stationary": true,
       "order_of_integration": 1,
       "log_transformed": true
     },
     "b": {
-      "adf_statistic": -8.942564344864666,
-      "adf_p_value": 9.169208145968095e-15,
-      "kpss_statistic": 0.18558134651693367,
+      "adf_statistic": -8.697813965567667,
+      "adf_p_value": 3.881847230503946e-14,
+      "kpss_statistic": 0.23347578813268927,
       "kpss_p_value": 0.1,
       "is_stationary": true,
       "order_of_integration": 1,
@@ -57,27 +57,27 @@
     "optimal_lag": 1,
     "selection_criterion": "bic",
     "a_causes_b": {
-      "f_stat": 0.8605981574498117,
-      "p_value": 0.3550616697242903,
-      "p_value_fdr_adj": 0.5402117755895722,
+      "f_stat": 0.3470935378050539,
+      "p_value": 0.5568523849717033,
+      "p_value_fdr_adj": 0.751137090084495,
       "significant": false
     },
     "b_causes_a": {
-      "f_stat": 0.4575020725573339,
-      "p_value": 0.49983532845232537,
-      "p_value_fdr_adj": 0.6741964895403458,
+      "f_stat": 0.6486228955630111,
+      "p_value": 0.422172338665164,
+      "p_value_fdr_adj": 0.6460516091694176,
       "significant": false
     }
   },
   "cointegration_engle_granger": {
-    "statistic": -0.637313321625098,
-    "p_value": 0.9529903607905293,
+    "statistic": -2.954503927962351,
+    "p_value": 0.12141986220678508,
     "cointegrated": false
   },
   "cointegration_johansen": {
     "trace_statistic": [
-      16.021671259518655,
-      2.585236360553946
+      8.442670017610174,
+      0.17614260611754565
     ],
     "critical_values": [
       [
@@ -91,17 +91,8 @@
         6.6349
       ]
     ],
-    "cointegration_rank": 1
+    "cointegration_rank": 0
   },
-  "vecm": {
-    "cointegration_vector": [
-      1.0,
-      -0.3597131638028126
-    ],
-    "adjustment_speed": [
-      -0.025392102767808518,
-      0.1771792333941608
-    ]
-  },
+  "vecm": null,
   "warnings": []
 }

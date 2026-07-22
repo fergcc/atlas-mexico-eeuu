@@ -14,7 +14,7 @@ import { MX_STATES } from "@/data/mx-states";
  * on-screen text.
  */
 
-const COUNTRY_NAMES: Record<string, string> = {
+export const COUNTRY_NAMES: Record<string, string> = {
   MX: "México",
   US: "Estados Unidos",
   CA: "Canadá",

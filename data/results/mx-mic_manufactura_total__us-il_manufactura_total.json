@@ -8,45 +8,45 @@
   },
   "series_a": {
     "id": "mx-mic_manufactura_total_itaee",
-    "source": "INEGI - ITAEE (clave 741177)",
+    "source": "INEGI - ITAEE (mock)",
     "region": "16",
     "proxy_type": "output_index",
     "seasonal_adjustment": "nsa"
   },
   "series_b": {
     "id": "us-il_manufactura_total_mic_bls",
-    "source": "BLS - CES SMU17000003000000001 (Illinois)",
+    "source": "BLS - State and Area Employment (mock)",
     "region": "17",
     "proxy_type": "labor_input",
     "seasonal_adjustment": "nsa"
   },
   "sample": {
     "frequency_used": "quarterly",
-    "start": "2006-03-31",
-    "end": "2025-12-31",
-    "n_obs": 80
+    "start": "2010-03-31",
+    "end": "2026-06-30",
+    "n_obs": 66
   },
-  "generated_at": "2026-07-21T21:27:10.571656+00:00",
-  "data_vintage": "2025-12-01",
+  "generated_at": "2026-07-22T20:11:08.434583+00:00",
+  "data_vintage": "2026-10-03",
   "data_vintage_detail": {
-    "a": "2025-12-01",
-    "b": "2025-12-01"
+    "a": "2026-10-03",
+    "b": "2026-07-21"
   },
   "insufficient_data": false,
   "stationarity": {
     "a": {
-      "adf_statistic": -5.726495547834748,
-      "adf_p_value": 6.752317517659842e-07,
-      "kpss_statistic": 0.06163907240000272,
+      "adf_statistic": -11.35506007742825,
+      "adf_p_value": 9.780624989391121e-21,
+      "kpss_statistic": 0.09325008290729339,
       "kpss_p_value": 0.1,
       "is_stationary": true,
       "order_of_integration": 1,
       "log_transformed": true
     },
     "b": {
-      "adf_statistic": -3.683280382952999,
-      "adf_p_value": 0.004354572364411368,
-      "kpss_statistic": 0.17223327029960764,
+      "adf_statistic": -6.183708266342777,
+      "adf_p_value": 6.363963036235526e-08,
+      "kpss_statistic": 0.19537349361887069,
       "kpss_p_value": 0.1,
       "is_stationary": true,
       "order_of_integration": 1,
@@ -54,30 +54,30 @@
     }
   },
   "granger": {
-    "optimal_lag": 3,
+    "optimal_lag": 1,
     "selection_criterion": "bic",
     "a_causes_b": {
-      "f_stat": 1.5184930418079985,
-      "p_value": 0.2124642810550854,
-      "p_value_fdr_adj": 0.37916702465215246,
+      "f_stat": 1.0481970322238972,
+      "p_value": 0.30794848372349726,
+      "p_value_fdr_adj": 0.5655053973831494,
       "significant": false
     },
     "b_causes_a": {
-      "f_stat": 3.5689437551356966,
-      "p_value": 0.015822408159043566,
-      "p_value_fdr_adj": 0.057495202676373994,
+      "f_stat": 0.7598557747051785,
+      "p_value": 0.3850858708084257,
+      "p_value_fdr_adj": 0.61988247487797,
       "significant": false
     }
   },
   "cointegration_engle_granger": {
-    "statistic": -1.208857998564011,
-    "p_value": 0.8555661903436441,
-    "cointegrated": false
+    "statistic": -5.627714778816887,
+    "p_value": 9.864345081745345e-06,
+    "cointegrated": true
   },
   "cointegration_johansen": {
     "trace_statistic": [
-      11.425223139402597,
-      2.965646154582785
+      21.62862145913821,
+      0.10587539730264436
     ],
     "critical_values": [
       [
@@ -91,8 +91,17 @@
         6.6349
       ]
     ],
-    "cointegration_rank": 0
+    "cointegration_rank": 1
   },
-  "vecm": null,
+  "vecm": {
+    "cointegration_vector": [
+      1.0,
+      -1.5134332247709874
+    ],
+    "adjustment_speed": [
+      -0.08394648890499753,
+      0.40919446373433677
+    ]
+  },
   "warnings": []
 }

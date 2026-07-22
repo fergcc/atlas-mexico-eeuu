@@ -1,9 +1,12 @@
-import type { Manifest, PairMeta, SeriesCatalogEntry, ResultFile, SectorMeta } from "./types";
+import type { Manifest, PairMeta, SeriesCatalogEntry, ResultFile, SectorMeta, Country } from "./types";
 import type { EvidenceRow } from "@/components/charts/evidence-grid";
 import type { CorridorPairData, CorridorSeriesInfo } from "@/components/charts/causality-corridor";
 import { getSeries, getResult } from "./data-loader";
 import { seriesShortLabel } from "./series-label";
 import { grangerPlainLabel } from "./plain-language";
+import { COUNTRY_NAMES } from "./pair-label";
+
+const COUNTRY_NAME_SHORT: Record<Country, string> = { MX: "México", US: "EEUU", CA: "Canadá" };
 
 // Re-exported for backwards compatibility with existing imports; the
 // canonical, client-safe definition now lives in `series-label.ts`.
@@ -44,10 +47,10 @@ function strengthFromPValue(pValue: number | null | undefined): number {
 }
 
 /**
- * Builds one evidence-grid row per pair, with 3 fixed columns:
- * [MX→US, US→MX, Cointegración]. Shared by /nacional, /sectores/[sector]
- * and /estatal/[estado] so the visual encoding stays consistent everywhere
- * a pair's results are summarized.
+ * Builds one evidence-grid row per pair, with 3 fixed cells:
+ * [a_causes_b, b_causes_a, cointegración]. The column headers for these
+ * cells depend on the pair's actual country axis — see `buildEvidenceGroups`,
+ * which calls this per pair and groups the resulting rows by axis.
  */
 export function buildEvidenceRow(
   pair: PairMeta,
@@ -94,10 +97,62 @@ export function buildEvidenceRow(
   };
 }
 
-export const EVIDENCE_COLUMNS = ["MX → EEUU", "EEUU → MX", "Cointegración"];
-
 function shortSource(fuente: string): string {
   return fuente.split(/[-(]/)[0]?.trim() || fuente;
+}
+
+export interface EvidenceGridGroup {
+  key: string;
+  /** Shown as a subtitle above the grid only when there's more than one group. */
+  heading: string;
+  columns: string[];
+  rows: EvidenceRow[];
+}
+
+function axisColumns(countryA: Country, countryB: Country): string[] {
+  const a = COUNTRY_NAME_SHORT[countryA] ?? countryA;
+  const b = COUNTRY_NAME_SHORT[countryB] ?? countryB;
+  return [`${a} → ${b}`, `${b} → ${a}`, "Cointegración"];
+}
+
+function axisHeading(countryA: Country, countryB: Country): string {
+  const a = COUNTRY_NAMES[countryA] ?? countryA;
+  const b = COUNTRY_NAMES[countryB] ?? countryB;
+  return `${a} ↔ ${b}`;
+}
+
+/**
+ * Groups pairs by their *real* country axis (MX-US / MX-CA / US-CA, read
+ * from each series' `pais` field — never from a hardcoded assumption) and
+ * builds one `EvidenceGridGroup` per axis, each with its own correct column
+ * headers. On pages where every pair shares the same axis (the common case)
+ * this produces a single group, identical to before except the header is
+ * always correct; on pages that mix axes (e.g. `/nacional`, which has both
+ * MX-US and MX-CA sector pairs) this produces one mini-grid per axis instead
+ * of a single grid with a misleading shared header.
+ */
+export function buildEvidenceGroups(
+  pairs: PairMeta[],
+  seriesCatalog: SeriesCatalogEntry[],
+  resultsByPairId: Record<string, ResultFile | null>,
+  labelForPair: (pair: PairMeta) => string
+): EvidenceGridGroup[] {
+  const seriesById = new Map(seriesCatalog.map((s) => [s.id, s]));
+  const groups = new Map<string, EvidenceGridGroup>();
+
+  for (const pair of pairs) {
+    const countryA = (seriesById.get(pair.series_a)?.pais as Country | undefined) ?? "MX";
+    const countryB = (seriesById.get(pair.series_b)?.pais as Country | undefined) ?? "US";
+    const key = `${countryA}-${countryB}`;
+    let group = groups.get(key);
+    if (!group) {
+      group = { key, heading: axisHeading(countryA, countryB), columns: axisColumns(countryA, countryB), rows: [] };
+      groups.set(key, group);
+    }
+    group.rows.push(buildEvidenceRow(pair, resultsByPairId[pair.pair_id], labelForPair(pair)));
+  }
+
+  return Array.from(groups.values());
 }
 
 /**
@@ -114,10 +169,10 @@ export function buildCorridorData(
   const seriesById = new Map(seriesCatalog.map((s) => [s.id, s]));
   const sectorLabelById = new Map(sectors.map((s) => [s.id, s.label]));
 
-  const toSeriesInfo = (entry: SeriesCatalogEntry | undefined, fallbackCountry: "MX" | "US"): CorridorSeriesInfo => {
+  const toSeriesInfo = (entry: SeriesCatalogEntry | undefined, fallbackCountry: Country): CorridorSeriesInfo => {
     if (!entry) return { id: "?", label: "Serie desconocida", country: fallbackCountry };
-    const country: "MX" | "US" = entry.pais === "MX" ? "MX" : "US";
-    const countryName = country === "MX" ? "México" : "EEUU";
+    const country = (entry.pais as Country) ?? fallbackCountry;
+    const countryName = COUNTRY_NAME_SHORT[country] ?? country;
     return {
       id: entry.id,
       label: entry.nombre,

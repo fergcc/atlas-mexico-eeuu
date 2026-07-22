@@ -17,7 +17,7 @@ export interface SectorMeta {
 export interface SeriesCatalogEntry {
   id: string;
   nombre: string;
-  pais: "MX" | "US" | string;
+  pais: Country | string;
   region_code: string;
   sector_id: string;
   fuente: string;

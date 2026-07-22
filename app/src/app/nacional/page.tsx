@@ -13,7 +13,12 @@ import { EvidenceGrid } from "@/components/charts/evidence-grid";
 import { ResultSummary } from "@/components/indicador/result-summary";
 import { SectionDisclosure } from "@/components/ui/section-disclosure";
 import { getManifest, getPairsByLevel, getResult, getSeries, getSectorById } from "@/lib/data-loader";
-import { buildCorridorData, buildEvidenceRow, pairResultBadge, EVIDENCE_COLUMNS, seriesShortLabel } from "@/lib/pair-helpers";
+import { buildCorridorData, buildEvidenceGroups, pairResultBadge, seriesShortLabel } from "@/lib/pair-helpers";
+import type { BadgeTone } from "@/components/ui/badge";
+
+function countryBadgeTone(pais: string | undefined): BadgeTone {
+  return pais === "MX" ? "mx" : pais === "CA" ? "ca" : "us";
+}
 
 export const metadata: Metadata = { title: "Nacional" };
 
@@ -24,9 +29,9 @@ export default function NacionalPage() {
 
   const resultsByPairId = Object.fromEntries(pairs.map((p) => [p.pair_id, getResult(p.pair_id)]));
   const corridorPairs = buildCorridorData(pairs, manifest.series_catalog, resultsByPairId, manifest.sectors);
-  const evidenceRows = pairs.map((p) => {
+  const evidenceGroups = buildEvidenceGroups(pairs, manifest.series_catalog, resultsByPairId, (p) => {
     const sector = getSectorById(p.sector_id);
-    return buildEvidenceRow(p, resultsByPairId[p.pair_id], sector?.label ?? p.sector_id);
+    return sector?.label ?? p.sector_id;
   });
 
   return (
@@ -34,8 +39,8 @@ export default function NacionalPage() {
       <Container className="flex flex-col gap-10">
         <PageHeader
           eyebrow="Nivel nacional"
-          title="Causalidad y cointegración agregada México–EEUU"
-          description="Compara el índice de producción manufacturera nacional de México contra el índice de producción industrial de Estados Unidos, sector por sector, con las mismas pruebas econométricas para todo el árbol SCIAN/NAICS."
+          title="Causalidad y cointegración agregada México–EEUU–Canadá"
+          description="Compara el índice de producción manufacturera nacional de México contra los índices de producción industrial de Estados Unidos y Canadá, sector por sector, con las mismas pruebas econométricas para todo el árbol SCIAN/NAICS."
           meta={
             <>
               <GeneratedAtBadge iso={manifest.generated_at} />
@@ -73,7 +78,18 @@ export default function NacionalPage() {
               <h2 className="mb-4 font-display text-lg font-semibold text-foreground">
                 Tablero de evidencia por sector
               </h2>
-              <EvidenceGrid columns={EVIDENCE_COLUMNS} rows={evidenceRows} />
+              <div className="flex flex-col gap-6">
+                {evidenceGroups.map((group) => (
+                  <div key={group.key}>
+                    {evidenceGroups.length > 1 && (
+                      <p className="mb-3 text-xs font-medium uppercase tracking-wide text-foreground-muted">
+                        {group.heading}
+                      </p>
+                    )}
+                    <EvidenceGrid columns={group.columns} rows={group.rows} />
+                  </div>
+                ))}
+              </div>
             </GlassPanel>
 
             {(() => {
@@ -115,7 +131,7 @@ export default function NacionalPage() {
                       <div>
                         <h3 className="font-display text-xl font-semibold text-foreground">
                           {sector?.label ?? pair.sector_id}
-                          {pair.pair_id.includes("ca-") && (
+                          {seriesB?.pais === "CA" && (
                             <span className="ml-2 text-xs font-normal text-foreground-muted">CA</span>
                           )}
                         </h3>
@@ -146,8 +162,8 @@ export default function NacionalPage() {
                     {result ? (
                       <SectionDisclosure summary="Ver análisis completo de este par" className="mt-4">
                         <div className="mb-6 flex flex-wrap gap-2">
-                          {seriesA && <Badge tone="mx">{seriesA.proxy_type}</Badge>}
-                          {seriesB && <Badge tone="us">{seriesB.proxy_type}</Badge>}
+                          {seriesA && <Badge tone={countryBadgeTone(seriesA.pais)}>{seriesA.proxy_type}</Badge>}
+                          {seriesB && <Badge tone={countryBadgeTone(seriesB.pais)}>{seriesB.proxy_type}</Badge>}
                         </div>
 
                         <TimeSeriesChart

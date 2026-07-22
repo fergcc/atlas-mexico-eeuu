@@ -16,7 +16,7 @@ import { ResultSummary } from "@/components/indicador/result-summary";
 import { SectionDisclosure } from "@/components/ui/section-disclosure";
 import { StateIndicatorSummary } from "@/components/territorial/state-indicator-summary";
 import { getManifest, getPairsByStateCode, getResult, getSeries, getSectorById, getTerritorialByRegion } from "@/lib/data-loader";
-import { buildCorridorData, buildEvidenceRow, pairResultBadge, EVIDENCE_COLUMNS, seriesShortLabel } from "@/lib/pair-helpers";
+import { buildCorridorData, buildEvidenceGroups, pairResultBadge, seriesShortLabel } from "@/lib/pair-helpers";
 import { US_STATES, getUsStateBySlug } from "@/data/us-states";
 
 export function generateStaticParams() {
@@ -39,9 +39,9 @@ export default async function EstadoUSPage({ params }: { params: Promise<{ estad
   const seriesById = new Map(manifest.series_catalog.map((s) => [s.id, s]));
   const resultsByPairId = Object.fromEntries(pairs.map((p) => [p.pair_id, getResult(p.pair_id)]));
   const corridorPairs = buildCorridorData(pairs, manifest.series_catalog, resultsByPairId, manifest.sectors);
-  const evidenceRows = pairs.map((p) => {
+  const evidenceGroups = buildEvidenceGroups(pairs, manifest.series_catalog, resultsByPairId, (p) => {
     const sector = getSectorById(p.sector_id);
-    return buildEvidenceRow(p, resultsByPairId[p.pair_id], sector?.label ?? p.sector_id);
+    return sector?.label ?? p.sector_id;
   });
   const territorialValues = getTerritorialByRegion(state.fips, "US");
 
@@ -86,7 +86,18 @@ export default async function EstadoUSPage({ params }: { params: Promise<{ estad
         {pairs.length >= 2 && (
           <GlassPanel className="p-6">
             <h2 className="mb-4 font-display text-lg font-semibold text-foreground">Tablero de evidencia</h2>
-            <EvidenceGrid columns={EVIDENCE_COLUMNS} rows={evidenceRows} />
+            <div className="flex flex-col gap-6">
+              {evidenceGroups.map((group) => (
+                <div key={group.key}>
+                  {evidenceGroups.length > 1 && (
+                    <p className="mb-3 text-xs font-medium uppercase tracking-wide text-foreground-muted">
+                      {group.heading}
+                    </p>
+                  )}
+                  <EvidenceGrid columns={group.columns} rows={group.rows} />
+                </div>
+              ))}
+            </div>
           </GlassPanel>
         )}
 

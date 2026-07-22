@@ -15,8 +15,8 @@ import { EvidenceGrid } from "@/components/charts/evidence-grid";
 import { ResultSummary } from "@/components/indicador/result-summary";
 import { SectionDisclosure } from "@/components/ui/section-disclosure";
 import { getManifest, getSectorById, getPairsBySector, getResult, getSeries, getSectors } from "@/lib/data-loader";
-import { buildCorridorData, buildEvidenceRow, pairResultBadge, EVIDENCE_COLUMNS, seriesShortLabel } from "@/lib/pair-helpers";
-import { formatPairLabel } from "@/lib/pair-label";
+import { buildCorridorData, buildEvidenceGroups, pairResultBadge, seriesShortLabel } from "@/lib/pair-helpers";
+import { formatPairLabel, COUNTRY_NAMES } from "@/lib/pair-label";
 import { SectorIcon } from "@/lib/icon-map";
 import regionsData from "@/data/regions.json";
 import { SectorAnalysisPanel } from "@/components/sector/sector-analysis-panel";
@@ -41,10 +41,18 @@ export default async function SectorPage({ params }: { params: Promise<{ sector:
   const seriesById = new Map(manifest.series_catalog.map((s) => [s.id, s]));
   const resultsByPairId = Object.fromEntries(pairs.map((p) => [p.pair_id, getResult(p.pair_id)]));
   const corridorPairs = buildCorridorData(pairs, manifest.series_catalog, resultsByPairId, manifest.sectors);
-  const evidenceRows = pairs.map((p) =>
-    buildEvidenceRow(p, resultsByPairId[p.pair_id], formatPairLabel(seriesById.get(p.series_a), seriesById.get(p.series_b)))
+  const evidenceGroups = buildEvidenceGroups(pairs, manifest.series_catalog, resultsByPairId, (p) =>
+    formatPairLabel(seriesById.get(p.series_a), seriesById.get(p.series_b))
   );
   const relatedCorridors = regionsData.corridors.filter((c) => c.sector_id === sectorId);
+
+  const involvedCountries = Array.from(
+    new Set(pairs.flatMap((p) => [seriesById.get(p.series_a)?.pais, seriesById.get(p.series_b)?.pais]).filter((c): c is string => Boolean(c)))
+  ).map((c) => COUNTRY_NAMES[c] ?? c);
+  const countriesText =
+    involvedCountries.length <= 1
+      ? involvedCountries[0] ?? "sin país"
+      : `${involvedCountries.slice(0, -1).join(", ")} y ${involvedCountries[involvedCountries.length - 1]}`;
 
   return (
     <Section className="pt-10">
@@ -58,7 +66,7 @@ export default async function SectorPage({ params }: { params: Promise<{ sector:
           <PageHeader
             eyebrow={sector.priority === "strategic" ? "Sector estratégico" : "Sector de referencia"}
             title={sector.label}
-            description={`${pairs.length} ${pairs.length === 1 ? "par evaluado" : "pares evaluados"} entre México y Estados Unidos para este sector, a nivel ${Array.from(new Set(pairs.map((p) => p.level))).join(", ") || "n/d"}.`}
+            description={`${pairs.length} ${pairs.length === 1 ? "par evaluado" : "pares evaluados"} entre ${countriesText} para este sector, a nivel ${Array.from(new Set(pairs.map((p) => p.level))).join(", ") || "n/d"}.`}
             meta={<GeneratedAtBadge iso={manifest.generated_at} />}
           />
           <div className="flex items-center gap-3 text-sm">
@@ -93,7 +101,18 @@ export default async function SectorPage({ params }: { params: Promise<{ sector:
 
             <GlassPanel className="p-6">
               <h2 className="mb-4 font-display text-lg font-semibold text-foreground">Tablero de evidencia</h2>
-              <EvidenceGrid columns={EVIDENCE_COLUMNS} rows={evidenceRows} />
+              <div className="flex flex-col gap-6">
+                {evidenceGroups.map((group) => (
+                  <div key={group.key}>
+                    {evidenceGroups.length > 1 && (
+                      <p className="mb-3 text-xs font-medium uppercase tracking-wide text-foreground-muted">
+                        {group.heading}
+                      </p>
+                    )}
+                    <EvidenceGrid columns={group.columns} rows={group.rows} />
+                  </div>
+                ))}
+              </div>
             </GlassPanel>
 
             <div className="flex flex-col gap-4">
@@ -123,7 +142,7 @@ export default async function SectorPage({ params }: { params: Promise<{ sector:
                         {seriesA && (
                           <Badge tone="neutral" className="text-[10px]">{seriesA.proxy_type === "output_index" ? "producción" : "empleo"}</Badge>
                         )}
-                        {pair.pair_id.includes("ca-") && (
+                        {seriesB?.pais === "CA" && (
                           <Badge tone="neutral" className="text-[10px]">CA</Badge>
                         )}
                         {seriesA && (
