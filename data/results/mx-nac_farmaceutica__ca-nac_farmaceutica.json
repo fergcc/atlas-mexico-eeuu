@@ -15,69 +15,69 @@
   },
   "series_b": {
     "id": "ca-nac_farmaceutica_sc",
-    "source": "Statistics Canada — Monthly GDP (real)",
+    "source": "Statistics Canada — Monthly GDP (mock)",
     "region": "NAC",
     "proxy_type": "output_index",
     "seasonal_adjustment": "nsa"
   },
   "sample": {
     "frequency_used": "monthly",
-    "start": "2021-05-31",
-    "end": "2026-04-30",
-    "n_obs": 60
+    "start": "2010-01-31",
+    "end": "2026-05-31",
+    "n_obs": 197
   },
-  "generated_at": "2026-07-21T20:26:41.540943+00:00",
-  "data_vintage": "2026-05-01",
+  "generated_at": "2026-07-21T21:27:10.618426+00:00",
+  "data_vintage": "2026-08-29",
   "data_vintage_detail": {
     "a": "2026-05-01",
-    "b": "2026-04-01"
+    "b": "2026-08-29"
   },
   "insufficient_data": false,
   "stationarity": {
     "a": {
-      "adf_statistic": -4.70127033129626,
-      "adf_p_value": 8.369159231132218e-05,
-      "kpss_statistic": 0.25463711578566445,
+      "adf_statistic": -5.514670757630558,
+      "adf_p_value": 1.9370738710864484e-06,
+      "kpss_statistic": 0.10759405333754607,
       "kpss_p_value": 0.1,
       "is_stationary": true,
-      "order_of_integration": 2,
+      "order_of_integration": 1,
       "log_transformed": true
     },
     "b": {
-      "adf_statistic": -2.8171791930003494,
-      "adf_p_value": 0.055861434552023456,
-      "kpss_statistic": 0.4469346052327012,
-      "kpss_p_value": 0.05692473912383571,
-      "is_stationary": false,
-      "order_of_integration": 2,
+      "adf_statistic": -3.3694768759068983,
+      "adf_p_value": 0.012044468758339925,
+      "kpss_statistic": 0.10392437520390513,
+      "kpss_p_value": 0.1,
+      "is_stationary": true,
+      "order_of_integration": 1,
       "log_transformed": true
     }
   },
   "granger": {
-    "optimal_lag": 2,
+    "optimal_lag": 1,
     "selection_criterion": "bic",
     "a_causes_b": {
-      "f_stat": 0.158340686396399,
-      "p_value": 0.853768335173706,
-      "p_value_fdr_adj": 0.928520075726978,
+      "f_stat": 5.87023534713725,
+      "p_value": 0.015860745565896273,
+      "p_value_fdr_adj": 0.057495202676373994,
       "significant": false
     },
     "b_causes_a": {
-      "f_stat": 0.8795604899898464,
-      "p_value": 0.4180885586302972,
-      "p_value_fdr_adj": 0.7195012404335348,
+      "f_stat": 1.326817804121987,
+      "p_value": 0.2500887604254641,
+      "p_value_fdr_adj": 0.4204390754978816,
       "significant": false
     }
   },
   "cointegration_engle_granger": {
-    "statistic": -1.4427504621289484,
-    "p_value": 0.782484423738685,
+    "statistic": -1.2754290621044122,
+    "p_value": 0.8370274073583943,
     "cointegrated": false
   },
   "cointegration_johansen": {
     "trace_statistic": [
-      35.25583438800385,
-      7.820616782972615
+      38.553584032516554,
+      1.671455537525246
     ],
     "critical_values": [
       [
@@ -91,19 +91,17 @@
         6.6349
       ]
     ],
-    "cointegration_rank": 2
+    "cointegration_rank": 1
   },
   "vecm": {
     "cointegration_vector": [
       1.0,
-      -9.450963668905698e-21
+      -0.19655670985900103
     ],
     "adjustment_speed": [
-      -0.7589781871144505,
-      -279.5766074926751
+      -0.37770933517661104,
+      -0.025436446887293428
     ]
   },
-  "warnings": [
-    "No se confirmó estacionariedad (ADF+KPSS) tras diferenciar 2 vez/veces (límite MAX_DIFF_ORDER=2); se usa este orden como mejor estimación disponible."
-  ]
+  "warnings": []
 }

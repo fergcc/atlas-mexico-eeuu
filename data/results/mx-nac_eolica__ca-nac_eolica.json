@@ -15,69 +15,69 @@
   },
   "series_b": {
     "id": "ca-nac_eolica_sc",
-    "source": "Statistics Canada — Monthly GDP (real)",
+    "source": "Statistics Canada — Monthly GDP (mock)",
     "region": "NAC",
     "proxy_type": "output_index",
     "seasonal_adjustment": "nsa"
   },
   "sample": {
     "frequency_used": "monthly",
-    "start": "2021-05-31",
-    "end": "2026-04-30",
-    "n_obs": 60
+    "start": "2010-01-31",
+    "end": "2026-05-31",
+    "n_obs": 197
   },
-  "generated_at": "2026-07-21T20:26:41.528964+00:00",
-  "data_vintage": "2026-05-01",
+  "generated_at": "2026-07-21T21:27:10.590176+00:00",
+  "data_vintage": "2026-08-29",
   "data_vintage_detail": {
     "a": "2026-05-01",
-    "b": "2026-04-01"
+    "b": "2026-08-29"
   },
   "insufficient_data": false,
   "stationarity": {
     "a": {
-      "adf_statistic": -2.9228655328950164,
-      "adf_p_value": 0.042752927381600844,
-      "kpss_statistic": 0.1188377244631814,
+      "adf_statistic": -3.6372871548213594,
+      "adf_p_value": 0.005086910334708881,
+      "kpss_statistic": 0.09454449779432716,
       "kpss_p_value": 0.1,
       "is_stationary": true,
       "order_of_integration": 1,
       "log_transformed": true
     },
     "b": {
-      "adf_statistic": -2.8171791930003494,
-      "adf_p_value": 0.055861434552023456,
-      "kpss_statistic": 0.4469346052327012,
-      "kpss_p_value": 0.05692473912383571,
-      "is_stationary": false,
-      "order_of_integration": 2,
+      "adf_statistic": -6.396231657925496,
+      "adf_p_value": 2.0476029039624244e-08,
+      "kpss_statistic": 0.03791271980485537,
+      "kpss_p_value": 0.1,
+      "is_stationary": true,
+      "order_of_integration": 1,
       "log_transformed": true
     }
   },
   "granger": {
-    "optimal_lag": 2,
+    "optimal_lag": 1,
     "selection_criterion": "bic",
     "a_causes_b": {
-      "f_stat": 0.05855244641452711,
-      "p_value": 0.943160451790251,
-      "p_value_fdr_adj": 0.9692718895455036,
+      "f_stat": 1.451051937326501,
+      "p_value": 0.22910113703940546,
+      "p_value_fdr_adj": 0.39498070595997425,
       "significant": false
     },
     "b_causes_a": {
-      "f_stat": 0.9294248334319545,
-      "p_value": 0.39809786477496145,
-      "p_value_fdr_adj": 0.7014105236511226,
+      "f_stat": 0.9130240966488318,
+      "p_value": 0.3399144481592416,
+      "p_value_fdr_adj": 0.5257343464862937,
       "significant": false
     }
   },
   "cointegration_engle_granger": {
-    "statistic": -0.7723458390804254,
-    "p_value": 0.9382421680930729,
-    "cointegrated": false
+    "statistic": -3.7784993677745464,
+    "p_value": 0.014476955500659526,
+    "cointegrated": true
   },
   "cointegration_johansen": {
     "trace_statistic": [
-      27.915483763979708,
-      8.710055504820055
+      22.75559953837078,
+      0.4909461799323267
     ],
     "critical_values": [
       [
@@ -91,19 +91,17 @@
         6.6349
       ]
     ],
-    "cointegration_rank": 2
+    "cointegration_rank": 1
   },
   "vecm": {
     "cointegration_vector": [
       1.0,
-      -6.436352825852855e-21
+      -0.2055417868118817
     ],
     "adjustment_speed": [
-      -0.503281064598208,
-      -367.2944666914816
+      -0.2925056403227103,
+      -0.014793398166701307
     ]
   },
-  "warnings": [
-    "No se confirmó estacionariedad (ADF+KPSS) tras diferenciar 2 vez/veces (límite MAX_DIFF_ORDER=2); se usa este orden como mejor estimación disponible."
-  ]
+  "warnings": []
 }

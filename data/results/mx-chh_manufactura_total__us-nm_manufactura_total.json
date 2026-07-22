@@ -1,0 +1,107 @@
+{
+  "pair_id": "mx-chh_manufactura_total__us-nm_manufactura_total",
+  "sector": {
+    "id": "manufactura_total",
+    "scian": "31-33",
+    "naics": "31-33",
+    "label": "Manufactura total (referencia nacional)"
+  },
+  "series_a": {
+    "id": "mx-chh_manufactura_total_itaee",
+    "source": "INEGI - ITAEE (clave 741177)",
+    "region": "08",
+    "proxy_type": "output_index",
+    "seasonal_adjustment": "nsa"
+  },
+  "series_b": {
+    "id": "us-nm_manufactura_total_chh_bls",
+    "source": "BLS - CES SMU35000003000000001 (New Mexico)",
+    "region": "35",
+    "proxy_type": "labor_input",
+    "seasonal_adjustment": "nsa"
+  },
+  "sample": {
+    "frequency_used": "quarterly",
+    "start": "2006-03-31",
+    "end": "2025-12-31",
+    "n_obs": 80
+  },
+  "generated_at": "2026-07-21T21:27:10.288826+00:00",
+  "data_vintage": "2025-12-01",
+  "data_vintage_detail": {
+    "a": "2025-12-01",
+    "b": "2025-12-01"
+  },
+  "insufficient_data": false,
+  "stationarity": {
+    "a": {
+      "adf_statistic": -3.725912535117936,
+      "adf_p_value": 0.0037630876595718386,
+      "kpss_statistic": 0.2933757616526346,
+      "kpss_p_value": 0.1,
+      "is_stationary": true,
+      "order_of_integration": 1,
+      "log_transformed": true
+    },
+    "b": {
+      "adf_statistic": -3.9473257688795615,
+      "adf_p_value": 0.001712884566079972,
+      "kpss_statistic": 0.2547691952158402,
+      "kpss_p_value": 0.1,
+      "is_stationary": true,
+      "order_of_integration": 1,
+      "log_transformed": true
+    }
+  },
+  "granger": {
+    "optimal_lag": 4,
+    "selection_criterion": "bic",
+    "a_causes_b": {
+      "f_stat": 2.6139561459775287,
+      "p_value": 0.03816898101701036,
+      "p_value_fdr_adj": 0.10062731359030005,
+      "significant": false
+    },
+    "b_causes_a": {
+      "f_stat": 1.824399372904983,
+      "p_value": 0.12785139545985125,
+      "p_value_fdr_adj": 0.251368845310894,
+      "significant": false
+    }
+  },
+  "cointegration_engle_granger": {
+    "statistic": -0.783552014016134,
+    "p_value": 0.9368311896296087,
+    "cointegrated": false
+  },
+  "cointegration_johansen": {
+    "trace_statistic": [
+      19.2650037307159,
+      8.308864457269904
+    ],
+    "critical_values": [
+      [
+        13.4294,
+        15.4943,
+        19.9349
+      ],
+      [
+        2.7055,
+        3.8415,
+        6.6349
+      ]
+    ],
+    "cointegration_rank": 2
+  },
+  "vecm": {
+    "cointegration_vector": [
+      0.9999999999999999,
+      -2.5173942380043496e-17
+    ],
+    "adjustment_speed": [
+      -0.1905806521158257,
+      -0.01803880504380289
+    ]
+  },
+  "warnings": []
+}

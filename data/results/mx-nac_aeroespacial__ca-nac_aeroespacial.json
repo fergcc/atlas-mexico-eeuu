@@ -15,69 +15,69 @@
   },
   "series_b": {
     "id": "ca-nac_aeroespacial_sc",
-    "source": "Statistics Canada — Monthly GDP (real)",
+    "source": "Statistics Canada — Monthly GDP (mock)",
     "region": "NAC",
     "proxy_type": "output_index",
     "seasonal_adjustment": "nsa"
   },
   "sample": {
     "frequency_used": "monthly",
-    "start": "2021-05-31",
-    "end": "2026-04-30",
-    "n_obs": 60
+    "start": "2010-01-31",
+    "end": "2026-05-31",
+    "n_obs": 197
   },
-  "generated_at": "2026-07-21T20:26:41.553683+00:00",
-  "data_vintage": "2026-05-01",
+  "generated_at": "2026-07-21T21:27:10.648835+00:00",
+  "data_vintage": "2026-08-29",
   "data_vintage_detail": {
     "a": "2026-05-01",
-    "b": "2026-04-01"
+    "b": "2026-08-29"
   },
   "insufficient_data": false,
   "stationarity": {
     "a": {
-      "adf_statistic": -5.2372285879382074,
-      "adf_p_value": 7.376973704380192e-06,
-      "kpss_statistic": 0.1992343229922881,
+      "adf_statistic": -15.098390030192093,
+      "adf_p_value": 8.00603978530016e-28,
+      "kpss_statistic": 0.2794211174782328,
       "kpss_p_value": 0.1,
       "is_stationary": true,
-      "order_of_integration": 2,
+      "order_of_integration": 1,
       "log_transformed": true
     },
     "b": {
-      "adf_statistic": -2.8171791930003494,
-      "adf_p_value": 0.055861434552023456,
-      "kpss_statistic": 0.4469346052327012,
-      "kpss_p_value": 0.05692473912383571,
-      "is_stationary": false,
+      "adf_statistic": -10.141271638228273,
+      "adf_p_value": 8.408195938684007e-18,
+      "kpss_statistic": 0.13749296003334158,
+      "kpss_p_value": 0.1,
+      "is_stationary": true,
       "order_of_integration": 2,
       "log_transformed": true
     }
   },
   "granger": {
-    "optimal_lag": 2,
+    "optimal_lag": 6,
     "selection_criterion": "bic",
     "a_causes_b": {
-      "f_stat": 0.04893940926769534,
-      "p_value": 0.9522611703218146,
-      "p_value_fdr_adj": 0.9692718895455036,
+      "f_stat": 2.065681691973961,
+      "p_value": 0.05662336214914338,
+      "p_value_fdr_adj": 0.13404714304695167,
       "significant": false
     },
     "b_causes_a": {
-      "f_stat": 1.1007194359424097,
-      "p_value": 0.336549728500848,
-      "p_value_fdr_adj": 0.6385815361298143,
+      "f_stat": 0.6246176952850718,
+      "p_value": 0.710597084084636,
+      "p_value_fdr_adj": 0.8305939652220662,
       "significant": false
     }
   },
   "cointegration_engle_granger": {
-    "statistic": -1.8547715104203002,
-    "p_value": 0.6027568280098929,
+    "statistic": -2.3476328158129127,
+    "p_value": 0.3500406923981567,
     "cointegrated": false
   },
   "cointegration_johansen": {
     "trace_statistic": [
-      26.366200959313215,
-      8.735123466915232
+      10.721950752172607,
+      1.9803790702698605
     ],
     "critical_values": [
       [
@@ -91,19 +91,8 @@
         6.6349
       ]
     ],
-    "cointegration_rank": 2
+    "cointegration_rank": 0
   },
-  "vecm": {
-    "cointegration_vector": [
-      1.0,
-      7.947959683726964e-20
-    ],
-    "adjustment_speed": [
-      -0.3835218826409338,
-      139.00776042516162
-    ]
-  },
-  "warnings": [
-    "No se confirmó estacionariedad (ADF+KPSS) tras diferenciar 2 vez/veces (límite MAX_DIFF_ORDER=2); se usa este orden como mejor estimación disponible."
-  ]
+  "vecm": null,
+  "warnings": []
 }
