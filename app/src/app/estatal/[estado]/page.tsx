@@ -43,7 +43,7 @@ export default async function EstadoPage({ params }: { params: Promise<{ estado:
     const sector = getSectorById(p.sector_id);
     return buildEvidenceRow(p, resultsByPairId[p.pair_id], sector?.label ?? p.sector_id);
   });
-  const territorialValues = getTerritorialByRegion(state.code);
+  const territorialValues = getTerritorialByRegion(state.code, "MX");
 
   return (
     <Section className="pt-10">

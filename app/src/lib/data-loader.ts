@@ -1,6 +1,6 @@
 import { readFileSync, existsSync, readdirSync } from "node:fs";
 import { join } from "node:path";
-import type { Manifest, SeriesFile, ResultFile, PairMeta, SectorMeta, TerritorialFile, TerritorialIndicatorValue } from "./types";
+import type { Manifest, SeriesFile, ResultFile, PairMeta, SectorMeta, TerritorialFile, TerritorialIndicatorValue, Country } from "./types";
 
 /**
  * Server-side data access for Server Components / generateStaticParams /
@@ -138,7 +138,18 @@ function getTerritorial(): TerritorialFile | null {
   }
 }
 
-/** The 34 territorial indicators (poverty, water stress, homicide rate, etc.) for a single MX state, by its 2-digit INEGI region code. */
-export function getTerritorialByRegion(regionCode: string): TerritorialIndicatorValue[] {
-  return getTerritorial()?.raw_values.filter((v) => v.region_code === regionCode) ?? [];
+/**
+ * The territorial indicators for a single region, by its country-specific region
+ * code (2-digit INEGI code for MX, FIPS for US, provincial code for CA).
+ *
+ * `country` is required because region codes collide across countries (e.g. "08"
+ * is Chihuahua in MX and Colorado in US) — omitting it silently merges two
+ * countries' rows for the same code.
+ */
+export function getTerritorialByRegion(regionCode: string, country: Country): TerritorialIndicatorValue[] {
+  return (
+    getTerritorial()?.raw_values.filter(
+      (v) => v.region_code === regionCode && v.country === country
+    ) ?? []
+  );
 }

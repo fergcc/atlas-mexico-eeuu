@@ -103,6 +103,8 @@ export interface VecmResult {
   [key: string]: unknown;
 }
 
+export type Country = "MX" | "US" | "CA";
+
 /** One row of `data/territorial.json` — a single indicator's value for a single region. */
 export interface TerritorialIndicatorValue {
   indicator_id: string;
@@ -110,7 +112,7 @@ export interface TerritorialIndicatorValue {
   theme: string;
   subtheme: string;
   phase: string;
-  country: string;
+  country: Country;
   region_code: string;
   region_name: string;
   value: number;
@@ -122,7 +124,7 @@ export interface TerritorialIndicatorValue {
 
 export interface TerritorialFile {
   generated_at: string;
-  country: string;
+  country: Country;
   total_indicators: number;
   total_regions: number;
   data_quality: string;

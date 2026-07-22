@@ -43,7 +43,7 @@ export default async function ProvinciaPage({ params }: { params: Promise<{ prov
     const sector = getSectorById(p.sector_id);
     return buildEvidenceRow(p, resultsByPairId[p.pair_id], sector?.label ?? p.sector_id);
   });
-  const territorialValues = getTerritorialByRegion(prov.code);
+  const territorialValues = getTerritorialByRegion(prov.code, "CA");
 
   return (
     <Section className="pt-10">
