@@ -8,19 +8,38 @@ import { getManifest } from "@/lib/data-loader";
 
 export const metadata: Metadata = { title: "Metodología" };
 
-function Step({ n, title, children }: { n: string; title: string; children: React.ReactNode }) {
+function PipelineModule({
+  id,
+  n,
+  title,
+  children,
+}: {
+  id: string;
+  n: string;
+  title: string;
+  children: React.ReactNode;
+}) {
   return (
-    <div className="flex gap-4">
-      <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary/10 font-mono-data text-sm font-semibold text-primary">
-        {n}
-      </span>
-      <div>
-        <p className="font-medium text-foreground">{title}</p>
-        <div className="mt-1 text-sm leading-relaxed text-foreground-muted">{children}</div>
+    <GlassPanel id={id} className="scroll-mt-20 p-6">
+      <div className="flex items-center gap-3">
+        <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary/10 font-mono-data text-sm font-semibold text-primary">
+          {n}
+        </span>
+        <h3 className="font-display text-lg font-semibold text-foreground">{title}</h3>
       </div>
-    </div>
+      <p className="mt-3 text-sm leading-relaxed text-foreground-muted">{children}</p>
+    </GlassPanel>
   );
 }
+
+const PIPELINE_MODULES = [
+  { id: "preprocesamiento", n: "1", title: "Preprocesamiento" },
+  { id: "granger", n: "2", title: "Causalidad de Granger" },
+  { id: "cointegracion", n: "3", title: "Cointegración" },
+  { id: "correccion-multiple", n: "4", title: "Corrección por comparaciones múltiples" },
+  { id: "comparabilidad-mx-eeuu", n: "5", title: "Comparabilidad estatal MX–EEUU" },
+  { id: "umbral-observaciones", n: "6", title: "Umbral mínimo de observaciones" },
+] as const;
 
 export default function MetodologiaPage() {
   const manifest = getManifest();
@@ -49,46 +68,58 @@ export default function MetodologiaPage() {
           </p>
         </GlassPanel>
 
-        <GlassPanel className="p-6">
-          <h2 className="mb-5 font-display text-xl font-semibold text-foreground">Pipeline econométrico</h2>
-          <div className="flex flex-col gap-6">
-            <Step n="1" title="Preprocesamiento">
-              Se usan series ajustadas por estacionalidad cuando existen (nunca se mezclan series SA y NSA en
-              una misma prueba), se aplica transformación logarítmica y se prueba estacionariedad con ADF
-              (<code className="font-mono-data">adfuller</code>) y KPSS como confirmación. Las series se
-              diferencian hasta alcanzar I(1)/I(2) según se requiera.
-            </Step>
-            <Step n="2" title="Causalidad de Granger">
-              Se ajusta un VAR (<code className="font-mono-data">statsmodels.tsa.api.VAR</code>) con el
-              orden elegido por AIC/BIC, y se prueba causalidad en ambas direcciones. El resultado se
-              clasifica como unidireccional, bidireccional o ausente.
-            </Step>
-            <Step n="3" title="Cointegración">
-              Engle-Granger (<code className="font-mono-data">coint</code>) se usa como filtro rápido por
-              par; Johansen (<code className="font-mono-data">coint_johansen</code>) es el resultado
-              autoritativo para sistemas multivariados. Cuando hay cointegración, se ajusta un VECM y se
-              extrae el vector de cointegración y la velocidad de ajuste.
-            </Step>
-            <Step n="4" title="Corrección por comparaciones múltiples">
-              Como se corren muchos pares industria×región, todos los p-values de una misma corrida se
-              corrigen con FDR de Benjamini-Hochberg (<code className="font-mono-data">multipletests</code>).
-              El sitio siempre muestra el p-value ajustado junto al crudo.
-            </Step>
-            <Step n="5" title="Comparabilidad estatal MX–EEUU">
-              El ITAEE (trimestral, México) se compara contra empleo/horas manufactureras de BLS (mensual,
-              agregado a trimestral). Como FRED no tiene producción industrial por estado en EEUU, el mejor
-              proxy disponible ahí es un insumo laboral, no producción — cada resultado declara
-              explícitamente <span className="font-mono-data">proxy_type: &quot;output_index&quot;</span> o{" "}
-              <span className="font-mono-data">&quot;labor_input&quot;</span> para no insinuar una relación
-              output-output que no existe.
-            </Step>
-            <Step n="6" title="Umbral mínimo de observaciones">
-              Si el número de observaciones cae debajo de un mínimo razonable, el par se marca como{" "}
-              <span className="font-mono-data">insufficient_data</span> en vez de reportar un estadístico
-              espurio.
-            </Step>
+        <div className="flex flex-col gap-4">
+          <div>
+            <h2 className="font-display text-xl font-semibold text-foreground">Pipeline econométrico</h2>
+            <nav aria-label="Módulos del pipeline econométrico" className="mt-3">
+              <ol className="flex flex-col gap-1 text-sm text-foreground-muted sm:flex-row sm:flex-wrap sm:gap-x-5 sm:gap-y-1">
+                {PIPELINE_MODULES.map((step) => (
+                  <li key={step.id}>
+                    <a href={`#${step.id}`} className="text-primary hover:underline">
+                      {step.n}. {step.title}
+                    </a>
+                  </li>
+                ))}
+              </ol>
+            </nav>
           </div>
-        </GlassPanel>
+
+          <PipelineModule id="preprocesamiento" n="1" title="Preprocesamiento">
+            Se usan series ajustadas por estacionalidad cuando existen (nunca se mezclan series SA y NSA en
+            una misma prueba), se aplica transformación logarítmica y se prueba estacionariedad con ADF
+            (<code className="font-mono-data">adfuller</code>) y KPSS como confirmación. Las series se
+            diferencian hasta alcanzar I(1)/I(2) según se requiera.
+          </PipelineModule>
+          <PipelineModule id="granger" n="2" title="Causalidad de Granger">
+            Se ajusta un VAR (<code className="font-mono-data">statsmodels.tsa.api.VAR</code>) con el
+            orden elegido por AIC/BIC, y se prueba causalidad en ambas direcciones. El resultado se
+            clasifica como unidireccional, bidireccional o ausente.
+          </PipelineModule>
+          <PipelineModule id="cointegracion" n="3" title="Cointegración">
+            Engle-Granger (<code className="font-mono-data">coint</code>) se usa como filtro rápido por
+            par; Johansen (<code className="font-mono-data">coint_johansen</code>) es el resultado
+            autoritativo para sistemas multivariados. Cuando hay cointegración, se ajusta un VECM y se
+            extrae el vector de cointegración y la velocidad de ajuste.
+          </PipelineModule>
+          <PipelineModule id="correccion-multiple" n="4" title="Corrección por comparaciones múltiples">
+            Como se corren muchos pares industria×región, todos los p-values de una misma corrida se
+            corrigen con FDR de Benjamini-Hochberg (<code className="font-mono-data">multipletests</code>).
+            El sitio siempre muestra el p-value ajustado junto al crudo.
+          </PipelineModule>
+          <PipelineModule id="comparabilidad-mx-eeuu" n="5" title="Comparabilidad estatal MX–EEUU">
+            El ITAEE (trimestral, México) se compara contra empleo/horas manufactureras de BLS (mensual,
+            agregado a trimestral). Como FRED no tiene producción industrial por estado en EEUU, el mejor
+            proxy disponible ahí es un insumo laboral, no producción — cada resultado declara
+            explícitamente <span className="font-mono-data">proxy_type: &quot;output_index&quot;</span> o{" "}
+            <span className="font-mono-data">&quot;labor_input&quot;</span> para no insinuar una relación
+            output-output que no existe.
+          </PipelineModule>
+          <PipelineModule id="umbral-observaciones" n="6" title="Umbral mínimo de observaciones">
+            Si el número de observaciones cae debajo de un mínimo razonable, el par se marca como{" "}
+            <span className="font-mono-data">insufficient_data</span> en vez de reportar un estadístico
+            espurio.
+          </PipelineModule>
+        </div>
 
         <GlassPanel className="p-6">
           <h2 className="mb-4 font-display text-xl font-semibold text-foreground">Umbrales de significancia</h2>
