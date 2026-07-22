@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useTheme } from "next-themes";
 import { ComposableMap, Geographies } from "react-simple-maps";
-import { geoMercator, type GeoProjection } from "d3-geo";
+import { geoAlbersUsa, geoMercator, type GeoProjection } from "d3-geo";
 import * as topojson from "topojson-client";
 import type { Topology, GeometryCollection } from "topojson-specification";
 import { fetchMxStatesTopology, fetchUsStatesTopology, fetchCaProvincesTopology } from "@/lib/client-data";
@@ -133,8 +133,13 @@ export function ChoroplethMap({ country, values, unit, onSelectState, selectedSt
 
   const projection = useMemo(() => {
     if (!featureCollection) return null;
-    return geoMercator().fitSize([MAP_WIDTH, height], featureCollection) as unknown as GeoProjection;
-  }, [height, featureCollection]);
+    // Alaska and Hawaii's raw coordinates blow up a plain Mercator fit (the
+    // mainland ends up a thin band in the middle of a much taller box) —
+    // geoAlbersUsa repositions them as compact insets, like every standard
+    // US choropleth.
+    const makeProjection = isUs ? geoAlbersUsa : geoMercator;
+    return makeProjection().fitSize([MAP_WIDTH, height], featureCollection) as unknown as GeoProjection;
+  }, [height, featureCollection, isUs]);
 
   if (!topology || !geoObject || !featureCollection || !projection) {
     return (
