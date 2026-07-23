@@ -21,7 +21,7 @@ const THEME_LABELS: Record<string, string> = {
 
 const DOT_CLASSES: Record<string, string> = {
   real: "bg-success",
-  mock: "bg-warning",
+  synthetic: "bg-warning",
 };
 
 function groupByTheme(values: TerritorialIndicatorValue[]) {

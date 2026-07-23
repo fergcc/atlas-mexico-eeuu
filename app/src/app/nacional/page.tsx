@@ -48,6 +48,7 @@ export default function NacionalPage() {
                 generatedAt={manifest.generated_at}
                 refreshCadence={manifest.refresh_cadence}
                 mode={manifest.mode}
+                variant="static"
               />
             </>
           }

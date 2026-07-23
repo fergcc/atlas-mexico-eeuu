@@ -181,6 +181,7 @@ export default function TerritorialPage() {
                     generatedAt={generatedAt}
                     refreshCadence={manifest.refresh_cadence}
                     mode={manifest.mode}
+                    variant="static"
                   />
                 )}
               </>
